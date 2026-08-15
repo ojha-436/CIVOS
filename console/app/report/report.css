@@ -483,3 +483,48 @@ textarea.say::placeholder {
   font-size: 14px;
   line-height: 1;
 }
+
+/* ── Location dropdowns ────────────────────────────────────────────────── */
+
+.location-select {
+  margin-top: 20px;
+}
+
+.location-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.loc-dropdown {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--rule);
+  background: var(--ink-700);
+  color: var(--paper);
+  font-size: 13px;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 30px;
+  transition: border-color 0.15s;
+}
+
+.loc-dropdown:focus {
+  outline: none;
+  border-color: var(--q-gap);
+}
+
+.loc-dropdown:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.loc-dropdown option {
+  background: var(--ink-800);
+  color: var(--paper);
+}

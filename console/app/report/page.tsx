@@ -4,6 +4,9 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import './report.css';
 
+type DistrictEntry = { code: string; name: string };
+type DistrictMap = Record<string, DistrictEntry[]>;
+
 /* Citizen intake — the widget behind the 0:20 and 0:50 beats of the demo.
  *
  * Recording and capture are real: MediaRecorder for voice, file capture for the
@@ -84,6 +87,21 @@ export default function Report() {
   const [sending, setSending] = useState(false);
   const [hintSector, setHintSector] = useState<string | null>(null);
 
+  // Location — loaded from India government district list
+  const [districtMap, setDistrictMap] = useState<DistrictMap>({});
+  const [selState, setSelState] = useState('');
+  const [selDistrict, setSelDistrict] = useState('');
+
+  useEffect(() => {
+    fetch('/data/india-districts.json')
+      .then((r) => r.json())
+      .then(setDistrictMap)
+      .catch(() => {});
+  }, []);
+
+  const stateList = Object.keys(districtMap).sort();
+  const districtList: DistrictEntry[] = selState ? (districtMap[selState] || []) : [];
+
   const rec = useRef<MediaRecorder | null>(null);
   const chunks = useRef<Blob[]>([]);
   const timer = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -158,6 +176,10 @@ export default function Report() {
     if (hintSector) {
       formData.append('hint_sector', hintSector);
     }
+    if (selDistrict) {
+      formData.append('declared_district', selDistrict);
+      formData.append('declared_state', selState);
+    }
 
     try {
       // Use local FastAPI endpoint.
@@ -175,6 +197,13 @@ export default function Report() {
       const sectorKey = res.sector || 'water_sanitation';
       const sectorLabel = SECTOR_LABELS[sectorKey] || 'Water & Sanitation';
 
+      // Location priority: EXIF GPS (high) > citizen selected > Gemini geo_hint
+      const districtLabel = res.district_name || selDistrict || res.geo_hint || 'Unknown';
+      const geoConf: 'high' | 'inferred' =
+        res.geo_confidence === 'high' ? 'high'
+        : selDistrict ? 'high'
+        : 'inferred';
+
       setPreview({
         language: res.language || 'none required',
         raw: res.raw_text || text.trim() || '—',
@@ -183,8 +212,8 @@ export default function Report() {
         severity: res.severity || 3,
         asset: res.asset_type || undefined,
         flags: res.condition_flags || undefined,
-        district: res.district_name || res.geo_hint || 'Nashik',
-        geoConfidence: res.geo_confidence === 'high' ? 'high' : 'inferred',
+        district: districtLabel,
+        geoConfidence: geoConf,
         modalities: res.modalities || [],
         isFallback: false,
       });
@@ -201,20 +230,17 @@ export default function Report() {
       const fallbackSector = hintSector
         ? (SECTOR_LABELS[hintSector] || 'Water & Sanitation')
         : 'Water & Sanitation';
+      const fallbackDistrict = selDistrict || 'Select your district above';
       setPreview({
-        language: hasAudio && !typed ? 'mr-IN' : typed ? 'detected on extraction' : 'none required',
-        raw: typed || (hasAudio ? 'आमच्या वाडीतला हातपंप पाच महिन्यांपासून कोरडा आहे.' : '—'),
-        english: typed
-          ? null
-          : hasAudio
-            ? 'The handpump in our hamlet has been dry for five months.'
-            : 'Structured entirely from the photograph — no language required.',
+        language: hasAudio && !typed ? 'auto-detected' : typed ? 'auto-detected' : 'none required',
+        raw: typed || (hasAudio ? '(voice note recorded)' : '—'),
+        english: typed ? null : hasAudio ? '(transcription via Gemini)' : 'Structured from photograph.',
         sector: fallbackSector,
         severity: hasImage ? 4 : 3,
-        asset: hasImage ? 'handpump' : undefined,
+        asset: hasImage ? 'infrastructure asset' : undefined,
         flags: hasImage ? ['unusable'] : undefined,
-        district: 'Nashik',
-        geoConfidence: hasImage ? 'high' : 'inferred',
+        district: fallbackDistrict,
+        geoConfidence: selDistrict ? 'high' : 'inferred',
         modalities,
         isFallback: true,
       });
@@ -230,6 +256,8 @@ export default function Report() {
     setPreview(null);
     setShowText(false);
     setHintSector(null);
+    setSelState('');
+    setSelDistrict('');
   }
 
   const mm = String(Math.floor(seconds / 60)).padStart(2, '0');
@@ -338,6 +366,37 @@ export default function Report() {
                 ))}
               </div>
             )}
+
+            {/* Location — state + district dropdowns from India government list */}
+            <div className="location-select rise d4">
+              <div className="sector-hint-label">
+                Location <span className="sector-hint-opt">optional — GPS auto-detects from photo</span>
+              </div>
+              <div className="location-row">
+                <select
+                  className="loc-dropdown"
+                  value={selState}
+                  onChange={(e) => { setSelState(e.target.value); setSelDistrict(''); }}
+                >
+                  <option value="">Select state…</option>
+                  {stateList.map((s) => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+
+                <select
+                  className="loc-dropdown"
+                  value={selDistrict}
+                  onChange={(e) => setSelDistrict(e.target.value)}
+                  disabled={!selState}
+                >
+                  <option value="">{selState ? 'Select district…' : 'Select state first'}</option>
+                  {districtList.map((d) => (
+                    <option key={d.code} value={d.name}>{d.name}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
 
             {/* Optional category hint — Gemini auto-detects, but citizen can guide it */}
             <div className="sector-hint rise d4">

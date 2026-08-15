@@ -73,6 +73,8 @@ async def signal_endpoint(
     audio: Annotated[UploadFile | None, File()] = None,
     image: Annotated[UploadFile | None, File()] = None,
     hint_sector: Annotated[str | None, Form()] = None,
+    declared_district: Annotated[str | None, Form()] = None,
+    declared_state: Annotated[str | None, Form()] = None,
 ):
     """Accept a citizen report in any modality and return a structured signal.
 
@@ -102,12 +104,17 @@ async def signal_endpoint(
         image_bytes = await image.read()
         image_mime = image.content_type or "image/jpeg"
 
-    # -- EXIF GPS path (SPEC P0-6) ------------------------------------------
-    # Coordinates are resolved here and never stored or returned.
+    # -- Location priority: EXIF GPS > citizen-selected > Gemini geo_hint ---
     district_code: str | None = None
     district_name: str | None = None
     district_state: str | None = None
     geo_confidence = "inferred"
+
+    # Citizen-selected district (from India government dropdown)
+    if declared_district and declared_state:
+        district_name = declared_district
+        district_state = declared_state
+        geo_confidence = "high"
 
     if image_bytes:
         gps = parse_exif_gps(image_bytes)
@@ -115,6 +122,7 @@ async def signal_endpoint(
             lat, lon = gps
             geo_result = resolve_district(lat, lon)
             if geo_result:
+                # EXIF GPS overrides citizen selection — it's exact coordinates
                 district_code = geo_result.admin_unit_code
                 district_name = geo_result.name
                 district_state = geo_result.state
