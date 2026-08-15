@@ -44,21 +44,51 @@ REPO = Path(__file__).resolve().parent.parent
 OUT = REPO / "console" / "public" / "data"
 console = Console()
 
-STATE_ABBR_OVERRIDES = {
+# Real ISO 3166-2:IN subdivision codes, keyed by the names the boundary file uses
+# (which are 2011-era, hence Orissa / Uttaranchal / Pondicherry).
+#
+# This replaces a first-letters heuristic that was quietly broken: it mapped BOTH
+# Maharashtra and Manipur to "MA", so IN-MA-nashik and IN-MA-ukhrul claimed the
+# same state, and it emitted IN-BI for Bihar and IN-RA for Rajasthan when ISO says
+# BR and RJ. SPEC §11 claims ISO 3166-2 codes as DPGA indicator 8 evidence, so the
+# codes need to actually be ISO 3166-2.
+ISO_3166_2_IN = {
     "Andaman and Nicobar": "AN",
-    "Arunachal Pradesh": "AR",
     "Andhra Pradesh": "AP",
-    "Madhya Pradesh": "MP",
-    "Uttar Pradesh": "UP",
+    "Arunachal Pradesh": "AR",
+    "Assam": "AS",
+    "Bihar": "BR",
+    "Chandigarh": "CH",
+    "Chhattisgarh": "CT",
+    "Dadra and Nagar Haveli": "DH",
+    "Daman and Diu": "DH",
+    "Goa": "GA",
+    "Gujarat": "GJ",
+    "Haryana": "HR",
     "Himachal Pradesh": "HP",
-    "West Bengal": "WB",
-    "Tamil Nadu": "TN",
     "Jammu and Kashmir": "JK",
-    "Dadra and Nagar Haveli": "DN",
-    "Daman and Diu": "DD",
-    "Uttaranchal": "UK",
+    "Jharkhand": "JH",
+    "Karnataka": "KA",
+    "Kerala": "KL",
+    "Lakshadweep": "LD",
+    "Madhya Pradesh": "MP",
+    "Maharashtra": "MH",
+    "Manipur": "MN",
+    "Meghalaya": "ML",
+    "Mizoram": "MZ",
+    "Nagaland": "NL",
+    "Delhi": "DL",
     "Orissa": "OR",
-    "NCT of Delhi": "DL",
+    "Puducherry": "PY",
+    "Punjab": "PB",
+    "Rajasthan": "RJ",
+    "Sikkim": "SK",
+    "Tamil Nadu": "TN",
+    "Telangana": "TG",
+    "Tripura": "TR",
+    "Uttar Pradesh": "UP",
+    "Uttaranchal": "UT",
+    "West Bengal": "WB",
 }
 
 
@@ -74,12 +104,19 @@ def slug(text: str) -> str:
 
 
 def state_abbr(state: str) -> str:
-    if state in STATE_ABBR_OVERRIDES:
-        return STATE_ABBR_OVERRIDES[state]
-    words = [w for w in re.split(r"\s+", state) if w]
-    if len(words) >= 2:
-        return (words[0][0] + words[1][0]).upper()
-    return state[:2].upper()
+    """ISO 3166-2:IN subdivision code. Fails loudly rather than guessing.
+
+    A heuristic fallback is what produced the Maharashtra/Manipur collision, so
+    an unrecognised state is an error to fix in the table, not something to
+    paper over with initials.
+    """
+    try:
+        return ISO_3166_2_IN[state]
+    except KeyError:
+        raise SystemExit(
+            f"No ISO 3166-2 code for state {state!r}. Add it to ISO_3166_2_IN "
+            "rather than letting a heuristic invent one."
+        ) from None
 
 
 def clamp(v: float, lo: float, hi: float) -> float:

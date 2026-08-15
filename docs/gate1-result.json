@@ -1,0 +1,481 @@
+{
+  "verdict": "PASS",
+  "accuracy": 0.9807692307692307,
+  "correct": 51,
+  "total": 52,
+  "resolvable_accuracy": 0.9772727272727273,
+  "abstain_accuracy": 1.0,
+  "confidently_wrong": 0,
+  "model": "gemini-2.5-flash",
+  "run_at": "2026-08-15 07:23 UTC",
+  "results": [
+    {
+      "id": "t1-01",
+      "tier": "T1",
+      "lang": "mr",
+      "expected": "IN-MH-nashik",
+      "got": "IN-MH-nashik",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t1-02",
+      "tier": "T1",
+      "lang": "en",
+      "expected": "IN-RJ-barmer",
+      "got": "IN-RJ-barmer",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t1-03",
+      "tier": "T1",
+      "lang": "ml",
+      "expected": "IN-KL-wayanad",
+      "got": "IN-KL-wayanad",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t1-04",
+      "tier": "T1",
+      "lang": "en",
+      "expected": "IN-OR-kandhamal",
+      "got": "IN-OR-kandhamal",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t1-05",
+      "tier": "T1",
+      "lang": "hi",
+      "expected": "IN-UP-sonbhadra",
+      "got": "IN-UP-sonbhadra",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t1-06",
+      "tier": "T1",
+      "lang": "bn",
+      "expected": "IN-WB-murshidabad",
+      "got": "IN-WB-murshidabad",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t1-07",
+      "tier": "T1",
+      "lang": "en",
+      "expected": "IN-OR-malkangiri",
+      "got": "IN-OR-malkangiri",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t1-08",
+      "tier": "T1",
+      "lang": "hi",
+      "expected": "IN-MP-jhabua",
+      "got": "IN-MP-jhabua",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t2-01",
+      "tier": "T2",
+      "lang": "en",
+      "expected": "IN-AS-dhuburi",
+      "got": "IN-AS-dhuburi",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t2-02",
+      "tier": "T2",
+      "lang": "en",
+      "expected": "IN-KA-chamrajnagar",
+      "got": "IN-KA-chamrajnagar",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t2-03",
+      "tier": "T2",
+      "lang": "bn",
+      "expected": "IN-WB-puruliya",
+      "got": "IN-WB-puruliya",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t2-04",
+      "tier": "T2",
+      "lang": "en",
+      "expected": "IN-OR-nabarangpur",
+      "got": "IN-OR-nabarangpur",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t2-05",
+      "tier": "T2",
+      "lang": "gu",
+      "expected": "IN-GJ-kachchh",
+      "got": "IN-GJ-kachchh",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t2-06",
+      "tier": "T2",
+      "lang": "en",
+      "expected": "IN-OR-baleshwar",
+      "got": "IN-OR-baleshwar",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t2-07",
+      "tier": "T2",
+      "lang": "en",
+      "expected": "IN-AS-karimganj",
+      "got": "IN-AS-karimganj",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t3-01",
+      "tier": "T3",
+      "lang": "en",
+      "expected": "IN-AS-cachar",
+      "got": "IN-AS-cachar",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t3-02",
+      "tier": "T3",
+      "lang": "hi",
+      "expected": "IN-CT-bastar",
+      "got": "IN-CT-bastar",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t3-03",
+      "tier": "T3",
+      "lang": "gu",
+      "expected": "IN-GJ-kachchh",
+      "got": "IN-GJ-kachchh",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t3-04",
+      "tier": "T3",
+      "lang": "ml",
+      "expected": "IN-KL-wayanad",
+      "got": "IN-KL-wayanad",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t3-05",
+      "tier": "T3",
+      "lang": "en",
+      "expected": "IN-OR-kandhamal",
+      "got": "IN-OR-kandhamal",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t3-06",
+      "tier": "T3",
+      "lang": "en",
+      "expected": "IN-TR-dhalai",
+      "got": "IN-TR-dhalai",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t3-07",
+      "tier": "T3",
+      "lang": "en",
+      "expected": "IN-OR-koraput",
+      "got": "IN-OR-koraput",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t3-08",
+      "tier": "T3",
+      "lang": "en",
+      "expected": "IN-ML-south-garo-hills",
+      "got": "IN-ML-south-garo-hills",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t3-09",
+      "tier": "T3",
+      "lang": "hi",
+      "expected": "IN-RJ-jaisalmer",
+      "got": "IN-RJ-jaisalmer",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t3-10",
+      "tier": "T3",
+      "lang": "mr",
+      "expected": "IN-MH-nashik",
+      "got": "IN-MH-nashik",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t3-11",
+      "tier": "T3",
+      "lang": "mr",
+      "expected": "IN-MH-pune",
+      "got": "IN-MH-pune",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t3-12",
+      "tier": "T3",
+      "lang": "en",
+      "expected": "IN-MH-thane",
+      "got": "IN-MH-thane",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t3-13",
+      "tier": "T3",
+      "lang": "mr",
+      "expected": "IN-MH-nandurbar",
+      "got": "IN-MH-nandurbar",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t3-14",
+      "tier": "T3",
+      "lang": "en",
+      "expected": "IN-KL-wayanad",
+      "got": "IN-KL-wayanad",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t3-15",
+      "tier": "T3",
+      "lang": "hi",
+      "expected": "IN-BR-supaul",
+      "got": "IN-BR-supaul",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t4-01",
+      "tier": "T4",
+      "lang": "en",
+      "expected": "IN-GJ-junagadh",
+      "got": null,
+      "correct": false,
+      "reason": "spans multiple districts"
+    },
+    {
+      "id": "t4-02",
+      "tier": "T4",
+      "lang": "en",
+      "expected": "IN-MN-bishnupur",
+      "got": "IN-MN-bishnupur",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t4-03",
+      "tier": "T4",
+      "lang": "hi",
+      "expected": "IN-JK-srinagar",
+      "got": "IN-JK-srinagar",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t4-04",
+      "tier": "T4",
+      "lang": "en",
+      "expected": null,
+      "got": null,
+      "correct": true,
+      "reason": "spans multiple districts"
+    },
+    {
+      "id": "t4-05",
+      "tier": "T4",
+      "lang": "or",
+      "expected": null,
+      "got": null,
+      "correct": true,
+      "reason": "spans multiple districts"
+    },
+    {
+      "id": "t5-01",
+      "tier": "T5",
+      "lang": "en",
+      "expected": "IN-BR-aurangabad",
+      "got": "IN-BR-aurangabad",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t5-02",
+      "tier": "T5",
+      "lang": "mr",
+      "expected": "IN-MH-aurangabad",
+      "got": "IN-MH-aurangabad",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t5-03",
+      "tier": "T5",
+      "lang": "en",
+      "expected": "IN-HP-bilaspur",
+      "got": "IN-HP-bilaspur",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t5-04",
+      "tier": "T5",
+      "lang": "hi",
+      "expected": "IN-CT-bilaspur",
+      "got": "IN-CT-bilaspur",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t5-05",
+      "tier": "T5",
+      "lang": "hi",
+      "expected": "IN-UP-hamirpur",
+      "got": "IN-UP-hamirpur",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t5-06",
+      "tier": "T5",
+      "lang": "en",
+      "expected": "IN-CT-raigarh",
+      "got": "IN-CT-raigarh",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t5-07",
+      "tier": "T5",
+      "lang": "en",
+      "expected": null,
+      "got": null,
+      "correct": true,
+      "reason": "spans multiple districts"
+    },
+    {
+      "id": "t6-01",
+      "tier": "T6",
+      "lang": "hi",
+      "expected": null,
+      "got": null,
+      "correct": true,
+      "reason": "no district proposed"
+    },
+    {
+      "id": "t6-02",
+      "tier": "T6",
+      "lang": "en",
+      "expected": null,
+      "got": null,
+      "correct": true,
+      "reason": "no district proposed"
+    },
+    {
+      "id": "t6-03",
+      "tier": "T6",
+      "lang": "ta",
+      "expected": null,
+      "got": null,
+      "correct": true,
+      "reason": "no district proposed"
+    },
+    {
+      "id": "t6-04",
+      "tier": "T6",
+      "lang": "en",
+      "expected": null,
+      "got": null,
+      "correct": true,
+      "reason": "no district proposed"
+    },
+    {
+      "id": "t6-05",
+      "tier": "T6",
+      "lang": "hi",
+      "expected": null,
+      "got": null,
+      "correct": true,
+      "reason": "no district proposed"
+    },
+    {
+      "id": "t7-01",
+      "tier": "T3",
+      "lang": "hi-en",
+      "expected": "IN-BR-kishanganj",
+      "got": "IN-BR-kishanganj",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t7-02",
+      "tier": "T1",
+      "lang": "mr-en",
+      "expected": "IN-MH-nandurbar",
+      "got": "IN-MH-nandurbar",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t7-03",
+      "tier": "T2",
+      "lang": "hi-en",
+      "expected": "IN-BR-sitamarhi",
+      "got": "IN-BR-sitamarhi",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t7-04",
+      "tier": "T5",
+      "lang": "hi-en",
+      "expected": "IN-HP-hamirpur",
+      "got": "IN-HP-hamirpur",
+      "correct": true,
+      "reason": "state+district"
+    },
+    {
+      "id": "t7-05",
+      "tier": "T4",
+      "lang": "en",
+      "expected": "IN-RJ-jaisalmer",
+      "got": "IN-RJ-jaisalmer",
+      "correct": true,
+      "reason": "state+district"
+    }
+  ]
+}

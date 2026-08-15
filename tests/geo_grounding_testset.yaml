@@ -1,4 +1,4 @@
-# GATE 1 — geo-grounding test set. 50 hand-built cases.
+# GATE 1 — geo-grounding test set. 52 hand-built cases.
 #
 # plan.md calls building this "the most valuable hour of the week", and it is
 # authored BEFORE the resolver exists, on purpose: a test set written after the
@@ -29,7 +29,7 @@ meta:
   version: 1
   authored: 2026-08-15
   authored_before_resolver: true
-  cases: 50
+  cases: 52
   gate_threshold: 0.85
   scoring: >
     A case is correct when the predicted admin_unit_code equals expected exactly,
@@ -263,6 +263,13 @@ cases:
     text: "The villages on the edge of the Gir forest still fetch water by bullock cart."
     note: "Gir forest lies mainly in Junagadh district, Gujarat."
     expected: IN-GJ-junagadh
+    post_hoc_note: >
+      The only case Gate 1 missed, and on review the resolver was probably right
+      and this answer key wrong: Gir spans Junagadh, Gir Somnath (created 2013)
+      and Amreli, so abstaining is defensible. The `expected` value is
+      deliberately LEFT UNCHANGED. Editing an answer key after seeing the score
+      is precisely the tuning this test set was written first to prevent, and a
+      disclosed 98.1% is worth more than a quietly manufactured 100%.
 
   - id: t4-02
     tier: T4

@@ -62,110 +62,110 @@ IN-AS-north-cachar-hills,North Cachar Hills,Assam,level-2,,,false,unmatched
 IN-AS-sibsagar,Sibsagar,Assam,level-2,,,false,unmatched
 IN-AS-sonitpur,Sonitpur,Assam,level-2,18,7,true,exact_state_district
 IN-AS-tinsukia,Tinsukia,Assam,level-2,18,10,true,exact_state_district
-IN-BI-araria,Araria,Bihar,level-2,10,7,true,exact_state_district
-IN-BI-aurangabad,Aurangabad,Bihar,level-2,10,33,true,exact_state_district
-IN-BI-banka,Banka,Bihar,level-2,10,23,true,exact_state_district
-IN-BI-begusarai,Begusarai,Bihar,level-2,10,20,true,exact_state_district
-IN-BI-bhabua,Bhabua,Bihar,level-2,,,false,unmatched
-IN-BI-bhagalpur,Bhagalpur,Bihar,level-2,10,22,true,exact_state_district
-IN-BI-bhojpur,Bhojpur,Bihar,level-2,10,29,true,exact_state_district
-IN-BI-buxar,Buxar,Bihar,level-2,10,30,true,exact_state_district
-IN-BI-darbhanga,Darbhanga,Bihar,level-2,10,13,true,exact_state_district
-IN-BI-gaya,Gaya,Bihar,level-2,10,34,true,exact_state_district
-IN-BI-gopalganj,Gopalganj,Bihar,level-2,10,15,true,exact_state_district
-IN-BI-jamui,Jamui,Bihar,level-2,10,36,true,exact_state_district
-IN-BI-jehanabad,Jehanabad,Bihar,level-2,10,37,true,exact_state_district
-IN-BI-katihar,Katihar,Bihar,level-2,10,10,true,exact_state_district
-IN-BI-khagaria,Khagaria,Bihar,level-2,10,21,true,exact_state_district
-IN-BI-kishanganj,Kishanganj,Bihar,level-2,10,8,true,exact_state_district
-IN-BI-lakhisarai,Lakhisarai,Bihar,level-2,10,25,true,exact_state_district
-IN-BI-madhepura,Madhepura,Bihar,level-2,10,11,true,exact_state_district
-IN-BI-madhubani,Madhubani,Bihar,level-2,10,5,true,exact_state_district
-IN-BI-munger,Munger,Bihar,level-2,10,24,true,exact_state_district
-IN-BI-muzaffarpur,Muzaffarpur,Bihar,level-2,10,14,true,exact_state_district
-IN-BI-nalanda,Nalanda,Bihar,level-2,10,27,true,exact_state_district
-IN-BI-nawada,Nawada,Bihar,level-2,10,35,true,exact_state_district
-IN-BI-pashchim-champaran,Pashchim Champaran,Bihar,level-2,10,1,true,exact_state_district
-IN-BI-patna,Patna,Bihar,level-2,10,28,true,exact_state_district
-IN-BI-purba-champaran,Purba Champaran,Bihar,level-2,10,2,true,exact_state_district
-IN-BI-purnia,Purnia,Bihar,level-2,10,9,true,exact_state_district
-IN-BI-rohtas,Rohtas,Bihar,level-2,10,32,true,exact_state_district
-IN-BI-saharsa,Saharsa,Bihar,level-2,10,12,true,exact_state_district
-IN-BI-samastipur,Samastipur,Bihar,level-2,10,19,true,exact_state_district
-IN-BI-saran,Saran,Bihar,level-2,10,17,true,exact_state_district
-IN-BI-sheikhpura,Sheikhpura,Bihar,level-2,10,26,true,exact_state_district
-IN-BI-sheohar,Sheohar,Bihar,level-2,10,3,true,exact_state_district
-IN-BI-sitamarhi,Sitamarhi,Bihar,level-2,10,4,true,exact_state_district
-IN-BI-siwan,Siwan,Bihar,level-2,10,16,true,exact_state_district
-IN-BI-supaul,Supaul,Bihar,level-2,10,6,true,exact_state_district
-IN-BI-vaishali,Vaishali,Bihar,level-2,10,18,true,exact_state_district
+IN-BR-araria,Araria,Bihar,level-2,10,7,true,exact_state_district
+IN-BR-aurangabad,Aurangabad,Bihar,level-2,10,33,true,exact_state_district
+IN-BR-banka,Banka,Bihar,level-2,10,23,true,exact_state_district
+IN-BR-begusarai,Begusarai,Bihar,level-2,10,20,true,exact_state_district
+IN-BR-bhabua,Bhabua,Bihar,level-2,,,false,unmatched
+IN-BR-bhagalpur,Bhagalpur,Bihar,level-2,10,22,true,exact_state_district
+IN-BR-bhojpur,Bhojpur,Bihar,level-2,10,29,true,exact_state_district
+IN-BR-buxar,Buxar,Bihar,level-2,10,30,true,exact_state_district
+IN-BR-darbhanga,Darbhanga,Bihar,level-2,10,13,true,exact_state_district
+IN-BR-gaya,Gaya,Bihar,level-2,10,34,true,exact_state_district
+IN-BR-gopalganj,Gopalganj,Bihar,level-2,10,15,true,exact_state_district
+IN-BR-jamui,Jamui,Bihar,level-2,10,36,true,exact_state_district
+IN-BR-jehanabad,Jehanabad,Bihar,level-2,10,37,true,exact_state_district
+IN-BR-katihar,Katihar,Bihar,level-2,10,10,true,exact_state_district
+IN-BR-khagaria,Khagaria,Bihar,level-2,10,21,true,exact_state_district
+IN-BR-kishanganj,Kishanganj,Bihar,level-2,10,8,true,exact_state_district
+IN-BR-lakhisarai,Lakhisarai,Bihar,level-2,10,25,true,exact_state_district
+IN-BR-madhepura,Madhepura,Bihar,level-2,10,11,true,exact_state_district
+IN-BR-madhubani,Madhubani,Bihar,level-2,10,5,true,exact_state_district
+IN-BR-munger,Munger,Bihar,level-2,10,24,true,exact_state_district
+IN-BR-muzaffarpur,Muzaffarpur,Bihar,level-2,10,14,true,exact_state_district
+IN-BR-nalanda,Nalanda,Bihar,level-2,10,27,true,exact_state_district
+IN-BR-nawada,Nawada,Bihar,level-2,10,35,true,exact_state_district
+IN-BR-pashchim-champaran,Pashchim Champaran,Bihar,level-2,10,1,true,exact_state_district
+IN-BR-patna,Patna,Bihar,level-2,10,28,true,exact_state_district
+IN-BR-purba-champaran,Purba Champaran,Bihar,level-2,10,2,true,exact_state_district
+IN-BR-purnia,Purnia,Bihar,level-2,10,9,true,exact_state_district
+IN-BR-rohtas,Rohtas,Bihar,level-2,10,32,true,exact_state_district
+IN-BR-saharsa,Saharsa,Bihar,level-2,10,12,true,exact_state_district
+IN-BR-samastipur,Samastipur,Bihar,level-2,10,19,true,exact_state_district
+IN-BR-saran,Saran,Bihar,level-2,10,17,true,exact_state_district
+IN-BR-sheikhpura,Sheikhpura,Bihar,level-2,10,26,true,exact_state_district
+IN-BR-sheohar,Sheohar,Bihar,level-2,10,3,true,exact_state_district
+IN-BR-sitamarhi,Sitamarhi,Bihar,level-2,10,4,true,exact_state_district
+IN-BR-siwan,Siwan,Bihar,level-2,10,16,true,exact_state_district
+IN-BR-supaul,Supaul,Bihar,level-2,10,6,true,exact_state_district
+IN-BR-vaishali,Vaishali,Bihar,level-2,10,18,true,exact_state_district
 IN-CH-chandigarh,Chandigarh,Chandigarh,level-2,4,1,true,exact_state_district
-IN-CH-bastar,Bastar,Chhattisgarh,level-2,22,15,true,exact_state_district
-IN-CH-bilaspur,Bilaspur,Chhattisgarh,level-2,22,7,true,exact_state_district
-IN-CH-dantewada,Dantewada,Chhattisgarh,level-2,22,17,true,exact_state_district
-IN-CH-dhamtari,Dhamtari,Chhattisgarh,level-2,22,13,true,exact_state_district
-IN-CH-durg,Durg,Chhattisgarh,level-2,22,10,true,exact_state_district
-IN-CH-janjgir-champa,Janjgir-Champa,Chhattisgarh,level-2,22,6,true,exact_state_district
-IN-CH-jashpur,Jashpur,Chhattisgarh,level-2,22,3,true,exact_state_district
-IN-CH-kanker,Kanker,Chhattisgarh,level-2,,,false,unmatched
-IN-CH-kawardha,Kawardha,Chhattisgarh,level-2,,,false,unmatched
-IN-CH-korba,Korba,Chhattisgarh,level-2,22,5,true,exact_state_district
-IN-CH-koriya,Koriya,Chhattisgarh,level-2,22,1,true,exact_state_district
-IN-CH-mahasamund,Mahasamund,Chhattisgarh,level-2,22,12,true,exact_state_district
-IN-CH-raigarh,Raigarh,Chhattisgarh,level-2,22,4,true,exact_state_district
-IN-CH-raipur,Raipur,Chhattisgarh,level-2,22,11,true,exact_state_district
-IN-CH-raj-nandgaon,Raj Nandgaon,Chhattisgarh,level-2,22,9,true,exact_state_district
-IN-CH-surguja,Surguja,Chhattisgarh,level-2,22,2,true,exact_state_district
-IN-DN-dadra-and-nagar-haveli,Dadra and Nagar Haveli,Dadra and Nagar Haveli,level-2,,,false,unmatched
-IN-DD-daman,Daman,Daman and Diu,level-2,,,false,unmatched
-IN-DD-junagadh,Junagadh,Daman and Diu,level-2,,,false,unmatched
-IN-DE-delhi,Delhi,Delhi,level-2,,,false,unmatched
-IN-GO-north-goa,North Goa,Goa,level-2,30,1,true,exact_state_district
-IN-GO-south-goa,South Goa,Goa,level-2,30,2,true,exact_state_district
-IN-GU-ahmadabad,Ahmadabad,Gujarat,level-2,24,7,true,fuzzy_within_state
-IN-GU-amreli,Amreli,Gujarat,level-2,24,13,true,exact_state_district
-IN-GU-anand,Anand,Gujarat,level-2,24,15,true,exact_state_district
-IN-GU-banas-kantha,Banas Kantha,Gujarat,level-2,24,2,true,exact_state_district
-IN-GU-bharuch,Bharuch,Gujarat,level-2,24,21,true,exact_state_district
-IN-GU-bhavnagar,Bhavnagar,Gujarat,level-2,24,14,true,exact_state_district
-IN-GU-dahod,Dahod,Gujarat,level-2,24,18,true,exact_state_district
-IN-GU-gandhinagar,Gandhinagar,Gujarat,level-2,24,6,true,exact_state_district
-IN-GU-jamnagar,Jamnagar,Gujarat,level-2,24,10,true,exact_state_district
-IN-GU-junagadh,Junagadh,Gujarat,level-2,24,12,true,exact_state_district
-IN-GU-kachchh,Kachchh,Gujarat,level-2,24,1,true,exact_state_district
-IN-GU-kheda,Kheda,Gujarat,level-2,24,16,true,exact_state_district
-IN-GU-mahesana,Mahesana,Gujarat,level-2,24,4,true,exact_state_district
-IN-GU-narmada,Narmada,Gujarat,level-2,24,20,true,exact_state_district
-IN-GU-navsari,Navsari,Gujarat,level-2,24,23,true,exact_state_district
-IN-GU-panch-mahals,Panch Mahals,Gujarat,level-2,24,17,true,fuzzy_within_state
-IN-GU-patan,Patan,Gujarat,level-2,24,3,true,exact_state_district
-IN-GU-porbandar,Porbandar,Gujarat,level-2,24,11,true,exact_state_district
-IN-GU-rajkot,Rajkot,Gujarat,level-2,24,9,true,exact_state_district
-IN-GU-sabar-kantha,Sabar Kantha,Gujarat,level-2,24,5,true,exact_state_district
-IN-GU-surat,Surat,Gujarat,level-2,24,25,true,exact_state_district
-IN-GU-surendranagar,Surendranagar,Gujarat,level-2,24,8,true,exact_state_district
-IN-GU-the-dangs,The Dangs,Gujarat,level-2,24,22,true,exact_state_district
-IN-GU-vadodara,Vadodara,Gujarat,level-2,24,19,true,exact_state_district
-IN-GU-valsad,Valsad,Gujarat,level-2,24,24,true,exact_state_district
-IN-HA-ambala,Ambala,Haryana,level-2,6,2,true,exact_state_district
-IN-HA-bhiwani,Bhiwani,Haryana,level-2,6,13,true,exact_state_district
-IN-HA-faridabad,Faridabad,Haryana,level-2,6,20,true,exact_state_district
-IN-HA-fatehabad,Fatehabad,Haryana,level-2,6,10,true,exact_state_district
-IN-HA-gurgaon,Gurgaon,Haryana,level-2,6,18,true,exact_state_district
-IN-HA-hisar,Hisar,Haryana,level-2,6,12,true,exact_state_district
-IN-HA-jhajjar,Jhajjar,Haryana,level-2,6,15,true,exact_state_district
-IN-HA-jind,Jind,Haryana,level-2,6,9,true,exact_state_district
-IN-HA-kaithal,Kaithal,Haryana,level-2,6,5,true,exact_state_district
-IN-HA-karnal,Karnal,Haryana,level-2,6,6,true,exact_state_district
-IN-HA-kurukshetra,Kurukshetra,Haryana,level-2,6,4,true,exact_state_district
-IN-HA-mahendragarh,Mahendragarh,Haryana,level-2,6,16,true,exact_state_district
-IN-HA-panchkula,Panchkula,Haryana,level-2,6,1,true,exact_state_district
-IN-HA-panipat,Panipat,Haryana,level-2,6,7,true,exact_state_district
-IN-HA-rewari,Rewari,Haryana,level-2,6,17,true,exact_state_district
-IN-HA-rohtak,Rohtak,Haryana,level-2,6,14,true,exact_state_district
-IN-HA-sirsa,Sirsa,Haryana,level-2,6,11,true,exact_state_district
-IN-HA-sonepat,Sonepat,Haryana,level-2,,,false,unmatched
-IN-HA-yamuna-nagar,Yamuna Nagar,Haryana,level-2,6,3,true,exact_state_district
+IN-CT-bastar,Bastar,Chhattisgarh,level-2,22,15,true,exact_state_district
+IN-CT-bilaspur,Bilaspur,Chhattisgarh,level-2,22,7,true,exact_state_district
+IN-CT-dantewada,Dantewada,Chhattisgarh,level-2,22,17,true,exact_state_district
+IN-CT-dhamtari,Dhamtari,Chhattisgarh,level-2,22,13,true,exact_state_district
+IN-CT-durg,Durg,Chhattisgarh,level-2,22,10,true,exact_state_district
+IN-CT-janjgir-champa,Janjgir-Champa,Chhattisgarh,level-2,22,6,true,exact_state_district
+IN-CT-jashpur,Jashpur,Chhattisgarh,level-2,22,3,true,exact_state_district
+IN-CT-kanker,Kanker,Chhattisgarh,level-2,,,false,unmatched
+IN-CT-kawardha,Kawardha,Chhattisgarh,level-2,,,false,unmatched
+IN-CT-korba,Korba,Chhattisgarh,level-2,22,5,true,exact_state_district
+IN-CT-koriya,Koriya,Chhattisgarh,level-2,22,1,true,exact_state_district
+IN-CT-mahasamund,Mahasamund,Chhattisgarh,level-2,22,12,true,exact_state_district
+IN-CT-raigarh,Raigarh,Chhattisgarh,level-2,22,4,true,exact_state_district
+IN-CT-raipur,Raipur,Chhattisgarh,level-2,22,11,true,exact_state_district
+IN-CT-raj-nandgaon,Raj Nandgaon,Chhattisgarh,level-2,22,9,true,exact_state_district
+IN-CT-surguja,Surguja,Chhattisgarh,level-2,22,2,true,exact_state_district
+IN-DH-dadra-and-nagar-haveli,Dadra and Nagar Haveli,Dadra and Nagar Haveli,level-2,,,false,unmatched
+IN-DH-daman,Daman,Daman and Diu,level-2,,,false,unmatched
+IN-DH-junagadh,Junagadh,Daman and Diu,level-2,,,false,unmatched
+IN-DL-delhi,Delhi,Delhi,level-2,,,false,unmatched
+IN-GA-north-goa,North Goa,Goa,level-2,30,1,true,exact_state_district
+IN-GA-south-goa,South Goa,Goa,level-2,30,2,true,exact_state_district
+IN-GJ-ahmadabad,Ahmadabad,Gujarat,level-2,24,7,true,fuzzy_within_state
+IN-GJ-amreli,Amreli,Gujarat,level-2,24,13,true,exact_state_district
+IN-GJ-anand,Anand,Gujarat,level-2,24,15,true,exact_state_district
+IN-GJ-banas-kantha,Banas Kantha,Gujarat,level-2,24,2,true,exact_state_district
+IN-GJ-bharuch,Bharuch,Gujarat,level-2,24,21,true,exact_state_district
+IN-GJ-bhavnagar,Bhavnagar,Gujarat,level-2,24,14,true,exact_state_district
+IN-GJ-dahod,Dahod,Gujarat,level-2,24,18,true,exact_state_district
+IN-GJ-gandhinagar,Gandhinagar,Gujarat,level-2,24,6,true,exact_state_district
+IN-GJ-jamnagar,Jamnagar,Gujarat,level-2,24,10,true,exact_state_district
+IN-GJ-junagadh,Junagadh,Gujarat,level-2,24,12,true,exact_state_district
+IN-GJ-kachchh,Kachchh,Gujarat,level-2,24,1,true,exact_state_district
+IN-GJ-kheda,Kheda,Gujarat,level-2,24,16,true,exact_state_district
+IN-GJ-mahesana,Mahesana,Gujarat,level-2,24,4,true,exact_state_district
+IN-GJ-narmada,Narmada,Gujarat,level-2,24,20,true,exact_state_district
+IN-GJ-navsari,Navsari,Gujarat,level-2,24,23,true,exact_state_district
+IN-GJ-panch-mahals,Panch Mahals,Gujarat,level-2,24,17,true,fuzzy_within_state
+IN-GJ-patan,Patan,Gujarat,level-2,24,3,true,exact_state_district
+IN-GJ-porbandar,Porbandar,Gujarat,level-2,24,11,true,exact_state_district
+IN-GJ-rajkot,Rajkot,Gujarat,level-2,24,9,true,exact_state_district
+IN-GJ-sabar-kantha,Sabar Kantha,Gujarat,level-2,24,5,true,exact_state_district
+IN-GJ-surat,Surat,Gujarat,level-2,24,25,true,exact_state_district
+IN-GJ-surendranagar,Surendranagar,Gujarat,level-2,24,8,true,exact_state_district
+IN-GJ-the-dangs,The Dangs,Gujarat,level-2,24,22,true,exact_state_district
+IN-GJ-vadodara,Vadodara,Gujarat,level-2,24,19,true,exact_state_district
+IN-GJ-valsad,Valsad,Gujarat,level-2,24,24,true,exact_state_district
+IN-HR-ambala,Ambala,Haryana,level-2,6,2,true,exact_state_district
+IN-HR-bhiwani,Bhiwani,Haryana,level-2,6,13,true,exact_state_district
+IN-HR-faridabad,Faridabad,Haryana,level-2,6,20,true,exact_state_district
+IN-HR-fatehabad,Fatehabad,Haryana,level-2,6,10,true,exact_state_district
+IN-HR-gurgaon,Gurgaon,Haryana,level-2,6,18,true,exact_state_district
+IN-HR-hisar,Hisar,Haryana,level-2,6,12,true,exact_state_district
+IN-HR-jhajjar,Jhajjar,Haryana,level-2,6,15,true,exact_state_district
+IN-HR-jind,Jind,Haryana,level-2,6,9,true,exact_state_district
+IN-HR-kaithal,Kaithal,Haryana,level-2,6,5,true,exact_state_district
+IN-HR-karnal,Karnal,Haryana,level-2,6,6,true,exact_state_district
+IN-HR-kurukshetra,Kurukshetra,Haryana,level-2,6,4,true,exact_state_district
+IN-HR-mahendragarh,Mahendragarh,Haryana,level-2,6,16,true,exact_state_district
+IN-HR-panchkula,Panchkula,Haryana,level-2,6,1,true,exact_state_district
+IN-HR-panipat,Panipat,Haryana,level-2,6,7,true,exact_state_district
+IN-HR-rewari,Rewari,Haryana,level-2,6,17,true,exact_state_district
+IN-HR-rohtak,Rohtak,Haryana,level-2,6,14,true,exact_state_district
+IN-HR-sirsa,Sirsa,Haryana,level-2,6,11,true,exact_state_district
+IN-HR-sonepat,Sonepat,Haryana,level-2,,,false,unmatched
+IN-HR-yamuna-nagar,Yamuna Nagar,Haryana,level-2,6,3,true,exact_state_district
 IN-HP-bilaspur,Bilaspur,Himachal Pradesh,level-2,2,8,true,exact_state_district
 IN-HP-chamba,Chamba,Himachal Pradesh,level-2,2,1,true,exact_state_district
 IN-HP-hamirpur,Hamirpur,Himachal Pradesh,level-2,2,6,true,exact_state_district
@@ -241,21 +241,21 @@ IN-KA-shimoga,Shimoga,Karnataka,level-2,29,14,true,exact_state_district
 IN-KA-tumkur,Tumkur,Karnataka,level-2,29,17,true,exact_state_district
 IN-KA-udupi,Udupi,Karnataka,level-2,29,15,true,exact_state_district
 IN-KA-uttar-kannand,Uttar Kannand,Karnataka,level-2,29,9,true,fuzzy_within_state
-IN-KE-alappuzha,Alappuzha,Kerala,level-2,32,11,true,exact_state_district
-IN-KE-ernakulam,Ernakulam,Kerala,level-2,32,8,true,exact_state_district
-IN-KE-idukki,Idukki,Kerala,level-2,32,9,true,exact_state_district
-IN-KE-kannur,Kannur,Kerala,level-2,32,2,true,exact_state_district
-IN-KE-kasaragod,Kasaragod,Kerala,level-2,32,1,true,exact_state_district
-IN-KE-kollam,Kollam,Kerala,level-2,32,13,true,exact_state_district
-IN-KE-kottayam,Kottayam,Kerala,level-2,32,10,true,exact_state_district
-IN-KE-kozhikode,Kozhikode,Kerala,level-2,32,4,true,exact_state_district
-IN-KE-malappuram,Malappuram,Kerala,level-2,32,5,true,exact_state_district
-IN-KE-palakkad,Palakkad,Kerala,level-2,32,6,true,exact_state_district
-IN-KE-pattanamtitta,Pattanamtitta,Kerala,level-2,32,12,true,fuzzy_within_state
-IN-KE-thiruvananthapuram,Thiruvananthapuram,Kerala,level-2,32,14,true,exact_state_district
-IN-KE-thrissur,Thrissur,Kerala,level-2,32,7,true,exact_state_district
-IN-KE-wayanad,Wayanad,Kerala,level-2,32,3,true,exact_state_district
-IN-LA-kavaratti,Kavaratti,Lakshadweep,level-2,,,false,unmatched
+IN-KL-alappuzha,Alappuzha,Kerala,level-2,32,11,true,exact_state_district
+IN-KL-ernakulam,Ernakulam,Kerala,level-2,32,8,true,exact_state_district
+IN-KL-idukki,Idukki,Kerala,level-2,32,9,true,exact_state_district
+IN-KL-kannur,Kannur,Kerala,level-2,32,2,true,exact_state_district
+IN-KL-kasaragod,Kasaragod,Kerala,level-2,32,1,true,exact_state_district
+IN-KL-kollam,Kollam,Kerala,level-2,32,13,true,exact_state_district
+IN-KL-kottayam,Kottayam,Kerala,level-2,32,10,true,exact_state_district
+IN-KL-kozhikode,Kozhikode,Kerala,level-2,32,4,true,exact_state_district
+IN-KL-malappuram,Malappuram,Kerala,level-2,32,5,true,exact_state_district
+IN-KL-palakkad,Palakkad,Kerala,level-2,32,6,true,exact_state_district
+IN-KL-pattanamtitta,Pattanamtitta,Kerala,level-2,32,12,true,fuzzy_within_state
+IN-KL-thiruvananthapuram,Thiruvananthapuram,Kerala,level-2,32,14,true,exact_state_district
+IN-KL-thrissur,Thrissur,Kerala,level-2,32,7,true,exact_state_district
+IN-KL-wayanad,Wayanad,Kerala,level-2,32,3,true,exact_state_district
+IN-LD-kavaratti,Kavaratti,Lakshadweep,level-2,,,false,unmatched
 IN-MP-anuppur,Anuppur,Madhya Pradesh,level-2,23,44,true,exact_state_district
 IN-MP-ashoknagar,Ashoknagar,Madhya Pradesh,level-2,23,42,true,exact_state_district
 IN-MP-balaghat,Balaghat,Madhya Pradesh,level-2,23,40,true,exact_state_district
@@ -304,72 +304,72 @@ IN-MP-ujjain,Ujjain,Madhya Pradesh,level-2,23,18,true,exact_state_district
 IN-MP-umaria,Umaria,Madhya Pradesh,level-2,23,14,true,exact_state_district
 IN-MP-vidisha,Vidisha,Madhya Pradesh,level-2,23,26,true,exact_state_district
 IN-MP-west-nimar,West Nimar,Madhya Pradesh,level-2,,,false,unmatched
-IN-MA-ahmednagar,Ahmednagar,Maharashtra,level-2,27,26,true,exact_state_district
-IN-MA-akola,Akola,Maharashtra,level-2,27,5,true,exact_state_district
-IN-MA-amravati,Amravati,Maharashtra,level-2,27,7,true,exact_state_district
-IN-MA-aurangabad,Aurangabad,Maharashtra,level-2,27,19,true,exact_state_district
-IN-MA-bhandara,Bhandara,Maharashtra,level-2,27,10,true,exact_state_district
-IN-MA-bid,Bid,Maharashtra,level-2,27,27,true,exact_state_district
-IN-MA-buldana,Buldana,Maharashtra,level-2,27,4,true,exact_state_district
-IN-MA-chandrapur,Chandrapur,Maharashtra,level-2,27,13,true,exact_state_district
-IN-MA-dhule,Dhule,Maharashtra,level-2,27,2,true,exact_state_district
-IN-MA-garhchiroli,Garhchiroli,Maharashtra,level-2,,,false,unmatched
-IN-MA-gondiya,Gondiya,Maharashtra,level-2,27,11,true,exact_state_district
-IN-MA-greater-bombay,Greater Bombay,Maharashtra,level-2,,,false,unmatched
-IN-MA-hingoli,Hingoli,Maharashtra,level-2,27,16,true,exact_state_district
-IN-MA-jalgaon,Jalgaon,Maharashtra,level-2,27,3,true,exact_state_district
-IN-MA-jalna,Jalna,Maharashtra,level-2,27,18,true,exact_state_district
-IN-MA-kolhapur,Kolhapur,Maharashtra,level-2,27,34,true,exact_state_district
-IN-MA-latur,Latur,Maharashtra,level-2,27,28,true,exact_state_district
-IN-MA-nagpur,Nagpur,Maharashtra,level-2,27,9,true,exact_state_district
-IN-MA-nanded,Nanded,Maharashtra,level-2,27,15,true,exact_state_district
-IN-MA-nandurbar,Nandurbar,Maharashtra,level-2,27,1,true,exact_state_district
-IN-MA-nashik,Nashik,Maharashtra,level-2,27,20,true,exact_state_district
-IN-MA-osmanabad,Osmanabad,Maharashtra,level-2,27,29,true,exact_state_district
-IN-MA-parbhani,Parbhani,Maharashtra,level-2,27,17,true,exact_state_district
-IN-MA-pune,Pune,Maharashtra,level-2,27,25,true,exact_state_district
-IN-MA-raigarh,Raigarh,Maharashtra,level-2,27,24,true,exact_state_district
-IN-MA-ratnagiri,Ratnagiri,Maharashtra,level-2,27,32,true,exact_state_district
-IN-MA-sangli,Sangli,Maharashtra,level-2,27,35,true,exact_state_district
-IN-MA-satara,Satara,Maharashtra,level-2,27,31,true,exact_state_district
-IN-MA-sindhudurg,Sindhudurg,Maharashtra,level-2,27,33,true,exact_state_district
-IN-MA-solapur,Solapur,Maharashtra,level-2,27,30,true,exact_state_district
-IN-MA-thane,Thane,Maharashtra,level-2,27,21,true,exact_state_district
-IN-MA-wardha,Wardha,Maharashtra,level-2,27,8,true,exact_state_district
-IN-MA-washim,Washim,Maharashtra,level-2,27,6,true,exact_state_district
-IN-MA-yavatmal,Yavatmal,Maharashtra,level-2,27,14,true,exact_state_district
-IN-MA-bishnupur,Bishnupur,Manipur,level-2,14,4,true,exact_state_district
-IN-MA-chandel,Chandel,Manipur,level-2,14,9,true,exact_state_district
-IN-MA-churachandpur,Churachandpur,Manipur,level-2,14,3,true,exact_state_district
-IN-MA-east-imphal,East Imphal,Manipur,level-2,,,false,unmatched
-IN-MA-senapati,Senapati,Manipur,level-2,14,1,true,exact_state_district
-IN-MA-tamenglong,Tamenglong,Manipur,level-2,14,2,true,exact_state_district
-IN-MA-thoubal,Thoubal,Manipur,level-2,14,5,true,exact_state_district
-IN-MA-ukhrul,Ukhrul,Manipur,level-2,14,8,true,exact_state_district
-IN-MA-west-imphal,West Imphal,Manipur,level-2,,,false,unmatched
-IN-ME-east-garo-hills,East Garo Hills,Meghalaya,level-2,17,2,true,exact_state_district
-IN-ME-east-khasi-hills,East Khasi Hills,Meghalaya,level-2,17,6,true,exact_state_district
-IN-ME-jaintia-hills,Jaintia Hills,Meghalaya,level-2,,,false,unmatched
-IN-ME-ri-bhoi,Ri-Bhoi,Meghalaya,level-2,17,5,true,exact_state_district
-IN-ME-south-garo-hills,South Garo Hills,Meghalaya,level-2,17,3,true,exact_state_district
-IN-ME-west-garo-hills,West Garo Hills,Meghalaya,level-2,17,1,true,exact_state_district
-IN-ME-west-khasi-hills,West Khasi Hills,Meghalaya,level-2,17,4,true,exact_state_district
-IN-MI-aizawl,Aizawl,Mizoram,level-2,15,3,true,exact_state_district
-IN-MI-champhai,Champhai,Mizoram,level-2,15,4,true,exact_state_district
-IN-MI-kolasib,Kolasib,Mizoram,level-2,15,2,true,exact_state_district
-IN-MI-lawngtlai,Lawngtlai,Mizoram,level-2,15,7,true,exact_state_district
-IN-MI-lunglei,Lunglei,Mizoram,level-2,15,6,true,exact_state_district
-IN-MI-mamit,Mamit,Mizoram,level-2,15,1,true,exact_state_district
-IN-MI-saiha,Saiha,Mizoram,level-2,15,8,true,exact_state_district
-IN-MI-serchhip,Serchhip,Mizoram,level-2,15,5,true,exact_state_district
-IN-NA-dimapur,Dimapur,Nagaland,level-2,13,5,true,exact_state_district
-IN-NA-kohima,Kohima,Nagaland,level-2,13,10,true,exact_state_district
-IN-NA-mokokchung,Mokokchung,Nagaland,level-2,13,2,true,exact_state_district
-IN-NA-mon,Mon,Nagaland,level-2,13,1,true,exact_state_district
-IN-NA-phek,Phek,Nagaland,level-2,13,6,true,exact_state_district
-IN-NA-tuensang,Tuensang,Nagaland,level-2,13,7,true,exact_state_district
-IN-NA-wokha,Wokha,Nagaland,level-2,13,4,true,exact_state_district
-IN-NA-zunheboto,Zunheboto,Nagaland,level-2,13,3,true,exact_state_district
+IN-MH-ahmednagar,Ahmednagar,Maharashtra,level-2,27,26,true,exact_state_district
+IN-MH-akola,Akola,Maharashtra,level-2,27,5,true,exact_state_district
+IN-MH-amravati,Amravati,Maharashtra,level-2,27,7,true,exact_state_district
+IN-MH-aurangabad,Aurangabad,Maharashtra,level-2,27,19,true,exact_state_district
+IN-MH-bhandara,Bhandara,Maharashtra,level-2,27,10,true,exact_state_district
+IN-MH-bid,Bid,Maharashtra,level-2,27,27,true,exact_state_district
+IN-MH-buldana,Buldana,Maharashtra,level-2,27,4,true,exact_state_district
+IN-MH-chandrapur,Chandrapur,Maharashtra,level-2,27,13,true,exact_state_district
+IN-MH-dhule,Dhule,Maharashtra,level-2,27,2,true,exact_state_district
+IN-MH-garhchiroli,Garhchiroli,Maharashtra,level-2,,,false,unmatched
+IN-MH-gondiya,Gondiya,Maharashtra,level-2,27,11,true,exact_state_district
+IN-MH-greater-bombay,Greater Bombay,Maharashtra,level-2,,,false,unmatched
+IN-MH-hingoli,Hingoli,Maharashtra,level-2,27,16,true,exact_state_district
+IN-MH-jalgaon,Jalgaon,Maharashtra,level-2,27,3,true,exact_state_district
+IN-MH-jalna,Jalna,Maharashtra,level-2,27,18,true,exact_state_district
+IN-MH-kolhapur,Kolhapur,Maharashtra,level-2,27,34,true,exact_state_district
+IN-MH-latur,Latur,Maharashtra,level-2,27,28,true,exact_state_district
+IN-MH-nagpur,Nagpur,Maharashtra,level-2,27,9,true,exact_state_district
+IN-MH-nanded,Nanded,Maharashtra,level-2,27,15,true,exact_state_district
+IN-MH-nandurbar,Nandurbar,Maharashtra,level-2,27,1,true,exact_state_district
+IN-MH-nashik,Nashik,Maharashtra,level-2,27,20,true,exact_state_district
+IN-MH-osmanabad,Osmanabad,Maharashtra,level-2,27,29,true,exact_state_district
+IN-MH-parbhani,Parbhani,Maharashtra,level-2,27,17,true,exact_state_district
+IN-MH-pune,Pune,Maharashtra,level-2,27,25,true,exact_state_district
+IN-MH-raigarh,Raigarh,Maharashtra,level-2,27,24,true,exact_state_district
+IN-MH-ratnagiri,Ratnagiri,Maharashtra,level-2,27,32,true,exact_state_district
+IN-MH-sangli,Sangli,Maharashtra,level-2,27,35,true,exact_state_district
+IN-MH-satara,Satara,Maharashtra,level-2,27,31,true,exact_state_district
+IN-MH-sindhudurg,Sindhudurg,Maharashtra,level-2,27,33,true,exact_state_district
+IN-MH-solapur,Solapur,Maharashtra,level-2,27,30,true,exact_state_district
+IN-MH-thane,Thane,Maharashtra,level-2,27,21,true,exact_state_district
+IN-MH-wardha,Wardha,Maharashtra,level-2,27,8,true,exact_state_district
+IN-MH-washim,Washim,Maharashtra,level-2,27,6,true,exact_state_district
+IN-MH-yavatmal,Yavatmal,Maharashtra,level-2,27,14,true,exact_state_district
+IN-MN-bishnupur,Bishnupur,Manipur,level-2,14,4,true,exact_state_district
+IN-MN-chandel,Chandel,Manipur,level-2,14,9,true,exact_state_district
+IN-MN-churachandpur,Churachandpur,Manipur,level-2,14,3,true,exact_state_district
+IN-MN-east-imphal,East Imphal,Manipur,level-2,,,false,unmatched
+IN-MN-senapati,Senapati,Manipur,level-2,14,1,true,exact_state_district
+IN-MN-tamenglong,Tamenglong,Manipur,level-2,14,2,true,exact_state_district
+IN-MN-thoubal,Thoubal,Manipur,level-2,14,5,true,exact_state_district
+IN-MN-ukhrul,Ukhrul,Manipur,level-2,14,8,true,exact_state_district
+IN-MN-west-imphal,West Imphal,Manipur,level-2,,,false,unmatched
+IN-ML-east-garo-hills,East Garo Hills,Meghalaya,level-2,17,2,true,exact_state_district
+IN-ML-east-khasi-hills,East Khasi Hills,Meghalaya,level-2,17,6,true,exact_state_district
+IN-ML-jaintia-hills,Jaintia Hills,Meghalaya,level-2,,,false,unmatched
+IN-ML-ri-bhoi,Ri-Bhoi,Meghalaya,level-2,17,5,true,exact_state_district
+IN-ML-south-garo-hills,South Garo Hills,Meghalaya,level-2,17,3,true,exact_state_district
+IN-ML-west-garo-hills,West Garo Hills,Meghalaya,level-2,17,1,true,exact_state_district
+IN-ML-west-khasi-hills,West Khasi Hills,Meghalaya,level-2,17,4,true,exact_state_district
+IN-MZ-aizawl,Aizawl,Mizoram,level-2,15,3,true,exact_state_district
+IN-MZ-champhai,Champhai,Mizoram,level-2,15,4,true,exact_state_district
+IN-MZ-kolasib,Kolasib,Mizoram,level-2,15,2,true,exact_state_district
+IN-MZ-lawngtlai,Lawngtlai,Mizoram,level-2,15,7,true,exact_state_district
+IN-MZ-lunglei,Lunglei,Mizoram,level-2,15,6,true,exact_state_district
+IN-MZ-mamit,Mamit,Mizoram,level-2,15,1,true,exact_state_district
+IN-MZ-saiha,Saiha,Mizoram,level-2,15,8,true,exact_state_district
+IN-MZ-serchhip,Serchhip,Mizoram,level-2,15,5,true,exact_state_district
+IN-NL-dimapur,Dimapur,Nagaland,level-2,13,5,true,exact_state_district
+IN-NL-kohima,Kohima,Nagaland,level-2,13,10,true,exact_state_district
+IN-NL-mokokchung,Mokokchung,Nagaland,level-2,13,2,true,exact_state_district
+IN-NL-mon,Mon,Nagaland,level-2,13,1,true,exact_state_district
+IN-NL-phek,Phek,Nagaland,level-2,13,6,true,exact_state_district
+IN-NL-tuensang,Tuensang,Nagaland,level-2,13,7,true,exact_state_district
+IN-NL-wokha,Wokha,Nagaland,level-2,13,4,true,exact_state_district
+IN-NL-zunheboto,Zunheboto,Nagaland,level-2,13,3,true,exact_state_district
 IN-OR-angul,Angul,Orissa,level-2,21,15,true,fuzzy_within_state
 IN-OR-baleshwar,Baleshwar,Orissa,level-2,21,8,true,exact_state_district
 IN-OR-baragarh,Baragarh,Orissa,level-2,21,1,true,fuzzy_within_state
@@ -400,63 +400,63 @@ IN-OR-rayagada,Rayagada,Orissa,level-2,21,27,true,exact_state_district
 IN-OR-sambalpur,Sambalpur,Orissa,level-2,21,3,true,exact_state_district
 IN-OR-sonepur,Sonepur,Orissa,level-2,,,false,unmatched
 IN-OR-sundargarh,Sundargarh,Orissa,level-2,21,5,true,exact_state_district
-IN-PU-karaikal,Karaikal,Puducherry,level-2,34,4,true,exact_state_district
-IN-PU-mahe,Mahe,Puducherry,level-2,34,3,true,exact_state_district
-IN-PU-puducherry,Puducherry,Puducherry,level-2,34,2,true,exact_state_district
-IN-PU-yanam,Yanam,Puducherry,level-2,34,1,true,exact_state_district
-IN-PU-amritsar,Amritsar,Punjab,level-2,3,15,true,exact_state_district
-IN-PU-bathinda,Bathinda,Punjab,level-2,3,12,true,exact_state_district
-IN-PU-faridkot,Faridkot,Punjab,level-2,3,11,true,exact_state_district
-IN-PU-fatehgarh-sahib,Fatehgarh Sahib,Punjab,level-2,3,6,true,exact_state_district
-IN-PU-firozpur,Firozpur,Punjab,level-2,3,9,true,exact_state_district
-IN-PU-gurdaspur,Gurdaspur,Punjab,level-2,3,1,true,fuzzy_within_state
-IN-PU-hoshiarpur,Hoshiarpur,Punjab,level-2,3,4,true,exact_state_district
-IN-PU-jalandhar,Jalandhar,Punjab,level-2,3,3,true,exact_state_district
-IN-PU-kapurthala,Kapurthala,Punjab,level-2,3,2,true,exact_state_district
-IN-PU-ludhiana,Ludhiana,Punjab,level-2,3,7,true,exact_state_district
-IN-PU-mansa,Mansa,Punjab,level-2,3,13,true,exact_state_district
-IN-PU-moga,Moga,Punjab,level-2,3,8,true,exact_state_district
-IN-PU-muktsar,Muktsar,Punjab,level-2,3,10,true,exact_state_district
-IN-PU-nawan-shehar,Nawan Shehar,Punjab,level-2,,,false,unmatched
-IN-PU-patiala,Patiala,Punjab,level-2,3,14,true,exact_state_district
-IN-PU-rupnagar,Rupnagar,Punjab,level-2,3,17,true,exact_state_district
-IN-PU-sangrur,Sangrur,Punjab,level-2,3,19,true,exact_state_district
-IN-RA-ajmer,Ajmer,Rajasthan,level-2,8,21,true,exact_state_district
-IN-RA-alwar,Alwar,Rajasthan,level-2,8,6,true,exact_state_district
-IN-RA-banswara,Banswara,Rajasthan,level-2,8,27,true,exact_state_district
-IN-RA-baran,Baran,Rajasthan,level-2,8,30,true,exact_state_district
-IN-RA-barmer,Barmer,Rajasthan,level-2,8,17,true,exact_state_district
-IN-RA-bharatpur,Bharatpur,Rajasthan,level-2,8,7,true,exact_state_district
-IN-RA-bhilwara,Bhilwara,Rajasthan,level-2,8,24,true,exact_state_district
-IN-RA-bikaner,Bikaner,Rajasthan,level-2,8,3,true,exact_state_district
-IN-RA-bundi,Bundi,Rajasthan,level-2,8,23,true,exact_state_district
-IN-RA-chittaurgarh,Chittaurgarh,Rajasthan,level-2,8,28,true,exact_state_district
-IN-RA-churu,Churu,Rajasthan,level-2,8,4,true,exact_state_district
-IN-RA-dausa,Dausa,Rajasthan,level-2,8,11,true,exact_state_district
-IN-RA-dhaulpur,Dhaulpur,Rajasthan,level-2,8,8,true,exact_state_district
-IN-RA-dungarpur,Dungarpur,Rajasthan,level-2,8,26,true,exact_state_district
-IN-RA-ganganagar,Ganganagar,Rajasthan,level-2,8,1,true,exact_state_district
-IN-RA-hanumangarh,Hanumangarh,Rajasthan,level-2,8,2,true,exact_state_district
-IN-RA-jaipur,Jaipur,Rajasthan,level-2,8,12,true,exact_state_district
-IN-RA-jaisalmer,Jaisalmer,Rajasthan,level-2,8,16,true,exact_state_district
-IN-RA-jalor,Jalor,Rajasthan,level-2,8,18,true,exact_state_district
-IN-RA-jhalawar,Jhalawar,Rajasthan,level-2,8,31,true,exact_state_district
-IN-RA-jhunjhunun,Jhunjhunun,Rajasthan,level-2,8,5,true,fuzzy_within_state
-IN-RA-jodhpur,Jodhpur,Rajasthan,level-2,8,15,true,exact_state_district
-IN-RA-karauli,Karauli,Rajasthan,level-2,8,9,true,exact_state_district
-IN-RA-kota,Kota,Rajasthan,level-2,8,29,true,exact_state_district
-IN-RA-nagaur,Nagaur,Rajasthan,level-2,8,14,true,exact_state_district
-IN-RA-pali,Pali,Rajasthan,level-2,8,20,true,exact_state_district
-IN-RA-rajsamand,Rajsamand,Rajasthan,level-2,8,25,true,exact_state_district
-IN-RA-sawai-madhopur,Sawai Madhopur,Rajasthan,level-2,8,10,true,exact_state_district
-IN-RA-sikar,Sikar,Rajasthan,level-2,8,13,true,exact_state_district
-IN-RA-sirohi,Sirohi,Rajasthan,level-2,8,19,true,exact_state_district
-IN-RA-tonk,Tonk,Rajasthan,level-2,8,22,true,exact_state_district
-IN-RA-udaipur,Udaipur,Rajasthan,level-2,8,32,true,exact_state_district
-IN-SI-east,East,Sikkim,level-2,,,false,unmatched
-IN-SI-north-sikkim,North Sikkim,Sikkim,level-2,,,false,unmatched
-IN-SI-south-sikkim,South Sikkim,Sikkim,level-2,,,false,unmatched
-IN-SI-west-sikkim,West Sikkim,Sikkim,level-2,,,false,unmatched
+IN-PY-karaikal,Karaikal,Puducherry,level-2,34,4,true,exact_state_district
+IN-PY-mahe,Mahe,Puducherry,level-2,34,3,true,exact_state_district
+IN-PY-puducherry,Puducherry,Puducherry,level-2,34,2,true,exact_state_district
+IN-PY-yanam,Yanam,Puducherry,level-2,34,1,true,exact_state_district
+IN-PB-amritsar,Amritsar,Punjab,level-2,3,15,true,exact_state_district
+IN-PB-bathinda,Bathinda,Punjab,level-2,3,12,true,exact_state_district
+IN-PB-faridkot,Faridkot,Punjab,level-2,3,11,true,exact_state_district
+IN-PB-fatehgarh-sahib,Fatehgarh Sahib,Punjab,level-2,3,6,true,exact_state_district
+IN-PB-firozpur,Firozpur,Punjab,level-2,3,9,true,exact_state_district
+IN-PB-gurdaspur,Gurdaspur,Punjab,level-2,3,1,true,fuzzy_within_state
+IN-PB-hoshiarpur,Hoshiarpur,Punjab,level-2,3,4,true,exact_state_district
+IN-PB-jalandhar,Jalandhar,Punjab,level-2,3,3,true,exact_state_district
+IN-PB-kapurthala,Kapurthala,Punjab,level-2,3,2,true,exact_state_district
+IN-PB-ludhiana,Ludhiana,Punjab,level-2,3,7,true,exact_state_district
+IN-PB-mansa,Mansa,Punjab,level-2,3,13,true,exact_state_district
+IN-PB-moga,Moga,Punjab,level-2,3,8,true,exact_state_district
+IN-PB-muktsar,Muktsar,Punjab,level-2,3,10,true,exact_state_district
+IN-PB-nawan-shehar,Nawan Shehar,Punjab,level-2,,,false,unmatched
+IN-PB-patiala,Patiala,Punjab,level-2,3,14,true,exact_state_district
+IN-PB-rupnagar,Rupnagar,Punjab,level-2,3,17,true,exact_state_district
+IN-PB-sangrur,Sangrur,Punjab,level-2,3,19,true,exact_state_district
+IN-RJ-ajmer,Ajmer,Rajasthan,level-2,8,21,true,exact_state_district
+IN-RJ-alwar,Alwar,Rajasthan,level-2,8,6,true,exact_state_district
+IN-RJ-banswara,Banswara,Rajasthan,level-2,8,27,true,exact_state_district
+IN-RJ-baran,Baran,Rajasthan,level-2,8,30,true,exact_state_district
+IN-RJ-barmer,Barmer,Rajasthan,level-2,8,17,true,exact_state_district
+IN-RJ-bharatpur,Bharatpur,Rajasthan,level-2,8,7,true,exact_state_district
+IN-RJ-bhilwara,Bhilwara,Rajasthan,level-2,8,24,true,exact_state_district
+IN-RJ-bikaner,Bikaner,Rajasthan,level-2,8,3,true,exact_state_district
+IN-RJ-bundi,Bundi,Rajasthan,level-2,8,23,true,exact_state_district
+IN-RJ-chittaurgarh,Chittaurgarh,Rajasthan,level-2,8,28,true,exact_state_district
+IN-RJ-churu,Churu,Rajasthan,level-2,8,4,true,exact_state_district
+IN-RJ-dausa,Dausa,Rajasthan,level-2,8,11,true,exact_state_district
+IN-RJ-dhaulpur,Dhaulpur,Rajasthan,level-2,8,8,true,exact_state_district
+IN-RJ-dungarpur,Dungarpur,Rajasthan,level-2,8,26,true,exact_state_district
+IN-RJ-ganganagar,Ganganagar,Rajasthan,level-2,8,1,true,exact_state_district
+IN-RJ-hanumangarh,Hanumangarh,Rajasthan,level-2,8,2,true,exact_state_district
+IN-RJ-jaipur,Jaipur,Rajasthan,level-2,8,12,true,exact_state_district
+IN-RJ-jaisalmer,Jaisalmer,Rajasthan,level-2,8,16,true,exact_state_district
+IN-RJ-jalor,Jalor,Rajasthan,level-2,8,18,true,exact_state_district
+IN-RJ-jhalawar,Jhalawar,Rajasthan,level-2,8,31,true,exact_state_district
+IN-RJ-jhunjhunun,Jhunjhunun,Rajasthan,level-2,8,5,true,fuzzy_within_state
+IN-RJ-jodhpur,Jodhpur,Rajasthan,level-2,8,15,true,exact_state_district
+IN-RJ-karauli,Karauli,Rajasthan,level-2,8,9,true,exact_state_district
+IN-RJ-kota,Kota,Rajasthan,level-2,8,29,true,exact_state_district
+IN-RJ-nagaur,Nagaur,Rajasthan,level-2,8,14,true,exact_state_district
+IN-RJ-pali,Pali,Rajasthan,level-2,8,20,true,exact_state_district
+IN-RJ-rajsamand,Rajsamand,Rajasthan,level-2,8,25,true,exact_state_district
+IN-RJ-sawai-madhopur,Sawai Madhopur,Rajasthan,level-2,8,10,true,exact_state_district
+IN-RJ-sikar,Sikar,Rajasthan,level-2,8,13,true,exact_state_district
+IN-RJ-sirohi,Sirohi,Rajasthan,level-2,8,19,true,exact_state_district
+IN-RJ-tonk,Tonk,Rajasthan,level-2,8,22,true,exact_state_district
+IN-RJ-udaipur,Udaipur,Rajasthan,level-2,8,32,true,exact_state_district
+IN-SK-east,East,Sikkim,level-2,,,false,unmatched
+IN-SK-north-sikkim,North Sikkim,Sikkim,level-2,,,false,unmatched
+IN-SK-south-sikkim,South Sikkim,Sikkim,level-2,,,false,unmatched
+IN-SK-west-sikkim,West Sikkim,Sikkim,level-2,,,false,unmatched
 IN-TN-ariyalur,Ariyalur,Tamil Nadu,level-2,33,15,true,exact_state_district
 IN-TN-chennai,Chennai,Tamil Nadu,level-2,33,2,true,exact_state_district
 IN-TN-coimbatore,Coimbatore,Tamil Nadu,level-2,33,31,true,exact_state_district
@@ -561,19 +561,19 @@ IN-UP-sonbhadra,Sonbhadra,Uttar Pradesh,level-2,9,69,true,exact_state_district
 IN-UP-sultanpur,Sultanpur,Uttar Pradesh,level-2,9,48,true,exact_state_district
 IN-UP-unnao,Unnao,Uttar Pradesh,level-2,9,25,true,exact_state_district
 IN-UP-varanasi,Varanasi,Uttar Pradesh,level-2,9,66,true,exact_state_district
-IN-UK-almora,Almora,Uttaranchal,level-2,5,9,true,exact_state_district
-IN-UK-bageshwar,Bageshwar,Uttaranchal,level-2,5,8,true,exact_state_district
-IN-UK-chamoli,Chamoli,Uttaranchal,level-2,5,2,true,exact_state_district
-IN-UK-champawat,Champawat,Uttaranchal,level-2,5,10,true,exact_state_district
-IN-UK-dehra-dun,Dehra Dun,Uttaranchal,level-2,5,5,true,exact_state_district
-IN-UK-haridwar,Haridwar,Uttaranchal,level-2,5,13,true,exact_state_district
-IN-UK-naini-tal,Naini Tal,Uttaranchal,level-2,5,11,true,exact_state_district
-IN-UK-pauri-garhwal,Pauri Garhwal,Uttaranchal,level-2,5,6,true,exact_state_district
-IN-UK-pithoragarh,Pithoragarh,Uttaranchal,level-2,5,7,true,exact_state_district
-IN-UK-rudra-prayag,Rudra Prayag,Uttaranchal,level-2,5,3,true,exact_state_district
-IN-UK-tehri-garhwal,Tehri Garhwal,Uttaranchal,level-2,5,4,true,exact_state_district
-IN-UK-udham-singh-nagar,Udham Singh Nagar,Uttaranchal,level-2,5,12,true,exact_state_district
-IN-UK-uttarkashi,Uttarkashi,Uttaranchal,level-2,5,1,true,exact_state_district
+IN-UT-almora,Almora,Uttaranchal,level-2,5,9,true,exact_state_district
+IN-UT-bageshwar,Bageshwar,Uttaranchal,level-2,5,8,true,exact_state_district
+IN-UT-chamoli,Chamoli,Uttaranchal,level-2,5,2,true,exact_state_district
+IN-UT-champawat,Champawat,Uttaranchal,level-2,5,10,true,exact_state_district
+IN-UT-dehra-dun,Dehra Dun,Uttaranchal,level-2,5,5,true,exact_state_district
+IN-UT-haridwar,Haridwar,Uttaranchal,level-2,5,13,true,exact_state_district
+IN-UT-naini-tal,Naini Tal,Uttaranchal,level-2,5,11,true,exact_state_district
+IN-UT-pauri-garhwal,Pauri Garhwal,Uttaranchal,level-2,5,6,true,exact_state_district
+IN-UT-pithoragarh,Pithoragarh,Uttaranchal,level-2,5,7,true,exact_state_district
+IN-UT-rudra-prayag,Rudra Prayag,Uttaranchal,level-2,5,3,true,exact_state_district
+IN-UT-tehri-garhwal,Tehri Garhwal,Uttaranchal,level-2,5,4,true,exact_state_district
+IN-UT-udham-singh-nagar,Udham Singh Nagar,Uttaranchal,level-2,5,12,true,exact_state_district
+IN-UT-uttarkashi,Uttarkashi,Uttaranchal,level-2,5,1,true,exact_state_district
 IN-WB-bankura,Bankura,West Bengal,level-2,19,13,true,exact_state_district
 IN-WB-barddhaman,Barddhaman,West Bengal,level-2,,,false,unmatched
 IN-WB-birbhum,Birbhum,West Bengal,level-2,19,8,true,exact_state_district
