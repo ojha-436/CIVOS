@@ -2,7 +2,7 @@
 
 Everything decided so far and, more importantly, **why**. Written so that work can resume cold — after a gap, on a new machine, or in a new session — without re-deriving anything.
 
-**Last updated:** 15 Aug 2026 · Status: **Phases 0–5 complete. Both services live on Cloud Run.**
+**Last updated:** 15 Aug 2026 · Status: **Phases 0–5 complete. Both services live on Cloud Run. CI/CD active — every push to main auto-deploys.**
 
 | Service | URL |
 |---|---|
