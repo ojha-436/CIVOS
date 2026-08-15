@@ -6,7 +6,13 @@
  * console was built before the data layer.
  */
 
-export type QuadrantKey = 'act_now' | 'silent_need' | 'expectation_gap' | 'stable';
+export type QuadrantKey =
+  | 'act_now'
+  | 'silent_need'
+  | 'expectation_gap'
+  | 'stable'
+  /** No official deficit value could be loaded. Excluded from ranking, rendered grey. */
+  | 'no_data';
 
 export interface Row {
   code: string;
@@ -17,8 +23,10 @@ export interface Row {
   images: number;
   /** DemandIndex — percentile-normalised raw demand, 0–100 */
   demand: number;
-  /** DeficitIndex — normalised official deprivation, 0–100 */
+  /** DeficitIndex — real NFHS-5 deprivation, 0–100. Meaningless unless has_deficit. */
   deficit: number;
+  /** False when no official value reconciled onto this district-sector. */
+  has_deficit: boolean;
   /** Signals per 1,000 population */
   participation: number;
   /** EvidenceStrength — share of needs backed by >= 1 photo */
@@ -114,4 +122,18 @@ export const QUADRANTS: Record<
     colour: 'var(--q-stable)',
     blurb: 'No action indicated.',
   },
+  no_data: {
+    label: 'No official data',
+    colour: 'var(--q-nodata)',
+    blurb:
+      'No NFHS-5 value reconciled onto this district-sector. Excluded from the ranking rather than given an invented number.',
+  },
 };
+
+/** Quadrants that represent a scored district. `no_data` is a disclosure, not a verdict. */
+export const SCORED_QUADRANTS: QuadrantKey[] = [
+  'act_now',
+  'silent_need',
+  'expectation_gap',
+  'stable',
+];

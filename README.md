@@ -147,10 +147,11 @@ worth more than mystery data.
 | Layer | Status |
 |---|---|
 | District boundaries, names, administrative codes | **Real** — 594 districts, public boundary data simplified for web rendering |
-| Sector indicators, funding schemes, unit costs | **Real** — five sectors bound to real district-level indicators; ten named central schemes |
+| Sector deficit indicators | **Real** — NFHS-5 2019-21 (IIPS / MoHFW), 537 of 594 districts, 4 of 5 sectors. Cross-validated against a second independent extraction: 100% identical. See [provenance](docs/DATA-RECONCILIATION.md) |
+| Funding schemes and unit costs | **Real** — ten named central schemes with published unit costs |
 | Evidence photographs | **Real** — openly licensed, individually attributed. *Never generated:* vision accuracy demonstrated on synthetic images would prove nothing |
 | Citizen signals (voice and text) | **Synthetic** — no government data access. Generated from real geography and real deficits with a **deliberate participation bias**, because that bias is what the product detects |
-| Deficit values in the current fixture | **Placeholder** — replaced by NFHS-5 and NITI National MPI in Phase 1, keyed to the same district codes |
+| Roads & Transport deficit · district population | **Not loaded.** Road connectivity has no health-survey equivalent and no census population is loaded. Both are shown as gaps in the interface rather than filled with a proxy |
 
 The generator ships as part of the public good: a reference dataset and pilot
 simulator, so a ministry can trial CIVOS *before* it has data.
@@ -245,8 +246,8 @@ Public Good" is a specification, not a licence choice.
 |---|---|
 | 0 — Foundations, interfaces, Gate 0 | ✅ complete |
 | 5 — Console and citizen intake | ✅ built early, against a frozen data contract |
-| 1 — Real deficit data layer | next |
-| 2–4 — Corpus, multimodal intake, intelligence | pending |
+| 1 — Real deficit data layer | ✅ complete — NFHS-5 loaded, 4/5 sectors real |
+| 2–4 — Corpus, multimodal intake, intelligence | next |
 | 6–7 — Second country adapter, submission | pending |
 
 The console was built ahead of the data layer deliberately: it is the phase most

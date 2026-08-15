@@ -2,7 +2,7 @@
 
 Everything decided so far and, more importantly, **why**. Written so that work can resume cold — after a gap, on a new machine, or in a new session — without re-deriving anything.
 
-**Last updated:** 14 Aug 2026 · Status: **Phase 0 complete. Gate 0 passed (`PROCEED_BQML`). Next: Phase 1 — the real data layer.**
+**Last updated:** 15 Aug 2026 · Status: **Phases 0, 1 and most of 5 complete.** Gate 0 passed (`PROCEED_BQML`); the official NFHS-5 deficit layer is loaded (537/594 districts, 4/5 sectors); the console and citizen intake are built. **Next: Phase 2 — signal corpus, evidence images, and Gate 1 (geo-grounding).**
 
 ---
 
@@ -252,6 +252,59 @@ joined against official deprivation data. Deficit and silence gap enter only in
 the corrected view. `w₂` and `w₃` are therefore marked inactive in raw mode rather
 than left as live controls that silently do nothing.
 
+### 3.17 Phase 1 — the official layer is real, and how it was actually obtained
+
+**Result: 537 of 594 rendered districts (90.4%) carry real NFHS-5 2019-21 values,
+across 4 of 5 sectors.** Loaded to BigQuery as `dim_admin_unit` (594) and
+`fact_deficit_indicator` (2,685). Full provenance in `docs/DATA-RECONCILIATION.md`,
+rebuilt by `scripts/build_deficit_layer.py`.
+
+**The PDF extraction never happened, and that turned out to be better.** The
+90-minute time-box existed for exactly this risk, but the failure was different
+from the one predicted: `rchiips.org`, which hosts the official district factsheet
+PDFs, now returns 404 and presents an invalid TLS certificate. The official source
+is simply unreachable, not merely awkward.
+
+The fallback was two independent community extractions of those same PDFs —
+**cross-validated against each other rather than trusted.** Across the 274
+districts both cover, all five indicators are identical to the decimal (max
+difference 0.00). Two independent parses agreeing exactly is stronger evidence of
+fidelity than one parse of my own would have been. The check re-runs on every
+build. Attribution goes to NFHS-5 (IIPS / MoHFW) — the repositories are transport,
+not authorship, and the values are Government of India statistics.
+
+**NITI MPI was dropped, with a reason.** The National MPI is *computed from*
+NFHS-5, which we now hold at district level. Loading a derived index alongside its
+own source adds a citation, not information. Recorded so nobody re-opens it.
+
+**The reconciliation bug worth remembering.** The first matcher had a national
+name-only fallback for districts whose state did not match. It matched Sikkim's
+**"East"** district to **Delhi's "East"** (census code 7/4 — Delhi is 7, Sikkim is
+11), and a boundary polygon labelled "Junagadh" under Daman & Diu to Gujarat's
+Junagadh. Both would have painted one district's deprivation onto another,
+invisibly. India has too many Easts, Wests and Norths for name-only matching to be
+a heuristic — it is a coin toss. State agreement is now mandatory; the fallback
+cost 3 matches and removed 2 wrong ones. The 27 surviving fuzzy matches are all
+genuine spelling variants (Dhuburi→Dhubri, Ahmadabad→Ahmedabad, Bolangir→Balangir)
+and were reviewed by hand.
+
+Also relevant: the boundary file is 2011-era, so it **predates Telangana (2014) and
+Ladakh (2019)**. Those states are aliased back to their parent for matching.
+
+**Roads & Transport has no real indicator and is left visibly empty.** Road
+connectivity is not a health-survey measure, so NFHS-5 carries no equivalent; it
+needs PMGSY habitation data. The console greys the whole sector, empties the
+ranked list, and explains why. plan.md's own rule — two real sectors beat five
+mangled ones — applied literally.
+
+**Still placeholder, and marked as such in the UI:** district population (so
+"population affected" is an estimate, tagged `est.`), and the citizen signal layer,
+which is synthetic by design.
+
+**Sanity check that the data is right:** worst water deficits land in Hailakandi
+and Cachar (Assam), Ukhrul and Tamenglong (Manipur), South Garo Hills (Meghalaya).
+Those are genuinely water-stressed districts. The ranking is not noise.
+
 ---
 
 ## 4. Process decisions
@@ -293,19 +346,24 @@ than left as live controls that silently do nothing.
 
 ## 7. Next action
 
-**Phase 0 is done and Gate 0 passed.** Next is **Phase 1 — the real data layer,
-15 Aug, 5.5 h**, and it is now the riskiest phase in the project.
+**Phase 2 — signal corpus, evidence images, and Gate 1.** The riskiest remaining
+assumption in the project is geo-grounding: everything downstream inherits its
+error, and mushy geo-grounding makes `DemandIndex` noise, which makes the quadrants
+noise, which collapses the silence turn.
 
-The one thing that actually matters tomorrow: find out within 90 minutes whether
-NFHS-5 district factsheets and the NITI National MPI district table are
-machine-readable or PDF-locked. If extraction blows the time-box, fall back to
-whatever is already CSV on data.gov.in for that sector and disclose the
-substitution in the README. **Two real sectors with clean data beat five sectors
-with mangled numbers.**
+Order of work:
+1. **Build the 50-case geo-grounding test set by hand first** (plan 2.4). Vague,
+   realistic, messy. plan.md calls it the most valuable hour of the week — do it
+   before writing the resolver, so the resolver cannot be tuned to its own test.
+2. Signal schema + BigQuery table (2.1) — every field already exists on
+   `NormalisedSignal`, so this is a transcription, not a design.
+3. Synthetic corpus, ~3,000 signals, grounded in the **now-real** district
+   deficits (2.2). The participation bias is required, not incidental.
+4. Evidence images, ~150 real openly-licensed photographs (2.3), attributed in
+   `docs/IMAGE-ATTRIBUTION.md`. Do not generate these.
+5. **Gate 1** — geo-grounding ≥ 85% or fall back to a mandatory district picker,
+   reframed as "assisted geo-tagging with human confirmation". Decide the same day.
 
-Order of work: boundary GeoJSON first (1.1), because district code reconciliation
-(1.4) is the boring task that silently breaks everything downstream and it needs
-the boundaries in hand.
-
-Everything Phase 1 writes goes through `Warehouse.load_table()` — the interface
-already exists, so there is nothing to design first.
+Note that the corpus generator should now read real deficits from
+`data/fact_deficit_indicator.csv` rather than inventing them — the console fixture
+generator already does exactly this and is the pattern to copy.

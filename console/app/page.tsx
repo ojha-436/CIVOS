@@ -11,7 +11,10 @@ import type { MapDatum } from '@/components/ChoroplethMap';
 
 const ChoroplethMap = dynamic(() => import('@/components/ChoroplethMap'), { ssr: false });
 
-const QKEYS: QuadrantKey[] = ['act_now', 'silent_need', 'expectation_gap', 'stable'];
+// `no_data` is listed last and is a disclosure rather than a verdict — but it is
+// listed, because otherwise the grey districts on the map look like a rendering
+// fault instead of an honest admission that no official value could be loaded.
+const QKEYS: QuadrantKey[] = ['act_now', 'silent_need', 'expectation_gap', 'stable', 'no_data'];
 
 /* Literal hex, because the ramp mixes channels numerically and cannot read a
    CSS custom property. Kept in step with the tokens in globals.css. */
@@ -20,6 +23,7 @@ const QUADRANT_HEX: Record<QuadrantKey, string> = {
   silent_need: '#f3c14b',
   expectation_gap: '#57c4e5',
   stable: '#4a5566',
+  no_data: '#1b212b',
 };
 
 export default function Console() {
@@ -46,7 +50,10 @@ export default function Console() {
   const ranked = useMemo(() => {
     if (!ds) return [];
     return ds.rows
-      .filter((r) => r.sector === sector)
+      // A district with no official deficit value cannot be ranked against one
+      // that has it. Excluded here rather than scored on a zero, which would
+      // silently park every unmatched district at the bottom as if it were fine.
+      .filter((r) => r.sector === sector && r.has_deficit)
       .map((r) => ({ row: r, p: priority(r, weights, adjusted) }))
       .sort((a, b) => b.p - a.p);
   }, [ds, sector, weights, adjusted]);
@@ -58,7 +65,7 @@ export default function Console() {
     if (!ds) return new Map<string, number>();
     const m = new Map<string, number>();
     ds.rows
-      .filter((r) => r.sector === sector)
+      .filter((r) => r.sector === sector && r.has_deficit)
       .map((r) => ({ code: r.code, p: priority(r, weights, !adjusted) }))
       .sort((a, b) => b.p - a.p)
       .forEach((x, i) => m.set(x.code, i + 1));
@@ -67,11 +74,14 @@ export default function Console() {
 
   const quadCounts = useMemo(() => {
     const c: Record<QuadrantKey, number> = {
-      act_now: 0, silent_need: 0, expectation_gap: 0, stable: 0,
+      act_now: 0, silent_need: 0, expectation_gap: 0, stable: 0, no_data: 0,
     };
     ranked.forEach(({ row }) => (c[row.quadrant] += 1));
+    ds?.rows.forEach((r) => {
+      if (r.sector === sector && !r.has_deficit) c.no_data += 1;
+    });
     return c;
-  }, [ranked]);
+  }, [ranked, ds, sector]);
 
   const mapData = useMemo(() => {
     const m = new Map<string, MapDatum>();
@@ -91,8 +101,16 @@ export default function Console() {
         visible: onQuads.has(row.quadrant),
       });
     });
+    // Unscored districts are painted explicitly rather than left unset, so the
+    // absence of official data is visible on the map instead of looking like a
+    // rendering gap.
+    ds?.rows.forEach((r) => {
+      if (r.sector === sector && !r.has_deficit) {
+        m.set(r.code, { colour: QUADRANT_HEX.no_data, q: 'no_data', visible: true });
+      }
+    });
     return m;
-  }, [ranked, onQuads]);
+  }, [ranked, onQuads, ds, sector]);
 
   const visibleRank = useMemo(
     () => ranked.filter(({ row }) => onQuads.has(row.quadrant)),
@@ -125,6 +143,9 @@ export default function Console() {
   }
 
   const silentTop = visibleRank.filter((r) => r.row.quadrant === 'silent_need').length;
+  const coverage = {
+    districts: new Set(ds.rows.filter((r) => r.has_deficit).map((r) => r.code)).size,
+  };
 
   return (
     <div className="shell">
@@ -153,7 +174,8 @@ export default function Console() {
         <div className="strip-item">
           <span className="dot real" />
           <span>
-            <b>Real</b> — district boundaries, names, sector indicators, funding schemes
+            <b>Real</b> — boundaries, names, and <b>NFHS-5 2019-21 deficit values</b> for{' '}
+            {coverage.districts}/{ds.meta.counts.districts} districts
           </span>
         </div>
         <div className="strip-item">
@@ -163,8 +185,9 @@ export default function Console() {
           </span>
         </div>
         <div className="strip-item">
+          <span className="dot nodata" />
           <span>
-            <b>Placeholder</b> — deficit values, pending the Phase 1 load
+            <b>No data</b> — {quadCounts.no_data} district-sectors this view, excluded from ranking
           </span>
         </div>
         <div className="strip-note">Fixture generated {ds.meta.generated_at}</div>
@@ -372,6 +395,23 @@ export default function Console() {
                   Score
                 </span>
               </div>
+              {visibleRank.length === 0 && (
+                <p
+                  style={{
+                    padding: '18px 17px',
+                    fontSize: 12,
+                    lineHeight: 1.6,
+                    color: 'var(--paper-3)',
+                    margin: 0,
+                  }}
+                >
+                  <strong style={{ color: 'var(--gold)' }}>No official indicator loaded</strong>{' '}
+                  for this sector. Road connectivity is not a health-survey measure, so NFHS-5
+                  carries no equivalent — it needs PMGSY habitation data, which is not loaded
+                  yet. The sector is left visibly empty rather than filled with a proxy: two
+                  real sectors beat five mangled ones.
+                </p>
+              )}
               <ul className="rank-list" ref={listRef}>
                 {visibleRank.slice(0, 120).map(({ row, p }, i) => {
                   const d = districts.get(row.code);

@@ -51,20 +51,22 @@ Lock this first. It is not a marketing artefact, it is the build spec. If a feat
 
 ---
 
-## Phase 1 — The Real Data Layer · 15 Aug · 5.5 h
-*The layer judges can independently verify, so it must be genuinely real. Also the phase most likely to overrun.*
+## Phase 1 — The Real Data Layer · 15 Aug · 5.5 h — ✅ **COMPLETE**
+*The layer judges can independently verify. Full provenance in [docs/DATA-RECONCILIATION.md](docs/DATA-RECONCILIATION.md).*
 
-| # | Task | Time |
+| # | Task | Status |
 |---|---|---|
-| 1.1 | Download district admin boundary GeoJSON (~700 districts). Simplify geometry for web rendering — full-resolution boundaries will make the map unusable. | 45 m |
-| 1.2 | NFHS-5 district factsheets → tabular. Extract: improved water source %, improved sanitation %, electricity %, institutional births %, school attendance. **Time-box PDF extraction to 90 minutes.** | 90 m |
-| 1.3 | NITI National MPI district table → deprivation indicators. Cross-check district codes against 1.1. | 45 m |
-| 1.4 | District population + reconcile district codes across all three sources. *The boring task that silently breaks everything downstream — do it properly.* | 45 m |
-| 1.5 | Load to BigQuery: `dim_admin_unit`, `fact_deficit_indicator` with source + year columns. | 30 m |
-| 1.6 | `adapters/in/sectors.yaml` — five sectors, each bound to its indicator **and its visual asset types** (see SPEC §7). | 25 m |
-| 1.7 | `adapters/in/schemes.yaml` — ~15 real central schemes with sector, eligibility note, unit cost for the cost band. Data entry, not engineering. | 45 m |
+| 1.1 | District boundary GeoJSON — 594 districts, 33 MB simplified to 880 KB with mapshaper, topology preserved. | ✅ (done early) |
+| 1.2 | NFHS-5 district indicators → tabular. **PDF extraction never happened** — `rchiips.org` 404s with an invalid TLS cert, so the official PDFs are unreachable. Two independent community extractions used instead and **cross-validated against each other**: 100% identical across 274 overlapping districts, max diff 0.00. | ✅ 644 districts |
+| 1.3 | ~~NITI National MPI district table.~~ **Dropped, deliberately** — the MPI is *computed from* NFHS-5, which we already have at district level. Loading a derived index alongside its own source adds a citation, not information. | ⏭ skipped with reason |
+| 1.4 | Reconcile district codes. **537/594 (90.4%) matched.** State agreement made mandatory after a national name-only fallback matched Sikkim's "East" to Delhi's "East". | ✅ |
+| 1.5 | Load to BigQuery: `dim_admin_unit` (594), `fact_deficit_indicator` (2,685) with source + year. | ✅ |
+| 1.6 | `adapters/in/sectors.yaml` | ✅ (done early) |
+| 1.7 | `adapters/in/schemes.yaml` — 10 real central schemes with unit costs. | ✅ (done early) |
 
-> **If PDF extraction blows past the time-box:** fall back to whatever is already CSV on data.gov.in for that sector and note the substitution in the README. Two real sectors with clean data beat five sectors with mangled numbers.
+> **The time-box fallback was taken, and it paid.** The rule said "fall back to whatever is already CSV and note the substitution". That is exactly what happened — and the cross-validation between two independent extractions is stronger evidence than a single PDF parse would have been.
+>
+> **4 of 5 sectors carry real data.** Roads & Transport has no NFHS-5 equivalent — road connectivity is not a health-survey measure. It is left visibly empty in the console rather than filled with a proxy, per this plan's own rule that two real sectors beat five mangled ones.
 
 ---
 

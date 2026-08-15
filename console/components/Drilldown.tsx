@@ -98,7 +98,10 @@ export default function Drilldown({ ds, district, row, sectorKey, weights, adjus
                   ×{row.voice_correction.toFixed(2)}
                 </dd>
                 <dt>Population affected</dt>
-                <dd>{affected.toLocaleString('en-IN')}</dd>
+                <dd title="Derived from a placeholder district population — no census population is loaded yet">
+                  {affected.toLocaleString('en-IN')}{' '}
+                  <span style={{ color: 'var(--q-silent)', fontSize: 10 }}>est.</span>
+                </dd>
               </dl>
             </div>
           </div>
@@ -162,10 +165,10 @@ export default function Drilldown({ ds, district, row, sectorKey, weights, adjus
                 <span className="amt">{row.deficit.toFixed(1)}%</span>
               </div>
               <div className="elig" style={{ marginTop: 8 }}>
-                Source: {sector.source} ({sector.year}) ·{' '}
-                <span style={{ color: 'var(--q-silent)' }}>
-                  placeholder value pending the Phase 1 load
-                </span>
+                Source: <strong>NFHS-5 {sector.year}</strong> — National Family Health Survey,
+                IIPS &amp; Ministry of Health and Family Welfare, Government of India.{' '}
+                <span style={{ color: 'var(--q-gap)' }}>Real measured value</span>, reconciled
+                onto this district and cross-validated against an independent extraction.
               </div>
             </div>
 

@@ -7,15 +7,17 @@ means the expensive UI work happens now and the real data slots in behind an
 interface that does not move.
 
 **Everything this script emits about citizens is synthetic and is labelled as such
-in the interface itself.** The district boundaries and names are real. The deficit
-indicators here are placeholders with the shape of the real ones — Phase 1 replaces
-them with NFHS-5 and NITI MPI values, keyed by the same district codes.
+in the interface itself.** District boundaries and names are real. **Deficit values
+are now real too** — NFHS-5 2019-21, built by `scripts/build_deficit_layer.py` and
+reconciled onto this boundary set. Where a district or sector has no real value it
+is marked `has_deficit = false`, assigned the `no_data` quadrant, excluded from the
+ranking and rendered grey. It is never given an invented number.
 
 The participation bias is deliberate and is the whole point. Connectivity drives
-three things at once: it *raises* how much a district complains, it *lowers* its
-deficit, and it *raises* how often a complaint carries a photograph. That last one
-is the urban skew SPEC §13 warns about — it is modelled here on purpose so the
-`w5 = 0` decision can be demonstrated rather than described.
+three things at once: it *raises* how much a district complains, it *lowers* how
+much of its real deficit gets voiced, and it *raises* how often a complaint carries
+a photograph. That last one is the urban skew SPEC §13 warns about — modelled on
+purpose so the `w5 = 0` decision can be demonstrated rather than described.
 
 Deterministic: the same inputs always produce the same fixture, so a reviewer can
 regenerate and diff.
@@ -26,6 +28,7 @@ Usage:
 
 from __future__ import annotations
 
+import csv
 import hashlib
 import json
 import re
@@ -154,6 +157,27 @@ FLAGS = ["structurally_unsafe", "standing_water", "unusable", "partially_functio
 # ---------------------------------------------------------------------------
 
 
+def load_real_deficits() -> dict[tuple[str, str], float]:
+    """Real NFHS-5 deprivation per (district, sector), from the Phase 1 build.
+
+    Where a sector has more than one indicator (water AND sanitation), the sector
+    deficit is their mean — SPEC §7 names both for Water & Sanitation and neither
+    alone represents the sector.
+
+    Districts or sectors with no real value are simply absent from this map. The
+    caller marks them `has_deficit = false` and the console renders them grey and
+    excludes them from the ranking, rather than inventing a number.
+    """
+    path = REPO / "data" / "fact_deficit_indicator.csv"
+    if not path.exists():
+        console.print("[yellow]No deficit layer found — run scripts/build_deficit_layer.py first.[/yellow]")
+        return {}
+    acc: dict[tuple[str, str], list[float]] = {}
+    for r in csv.DictReader(path.open(encoding="utf-8")):
+        acc.setdefault((r["admin_unit_code"], r["sector"]), []).append(float(r["deficit_pct"]))
+    return {k: sum(v) / len(v) for k, v in acc.items()}
+
+
 def bbox_centroid(geom: dict) -> tuple[float, float]:
     xs: list[float] = []
     ys: list[float] = []
@@ -182,6 +206,8 @@ def main(
     sectors_cfg = yaml.safe_load((REPO / "adapters" / "in" / "sectors.yaml").read_text())
     schemes_cfg = yaml.safe_load((REPO / "adapters" / "in" / "schemes.yaml").read_text())
     sectors = sectors_cfg["sectors"]
+    real_deficits = load_real_deficits()
+    console.print(f"Real deficit values loaded: [bold]{len(real_deficits)}[/bold] district-sector pairs")
     schemes = {s["key"]: s for s in schemes_cfg["schemes"]}
 
     console.print(f"Districts in source: [bold]{len(gj['features'])}[/bold]")
@@ -228,10 +254,13 @@ def main(
             key = sec["key"]
             k = f"{d['code']}|{key}"
 
-            # Deficit is worse where connectivity is lower. Real deficit data
-            # replaces this in Phase 1; the anti-correlation is what makes the
-            # Silent Need quadrant populate plausibly in the meantime.
-            deficit = clamp((1 - conn) * 74 + rnd("def", k) * 34 - 4, 2, 99)
+            # Deficit is REAL where Phase 1 could load it: NFHS-5 2019-21,
+            # reconciled onto this boundary set. Absent for districts that did not
+            # reconcile and for Roads & Transport, which has no health-survey
+            # equivalent — those are flagged, not filled.
+            real = real_deficits.get((d["code"], key))
+            has_deficit = real is not None
+            deficit = real if has_deficit else 0.0
 
             # A district is only heard from when it has BOTH a problem and the
             # means to report it. This is the bias the engine exists to correct.
@@ -261,6 +290,7 @@ def main(
                     "images": images,
                     "demand": round(demand, 1),
                     "deficit": round(deficit, 1),
+                    "has_deficit": has_deficit,
                     "participation": participation,
                     "evidence": round(evidence, 1),
                     "forecast": forecast,
@@ -278,9 +308,16 @@ def main(
         r["silence_gap"] = round(r["deficit"] - r["demand"], 1)
 
     # -- quadrants off cross-district medians --------------------------------
-    med_dem = sorted(r["demand"] for r in rows)[len(rows) // 2]
-    med_def = sorted(r["deficit"] for r in rows)[len(rows) // 2]
+    # Medians over rows that actually carry a real deficit. Including the zeros
+    # written for unmatched districts would drag both medians down and mislabel
+    # the whole map.
+    scored = [r for r in rows if r["has_deficit"]]
+    med_dem = sorted(r["demand"] for r in scored)[len(scored) // 2]
+    med_def = sorted(r["deficit"] for r in scored)[len(scored) // 2]
     for r in rows:
+        if not r["has_deficit"]:
+            r["quadrant"] = "no_data"
+            continue
         hi_d, hi_x = r["demand"] >= med_dem, r["deficit"] >= med_def
         r["quadrant"] = (
             "act_now" if (hi_d and hi_x)
@@ -325,7 +362,7 @@ def main(
             "provenance": {
                 "boundaries": "real — public district boundary data, simplified for web rendering",
                 "district_names": "real",
-                "deficit_indicators": "PLACEHOLDER — Phase 1 replaces with NFHS-5 / NITI MPI, same district codes",
+                "deficit_indicators": "REAL — NFHS-5 2019-21 (IIPS/MoHFW), reconciled onto this boundary set. See docs/DATA-RECONCILIATION.md",
                 "citizen_signals": "SYNTHETIC — generated with a deliberate participation bias",
                 "population": "PLACEHOLDER",
                 "quotes": "SYNTHETIC — illustrative phrasing, real languages",

@@ -29,13 +29,6 @@ interface Props {
   onReady: () => void;
 }
 
-const QCOLOUR: Record<QuadrantKey, string> = {
-  act_now: '#ff6a45',
-  silent_need: '#f3c14b',
-  expectation_gap: '#57c4e5',
-  stable: '#566273',
-};
-
 export default function ChoroplethMap({ data, selected, onHover, onSelect, onReady }: Props) {
   const holder = useRef<HTMLDivElement>(null);
   const map = useRef<MLMap | null>(null);

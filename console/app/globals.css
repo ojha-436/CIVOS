@@ -1340,3 +1340,14 @@ input[type='range']::-moz-range-thumb {
 .maplibregl-canvas:focus {
   outline: none;
 }
+
+/* -- no-data disclosure ---------------------------------------------------- */
+
+:root {
+  --q-nodata: #39424f;
+}
+
+.dot.nodata {
+  background: var(--q-nodata);
+  box-shadow: 0 0 6px var(--q-nodata);
+}
