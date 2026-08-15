@@ -1,0 +1,418 @@
+# GATE 1 — geo-grounding test set. 50 hand-built cases.
+#
+# plan.md calls building this "the most valuable hour of the week", and it is
+# authored BEFORE the resolver exists, on purpose: a test set written after the
+# resolver is a test of what the resolver already does, not of what the product
+# needs. Nothing in scripts/geo_ground.py existed when this file was committed.
+#
+# **Stated limitation.** These cases are authored by the same party that builds
+# the resolver, so this is a self-graded exam. Writing it first constrains the
+# grading but does not eliminate the bias, and no accuracy figure derived from it
+# should be presented as an independent evaluation. It is a build gate, not a
+# benchmark.
+#
+# Ground truth is an `admin_unit_code` from data/dim_admin_unit.csv, or `null`
+# where a competent human could not resolve the text either. The null cases carry
+# equal weight: a resolver that confidently invents a district for "in our
+# village" is worse than one that abstains, because every downstream score
+# inherits the error silently.
+#
+# Difficulty tiers:
+#   T1 explicit    district named outright
+#   T2 variant     district named, but spelled differently from the boundary file
+#   T3 subunit     only a town, block or tehsil is named
+#   T4 landmark    only a physical or cultural feature is named
+#   T5 ambiguous   the name exists in more than one state
+#   T6 abstain     genuinely unresolvable; the correct answer is null
+
+meta:
+  version: 1
+  authored: 2026-08-15
+  authored_before_resolver: true
+  cases: 50
+  gate_threshold: 0.85
+  scoring: >
+    A case is correct when the predicted admin_unit_code equals expected exactly,
+    or when both are null. Abstain cases count toward the same total as any other.
+
+cases:
+  # ---- T1 · explicit district name --------------------------------------
+  - id: t1-01
+    tier: T1
+    lang: mr
+    text: "नाशिक जिल्ह्यातील आमच्या गावात हातपंप तीन महिन्यांपासून बंद आहे."
+    gloss: "In our village in Nashik district the handpump has been out for three months."
+    expected: IN-MH-nashik
+
+  - id: t1-02
+    tier: T1
+    lang: en
+    text: "Barmer district, the overhead tank was built but no water ever came."
+    expected: IN-RJ-barmer
+
+  - id: t1-03
+    tier: T1
+    lang: ml
+    text: "വയനാട് ജില്ലയിലെ സ്കൂളിന്റെ മതിൽ ഇടിഞ്ഞു വീണു."
+    gloss: "The school wall in Wayanad district has collapsed."
+    expected: IN-KL-wayanad
+
+  - id: t1-04
+    tier: T1
+    lang: en
+    text: "Kandhamal district in Odisha — the sub-centre has no electricity at all."
+    expected: IN-OR-kandhamal
+
+  - id: t1-05
+    tier: T1
+    lang: hi
+    text: "सोनभद्र जिले में हैंडपंप का पानी लाल आता है।"
+    gloss: "In Sonbhadra district the handpump water runs red."
+    expected: IN-UP-sonbhadra
+
+  - id: t1-06
+    tier: T1
+    lang: bn
+    text: "মুর্শিদাবাদ জেলায় রাস্তার আলো ছয় মাস ধরে জ্বলে না।"
+    gloss: "In Murshidabad district the street lights have not worked for six months."
+    expected: IN-WB-murshidabad
+
+  - id: t1-07
+    tier: T1
+    lang: en
+    text: "Please look at Malkangiri, the ambulance cannot reach these villages in the rains."
+    expected: IN-OR-malkangiri
+
+  - id: t1-08
+    tier: T1
+    lang: hi
+    text: "झाबुआ जिले के स्कूल में लड़कियों के लिए अलग शौचालय नहीं है।"
+    gloss: "The school in Jhabua district has no separate toilet for girls."
+    expected: IN-MP-jhabua
+
+  # ---- T2 · variant spelling / transliteration --------------------------
+  - id: t2-01
+    tier: T2
+    lang: en
+    text: "Dhubri town and the villages around it flood every single year."
+    note: "Boundary file spells this Dhuburi."
+    expected: IN-AS-dhuburi
+
+  - id: t2-02
+    tier: T2
+    lang: en
+    text: "Chamarajanagar — the tribal hamlets still have no piped water."
+    note: "Boundary file spells this Chamrajnagar."
+    expected: IN-KA-chamrajnagar
+
+  - id: t2-03
+    tier: T2
+    lang: bn
+    text: "পুরুলিয়ায় গ্রীষ্মকালে সব কুয়ো শুকিয়ে যায়।"
+    gloss: "In Purulia all the wells dry up in summer."
+    note: "Boundary file spells this Puruliya."
+    expected: IN-WB-puruliya
+
+  - id: t2-04
+    tier: T2
+    lang: en
+    text: "Nowrangpur block office says the borewell scheme was completed. It was not."
+    note: "Nabarangpur, also written Nowrangpur."
+    expected: IN-OR-nabarangpur
+
+  - id: t2-05
+    tier: T2
+    lang: gu
+    text: "કચ્છમાં ખારા પાણીના કારણે લોકો બીમાર પડે છે."
+    gloss: "In Kutch people fall ill because of the saline water."
+    note: "Kutch / Kachchh."
+    expected: IN-GJ-kachchh
+
+  - id: t2-06
+    tier: T2
+    lang: en
+    text: "Balasore side, the cyclone shelter has no working toilet."
+    note: "Baleshwar / Balasore."
+    expected: IN-OR-baleshwar
+
+  - id: t2-07
+    tier: T2
+    lang: en
+    text: "Karimgunj — the primary health centre roof leaks onto the beds."
+    note: "Karimganj, occasionally transliterated Karimgunj."
+    expected: IN-AS-karimganj
+
+  # ---- T3 · town / block / tehsil only ----------------------------------
+  - id: t3-01
+    tier: T3
+    lang: en
+    text: "In Silchar the drains overflow into the road every monsoon."
+    note: "Silchar is the headquarters of Cachar district."
+    expected: IN-AS-cachar
+
+  - id: t3-02
+    tier: T3
+    lang: hi
+    text: "जगदलपुर के पास वाले गाँव में बिजली का ट्रांसफार्मर जला पड़ा है।"
+    gloss: "In a village near Jagdalpur the transformer has burnt out."
+    note: "Jagdalpur is the headquarters of Bastar district."
+    expected: IN-CT-bastar
+
+  - id: t3-03
+    tier: T3
+    lang: gu
+    text: "ભુજ પાસેના ગામમાં પાણીની ટાંકી તૂટી ગઈ છે."
+    gloss: "In a village near Bhuj the water tank has broken."
+    note: "Bhuj is the headquarters of Kachchh."
+    expected: IN-GJ-kachchh
+
+  - id: t3-04
+    tier: T3
+    lang: ml
+    text: "കൽപ്പറ്റയ്ക്ക് അടുത്തുള്ള അങ്കണവാടിക്ക് കക്കൂസില്ല."
+    gloss: "The anganwadi near Kalpetta has no toilet."
+    note: "Kalpetta is the headquarters of Wayanad."
+    expected: IN-KL-wayanad
+
+  - id: t3-05
+    tier: T3
+    lang: en
+    text: "Phulbani area — women walk three kilometres for drinking water."
+    note: "Phulbani is the headquarters of Kandhamal."
+    expected: IN-OR-kandhamal
+
+  - id: t3-06
+    tier: T3
+    lang: en
+    text: "Near Ambassa the road to the school washes out every year."
+    note: "Ambassa is the headquarters of Dhalai district, Tripura."
+    expected: IN-TR-dhalai
+
+  - id: t3-07
+    tier: T3
+    lang: en
+    text: "Jeypore side the school has one room for three classes."
+    note: "Jeypore is in Koraput district, Odisha."
+    expected: IN-OR-koraput
+
+  - id: t3-08
+    tier: T3
+    lang: en
+    text: "Baghmara — no electricity connection in the whole hamlet."
+    note: "Baghmara is the headquarters of South Garo Hills, Meghalaya."
+    expected: IN-ML-south-garo-hills
+
+  - id: t3-09
+    tier: T3
+    lang: hi
+    text: "पोखरण के पास ट्यूबवेल का पानी खारा है, पीने लायक नहीं।"
+    gloss: "Near Pokhran the tubewell water is saline and undrinkable."
+    note: "Pokhran is in Jaisalmer district."
+    expected: IN-RJ-jaisalmer
+
+  - id: t3-10
+    tier: T3
+    lang: mr
+    text: "त्र्यंबकेश्वरजवळच्या पाड्यावर वीज अजून पोहोचली नाही."
+    gloss: "Electricity has still not reached the hamlet near Trimbakeshwar."
+    note: "Trimbakeshwar is a taluka of Nashik district."
+    expected: IN-MH-nashik
+
+  - id: t3-11
+    tier: T3
+    lang: mr
+    text: "बारामती तालुक्यातील शाळेची इमारत धोकादायक झाली आहे."
+    gloss: "The school building in Baramati taluka has become unsafe."
+    note: "Baramati is a taluka of Pune district."
+    expected: IN-MH-pune
+
+  - id: t3-12
+    tier: T3
+    lang: en
+    text: "Bhiwandi — the public toilet block has been locked for a year."
+    note: "Bhiwandi is in Thane district."
+    expected: IN-MH-thane
+
+  - id: t3-13
+    tier: T3
+    lang: mr
+    text: "अक्कलकुवा भागात प्रसूतीसाठी बाईला ४० किलोमीटर न्यावं लागतं."
+    gloss: "In the Akkalkuwa area a woman must be taken 40 km to give birth."
+    note: "Akkalkuwa is a taluka of Nandurbar district."
+    expected: IN-MH-nandurbar
+
+  - id: t3-14
+    tier: T3
+    lang: en
+    text: "Sulthan Bathery — the tribal colony has no street lighting at all."
+    note: "Sulthan Bathery is in Wayanad district."
+    expected: IN-KL-wayanad
+
+  - id: t3-15
+    tier: T3
+    lang: hi
+    text: "बीरपुर के पास कोसी बांध वाले इलाके में चापाकल खराब है।"
+    gloss: "Near Birpur, in the Kosi embankment area, the handpump is broken."
+    note: "Birpur town is in Supaul district, Bihar."
+    expected: IN-BR-supaul
+
+  # ---- T4 · landmark / physical feature only ----------------------------
+  - id: t4-01
+    tier: T4
+    lang: en
+    text: "The villages on the edge of the Gir forest still fetch water by bullock cart."
+    note: "Gir forest lies mainly in Junagadh district, Gujarat."
+    expected: IN-GJ-junagadh
+
+  - id: t4-02
+    tier: T4
+    lang: en
+    text: "Around Loktak lake the fishing hamlets have no toilets."
+    note: "Loktak lake is in Bishnupur district, Manipur."
+    expected: IN-MN-bishnupur
+
+  - id: t4-03
+    tier: T4
+    lang: hi
+    text: "डल झील के किनारे के मोहल्ले में नाली का पानी झील में जा रहा है।"
+    gloss: "In the neighbourhood beside Dal Lake the drain water flows into the lake."
+    note: "Dal Lake is in Srinagar district."
+    expected: IN-JK-srinagar
+
+  - id: t4-04
+    tier: T4
+    lang: en
+    text: "The tea garden lines near Kaziranga have no piped water."
+    note: >
+      Kaziranga straddles Golaghat and Nagaon districts. A careful resolver should
+      abstain rather than pick one; this case tests that it does not guess.
+    expected: null
+
+  - id: t4-05
+    tier: T4
+    lang: or
+    text: "ଚିଲିକା ହ୍ରଦ କୂଳର ଗାଁରେ ପାନୀୟ ଜଳର ଅଭାବ ।"
+    gloss: "The villages on the shore of Chilika lake lack drinking water."
+    note: >
+      Chilika spans Puri, Khordha and Ganjam districts. Correct answer is to abstain.
+    expected: null
+
+  # ---- T5 · ambiguous district name, needs the state ---------------------
+  - id: t5-01
+    tier: T5
+    lang: en
+    text: "Aurangabad district in Bihar — the primary school has no boundary wall."
+    expected: IN-BR-aurangabad
+
+  - id: t5-02
+    tier: T5
+    lang: mr
+    text: "औरंगाबाद, महाराष्ट्र — वस्तीत पाण्याची टाकी नाही."
+    gloss: "Aurangabad, Maharashtra — the settlement has no water tank."
+    expected: IN-MH-aurangabad
+
+  - id: t5-03
+    tier: T5
+    lang: en
+    text: "Bilaspur in Himachal, the road to the village is broken after the landslide."
+    expected: IN-HP-bilaspur
+
+  - id: t5-04
+    tier: T5
+    lang: hi
+    text: "बिलासपुर (छत्तीसगढ़) में सरकारी अस्पताल में बिजली नहीं रहती।"
+    gloss: "In Bilaspur (Chhattisgarh) the government hospital has no power."
+    expected: IN-CT-bilaspur
+
+  - id: t5-05
+    tier: T5
+    lang: hi
+    text: "हमीरपुर, उत्तर प्रदेश — गाँव में शौचालय बने पर पानी नहीं आता।"
+    gloss: "Hamirpur, Uttar Pradesh — toilets were built but there is no water."
+    expected: IN-UP-hamirpur
+
+  - id: t5-06
+    tier: T5
+    lang: en
+    text: "Raigarh in Chhattisgarh — coal dust in the drinking water tank."
+    expected: IN-CT-raigarh
+
+  - id: t5-07
+    tier: T5
+    lang: en
+    text: "We are from Aurangabad. The handpump is dry."
+    note: >
+      Aurangabad exists in both Bihar and Maharashtra and no state is given.
+      Abstaining is correct; guessing is a coin toss that a downstream score
+      would inherit silently.
+    expected: null
+
+  # ---- T6 · genuinely unresolvable; abstaining is the right answer -------
+  - id: t6-01
+    tier: T6
+    lang: hi
+    text: "हमारे गाँव में पानी की बहुत दिक्कत है, कोई सुनता नहीं।"
+    gloss: "There is a severe water problem in our village and nobody listens."
+    expected: null
+
+  - id: t6-02
+    tier: T6
+    lang: en
+    text: "The transformer near the temple has been burnt out for months."
+    expected: null
+
+  - id: t6-03
+    tier: T6
+    lang: ta
+    text: "எங்கள் ஊரில் தெருவிளக்கு ஒன்றும் எரியவில்லை."
+    gloss: "Not a single street light works in our town."
+    expected: null
+
+  - id: t6-04
+    tier: T6
+    lang: en
+    text: "In the northern part of the state the schools have no drinking water."
+    expected: null
+
+  - id: t6-05
+    tier: T6
+    lang: hi
+    text: "जिला मुख्यालय के पास वाली बस्ती में नाली नहीं है।"
+    gloss: "The settlement near the district headquarters has no drain."
+    expected: null
+
+  # ---- code-mixing, which real Indian speech does constantly -------------
+  - id: t7-01
+    tier: T3
+    lang: hi-en
+    text: "Bhai humare yahan Kishanganj mein school building ka roof leak kar raha hai."
+    gloss: "Brother, here in Kishanganj the school building roof is leaking."
+    expected: IN-BR-kishanganj
+
+  - id: t7-02
+    tier: T1
+    lang: mr-en
+    text: "Nandurbar district madhe PHC la doctor nahi, staff nurse pan nahi."
+    gloss: "In Nandurbar district the PHC has no doctor, not even a staff nurse."
+    expected: IN-MH-nandurbar
+
+  - id: t7-03
+    tier: T2
+    lang: hi-en
+    text: "Sitamarhi ka jo border wala block hai, wahan chapakal sab kharab pade hain."
+    gloss: "In the border block of Sitamarhi all the handpumps are broken."
+    expected: IN-BR-sitamarhi
+
+  - id: t7-04
+    tier: T5
+    lang: hi-en
+    text: "Hamirpur HP wala, road bilkul toot gaya hai barish ke baad."
+    gloss: "Hamirpur in HP — the road is completely broken after the rain."
+    note: "HP disambiguates from Hamirpur, Uttar Pradesh."
+    expected: IN-HP-hamirpur
+
+  - id: t7-05
+    tier: T4
+    lang: en
+    text: "The desert villages past Pokhran towards the border have no electricity."
+    expected: IN-RJ-jaisalmer
