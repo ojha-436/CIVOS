@@ -2,7 +2,14 @@
 
 Everything decided so far and, more importantly, **why**. Written so that work can resume cold — after a gap, on a new machine, or in a new session — without re-deriving anything.
 
-**Last updated:** 15 Aug 2026 · Status: **Phases 0, 1, 2 and most of 5 complete.** Gate 1 passed (98.1%). Gate 0 passed (`PROCEED_BQML`); the official NFHS-5 deficit layer is loaded (537/594 districts, 4/5 sectors); the console and citizen intake are built. **Next: Phase 2 — signal corpus, evidence images, and Gate 1 (geo-grounding).**
+**Last updated:** 15 Aug 2026 · Status: **Phases 0–5 complete. Both services live on Cloud Run.**
+
+| Service | URL |
+|---|---|
+| Console (Next.js) | https://civos-console-924096812044.asia-south1.run.app |
+| API (FastAPI) | https://civos-api-dwqucraxoq-el.a.run.app |
+
+Gate 0: `PROCEED_BQML`. Gate 1: 98.1% (51/52). Phases 3 & 4 shipped 15 Aug. **Next: Phase 6 — Portability & DPG (second country adapter, lint CI, DPG compliance doc).**
 
 ---
 
