@@ -161,7 +161,7 @@ export default function Report() {
 
     try {
       // Use local FastAPI endpoint.
-      const response = await fetch('http://localhost:8000/signal', {
+      const response = await fetch('/api/signal', {
         method: 'POST',
         body: formData,
       });

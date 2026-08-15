@@ -120,7 +120,7 @@ export default function Dossier({ ds, district, row, sectorKey, weights, adjuste
       cost_hi: formatINR(hi),
     };
 
-    fetch('http://localhost:8000/dossier', {
+    fetch('/api/dossier', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(bundle),

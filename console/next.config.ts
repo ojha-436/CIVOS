@@ -1,15 +1,17 @@
 import type { NextConfig } from 'next';
 
+// BACKEND_URL is a server-only env var — never NEXT_PUBLIC_ — so it is read
+// at runtime by the standalone server, not baked into the client bundle.
+// Locally: http://localhost:8000  |  Cloud Run: set via --set-env-vars
+const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8000';
+
 const nextConfig: NextConfig = {
   output: 'standalone',
-  // API rewrites: when deployed, the console hits the Cloud Run API service.
-  // Locally, it hits localhost:8000. The env var overrides the default.
   async rewrites() {
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
     return [
       {
         source: '/api/:path*',
-        destination: `${apiBase}/:path*`,
+        destination: `${BACKEND_URL}/:path*`,
       },
     ];
   },
