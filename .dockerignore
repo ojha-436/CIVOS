@@ -1,0 +1,10 @@
+.git/
+.venv/
+console/node_modules/
+console/.next/
+data/raw/
+__pycache__/
+*.pyc
+.DS_Store
+uv.lock
+docs/screenshots/

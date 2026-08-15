@@ -223,6 +223,90 @@ async def import_csv(file: UploadFile = File(...)):
 # ---------------------------------------------------------------------------
 
 
+@app.post("/dossier")
+async def dossier_endpoint(request: dict):
+    """Generate a grounded dossier for a district-sector pair.
+
+    Accepts a JSON evidence bundle (assembled by the console from the precomputed
+    fixture) and returns Gemini-generated prose. Nothing can appear in the dossier
+    that is not in the bundle — grounding is architectural, not aspirational (SPEC §9).
+    """
+    try:
+        from google import genai
+        from google.genai import types as gtypes
+
+        PROJECT = "civos-in"
+        LOCATION = "asia-south1"
+        MODEL = "gemini-2.5-flash"
+
+        district = request.get("district", "")
+        sector = request.get("sector", "")
+        quadrant = request.get("quadrant", "")
+        signals = request.get("signals", 0)
+        needs = request.get("needs", 0)
+        deficit = request.get("deficit", 0.0)
+        languages = request.get("languages", 1)
+        images = request.get("images", 0)
+        priority_score = request.get("priority_score", 0.0)
+        quotes = request.get("quotes", [])
+        scheme_name = request.get("scheme_name", "")
+        scheme_eligibility = request.get("scheme_eligibility", "")
+        cost_lo = request.get("cost_lo", "")
+        cost_hi = request.get("cost_hi", "")
+        forecast_direction = request.get("forecast_direction", "stable")
+        assets = request.get("assets", [])
+        population_affected = request.get("population_affected", 0)
+        evidence_strength = request.get("evidence_strength", 0.0)
+        source = request.get("source", "NFHS-5 2019-21")
+
+        quote_text = "\n".join([
+            f'[Q{i+1}] ({q.get("lang", "")}) "{q.get("original", "")}" → "{q.get("english", "")}"'
+            for i, q in enumerate(quotes)
+        ])
+        asset_text = ", ".join([f'{a.get("type","").replace("_"," ")} ({a.get("flag","")})' for a in assets])
+
+        bundle_prompt = f"""You are generating a project dossier for a government policymaker in India.
+Generate ONLY from the evidence bundle below — do NOT invent claims, statistics, or quotes.
+Be concise: 3-4 short paragraphs total.
+
+EVIDENCE BUNDLE:
+- District: {district}
+- Sector: {sector}
+- Quadrant: {quadrant}
+- Priority score: {priority_score:.1f}/100
+- Citizen signals: {signals} (from {needs} distinct needs, in {languages} language(s), {images} with photos)
+- Official deficit: {deficit:.1f}% ({source})
+- Population affected (est.): {population_affected:,}
+- 90-day demand trend: {forecast_direction}
+- Evidence strength (share of needs with photos): {evidence_strength:.1f}%
+- Representative citizen quotes:
+{quote_text}
+- Visual evidence assets: {asset_text}
+- Matched funding scheme: {scheme_name}
+- Scheme eligibility: {scheme_eligibility}
+- Indicative cost band: {cost_lo} – {cost_hi}
+
+Generate 3-4 paragraphs:
+1. The situation (what citizens say + what official data confirms)
+2. Why this district needs attention (silence gap or corroboration)
+3. Recommended action and funding route
+4. Data quality and caveats (include: citizen layer is synthetic, evidence photos are real)
+"""
+
+        client = genai.Client(vertexai=True, project=PROJECT, location=LOCATION)
+        response = client.models.generate_content(
+            model=MODEL,
+            contents=[gtypes.Content(parts=[gtypes.Part.from_text(bundle_prompt)], role="user")],
+            config=gtypes.GenerateContentConfig(temperature=0.3),
+        )
+        prose = (response.text or "").strip()
+
+    except Exception as exc:
+        prose = f"[Dossier generation unavailable: {exc}]"
+
+    return {"prose": prose}
+
+
 @app.get("/aggregate")
 def aggregate(sector: str | None = None, quadrant: str | None = None):
     """Return ranked (district, sector) rows from the precomputed fixture.

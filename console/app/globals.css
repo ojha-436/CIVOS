@@ -1351,3 +1351,204 @@ input[type='range']::-moz-range-thumb {
   background: var(--q-nodata);
   box-shadow: 0 0 6px var(--q-nodata);
 }
+
+/* ── Phase 5.7 — Dossier modal ─────────────────────────────────────────── */
+
+.dossier-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  z-index: 300;
+  backdrop-filter: blur(2px);
+}
+
+.dossier-modal {
+  position: fixed;
+  inset: 20px;
+  z-index: 301;
+  background: var(--ink-800);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.dossier-inner {
+  overflow-y: auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.dos-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 18px 22px 14px;
+  border-bottom: 1px solid var(--rule);
+  flex-shrink: 0;
+}
+
+.dos-banner {
+  padding: 8px 22px;
+  background: color-mix(in srgb, var(--ink-700) 80%, transparent);
+  border-bottom: 1px solid var(--rule);
+  font-size: 11px;
+  color: var(--paper-3);
+  flex-shrink: 0;
+}
+
+.dos-body {
+  display: flex;
+  gap: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+.dos-col {
+  padding: 16px 20px;
+  overflow-y: auto;
+  flex: 1;
+  min-width: 0;
+}
+
+.dos-col + .dos-col {
+  border-left: 1px solid var(--rule);
+}
+
+.dos-section {
+  margin-bottom: 20px;
+}
+
+.dos-score-big {
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+  margin: 4px 0 10px;
+}
+
+.dos-photos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.dos-photo {
+  margin: 0;
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--ink-700);
+  aspect-ratio: 4/3;
+}
+
+.dos-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.dos-photo figcaption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.82), transparent);
+  padding: 20px 8px 7px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.dos-photo-label {
+  font-size: 9.5px;
+  color: rgba(255,255,255,0.8);
+  line-height: 1.35;
+  max-width: 80%;
+}
+
+.dos-photo-id {
+  font-size: 9px;
+  color: rgba(255,255,255,0.5);
+  font-family: var(--mono);
+}
+
+.dos-prose {
+  font-size: 12.5px;
+  color: var(--paper-2);
+  line-height: 1.7;
+  background: color-mix(in srgb, var(--ink-700) 60%, transparent);
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin-top: 8px;
+}
+
+.dos-prose p {
+  margin: 0 0 10px;
+}
+
+.dos-prose p:last-child {
+  margin-bottom: 0;
+}
+
+.dos-prose-loading {
+  padding: 18px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.dos-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  margin-top: 8px;
+}
+
+.dos-table th {
+  text-align: left;
+  padding: 5px 8px;
+  color: var(--paper-4);
+  font-weight: 500;
+  border-bottom: 1px solid var(--rule);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dos-table td {
+  padding: 5px 8px;
+  color: var(--paper-3);
+  border-bottom: 1px solid color-mix(in srgb, var(--rule) 50%, transparent);
+  vertical-align: top;
+}
+
+.dos-table td:first-child {
+  color: var(--paper-4);
+  font-family: var(--mono);
+  font-size: 10px;
+  width: 24px;
+}
+
+.dos-table td:last-child {
+  color: var(--paper-4);
+  font-family: var(--mono);
+  font-size: 10px;
+}
+
+@media (max-width: 900px) {
+  .dos-body {
+    flex-direction: column;
+  }
+  .dos-col + .dos-col {
+    border-left: none;
+    border-top: 1px solid var(--rule);
+  }
+  .dos-photos {
+    grid-template-columns: 1fr 1fr;
+  }
+}

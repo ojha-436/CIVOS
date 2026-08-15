@@ -1,8 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import type { Dataset, District, Row, Weights } from '@/lib/types';
 import { QUADRANTS } from '@/lib/types';
 import { costBand, formatINR, priority } from '@/lib/scoring';
+import Dossier from './Dossier';
 
 interface Props {
   ds: Dataset;
@@ -15,6 +17,7 @@ interface Props {
 }
 
 export default function Drilldown({ ds, district, row, sectorKey, weights, adjusted, onClose }: Props) {
+  const [showDossier, setShowDossier] = useState(false);
   const sector = ds.sectors.find((s) => s.key === sectorKey)!;
   const q = QUADRANTS[row.quadrant];
   const p = priority(row, weights, adjusted);
@@ -198,14 +201,26 @@ export default function Drilldown({ ds, district, row, sectorKey, weights, adjus
                   recommend funding on silence — that would replace one guess with
                   another. It recommends going to listen.
                 </p>
-                <button className="btn-gold" onClick={() => alert('Outreach dispatch — wired in Phase 5')}>
+                <button className="btn-gold" onClick={() => setShowDossier(true)}>
                   Dispatch outreach
                 </button>
               </div>
             ) : (
-              <button className="btn-gold" onClick={() => alert('Dossier generation — wired in Phase 5')}>
+              <button className="btn-gold" onClick={() => setShowDossier(true)}>
                 Generate full dossier
               </button>
+            )}
+
+            {showDossier && (
+              <Dossier
+                ds={ds}
+                district={district}
+                row={row}
+                sectorKey={sectorKey}
+                weights={weights}
+                adjusted={adjusted}
+                onClose={() => setShowDossier(false)}
+              />
             )}
 
             <p style={{ fontSize: 10.5, color: 'var(--paper-4)', lineHeight: 1.5, marginTop: 12 }}>

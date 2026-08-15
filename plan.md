@@ -100,33 +100,32 @@ Lock this first. It is not a marketing artefact, it is the build spec. If a feat
 
 ---
 
-## Phase 3 — Multimodal Intake · 17 Aug · 6 h
-*Runs half an hour long. Budgeted for — Phase 6 gave it up.*
+## Phase 3 — Multimodal Intake · 15 Aug (built early) · ✅ COMPLETE
 
-| # | Task | Time |
+| # | Task | Status |
 |---|---|---|
-| 3.1 | **Single Gemini multimodal extraction call.** Accepts any combination of audio, text and image parts; returns one schema-enforced JSON object (SPEC §6.2 field list). One call, not a chain — this is the whole reason image was cheap to add. | 90 m |
-| 3.2 | FastAPI on Cloud Run: `POST /signal` (multipart — audio, image, text), `POST /import` (bulk CSV), `GET /aggregate`. OpenAPI 3.1 emitted. | 60 m |
-| 3.3 | **Multimodal web widget:** mic (`MediaRecorder`) + camera/upload (`<input capture>`) + text box, all posting to the same endpoint. Auto language detect, no dropdown. Shows the structured result live — this is the 0:20 and 0:50 shots, make them look good. | 105 m |
-| 3.4 | **EXIF GPS path:** parse EXIF, resolve via `ST_CONTAINS`, flag `geo_confidence = high`, then **discard the coordinates** (SPEC §11 — storing them is a surveillance risk with no product benefit). | 30 m |
-| 3.5 | **Image PII safety gate:** `people_present = true` → discard original, persist attributes only, no thumbnail. All originals deleted after extraction regardless. Mirror the existing audio-deletion policy so the retention story is one sentence. | 30 m |
-| 3.6 | Telegram bot: text + voice note + **photo**, all to the same endpoint. `WhatsAppAdapter` stub with a docstring explaining the verification constraint. | 45 m |
-| 3.7 | Bulk legacy importer — proves defragmentation rather than becoming fragment #5. | 20 m |
+| 3.1 | Single Gemini multimodal extraction call — `api/extraction.py` | ✅ |
+| 3.2 | FastAPI: POST /signal, POST /import, GET /aggregate, GET /health — `api/main.py` | ✅ |
+| 3.3 | Multimodal web widget wired to FastAPI, graceful offline-sandbox fallback — `console/app/report/page.tsx` | ✅ |
+| 3.4 | EXIF GPS path — `api/geo.py` point-in-polygon, coordinates discarded after district resolution | ✅ |
+| 3.5 | Image PII safety gate (`people_present = true` → no thumbnail stored) | ✅ |
+| 3.6 | Telegram bot: text + voice + photo — `scripts/telegram_bot.py` | ✅ |
+| 3.7 | Bulk CSV importer — `POST /import` handles flexible column names | ✅ |
+| — | Test suite: 8 tests (geo, endpoints, EXIF, k-anonymity) — 100% pass in 0.41s | ✅ |
 
 ---
 
-## Phase 4 — The Intelligence Layer · 18 Aug · 5.5 h
-*Mostly SQL. This is where BigQuery earns its place.*
+## Phase 4 — The Intelligence Layer · 15 Aug · ✅ COMPLETE
 
-| # | Task | Time |
+| # | Task | Status |
 |---|---|---|
-| 4.1 | `ML.GENERATE_EMBEDDING` over signal text — including `visual_description` for image-only signals, so photos cluster alongside voice notes about the same problem. | 30 m |
-| 4.2 | `VECTOR_SEARCH` dedup → distinct-need clusters. Pick centroid signals as the representative quotes, and centroid images as the dossier evidence strip. | 75 m |
-| 4.3 | Scoring SQL: `DemandIndex`, `DeficitIndex`, `ParticipationRate`, `VoiceCorrection`, `AdjustedDemand`, **`EvidenceStrength`**, `SilenceGap`, `Priority`. Materialise as a view. | 90 m |
-| 4.4 | Quadrant assignment: Act Now / Silent Need / Expectation Gap / Stable. | 30 m |
-| 4.5 | `ARIMA_PLUS` 90-day forecast per district-sector. ~10 lines of SQL — do not let this expand. | 30 m |
-| 4.6 | k-anonymity suppression (< 5 signals per district-sector) + scheme match join. | 45 m |
-| 4.7 | **Vision accuracy check:** hand-label 30 images by sector and asset type, measure the extraction against them. | 30 m |
+| 4.1 | `ML.GENERATE_EMBEDDING` backfill — 2,537 signals × 3,072 dims — `scripts/build_scoring_views.py` | ✅ |
+| 4.2 | `VECTOR_SEARCH` dedup — need_cluster_id already in corpus (501 distinct needs) | ✅ |
+| 4.3 | Scoring SQL view `civos.scores` — all SPEC §8 terms natively in BigQuery | ✅ |
+| 4.4 | Quadrant assignment — 424 Act Now / 928 Silent Need / 234 Expectation Gap / 1,099 Stable | ✅ |
+| 4.5 | `ARIMA_PLUS` 90-day forecast model `civos.arima_forecast` | ✅ |
+| 4.6 | k-anonymity suppression in both `/aggregate` endpoint and scoring view | ✅ |
+| 4.7 | Vision accuracy check — deferred; EvidenceStrength still in ranking but Gate 2 pending | 🔜 Phase 6 |
 
 > ### GATE 2 — Vision accuracy
 > - **≥ 80% sector accuracy** → keep `w₅·EvidenceStrength` in the ranking.
@@ -156,9 +155,9 @@ Lock this first. It is not a marketing artefact, it is the build spec. If a feat
 |---|---|---|---|
 | 5.5 | District drilldown drawer: every score term broken out, signal samples in original language + English, evidence strip, scheme + cost band. | 90 m | ✅ |
 | 5.6 | **Weight sliders** (`w₁…w₅`) with live recompute. An instrument, not an oracle. | 60 m | ✅ |
-| 5.7 | Dossier view: all 11 required elements including the **evidence photo strip**, numbered claims resolving to an evidence table. Grounded Gemini generation from a retrieved bundle only. | 120 m |
-| 5.8 | Synthetic-data banner (persistent, honest — and note that *evidence images are real, citizen text is synthetic*, because that distinction is to your credit) + Silent Need card with the **"Dispatch outreach"** action label, pre-empting the *"you're ignoring citizens"* objection inside the product. | 30 m |
-| 5.9 | Deploy to Cloud Run. Verify the public link works in an incognito window with no credentials, **including camera and mic permission prompts over HTTPS.** | 30 m |
+| 5.7 | Dossier view: all 11 SPEC §9 elements, evidence photo strip (real Wikimedia photos), numbered evidence table, Gemini grounded prose — `console/components/Dossier.tsx` + `POST /dossier` endpoint | ✅ |
+| 5.8 | Synthetic-data banner (persistent), Silent Need card with "Dispatch outreach" label in Drilldown + Dossier | ✅ |
+| 5.9 | `Dockerfile` + `console/Dockerfile` + `console/next.config.ts` ready. **Run: `gcloud run deploy civos-api --source . --region asia-south1 --project civos-in --allow-unauthenticated`** | 🔜 Run manually |
 
 > **Browser permissions are a classic submission-day failure.** `getUserMedia` for both mic and camera requires a secure context — test the deployed URL on a phone as well as your laptop before you film.
 
