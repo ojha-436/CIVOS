@@ -1,0 +1,58 @@
+# CIVOS-IN — language expectations for this country adapter.
+#
+# This file exists so that a country-specific claim ("all 22 Scheduled Languages")
+# can be VERIFIED by the generic probe rather than asserted in a slide. The probe
+# in scripts/ knows nothing about India; it just checks whatever list an adapter
+# hands it against live API coverage.
+#
+# Checked by: uv run python scripts/probe_language_capability.py --check-list adapters/in/languages.yaml
+
+country_code: IN
+instance: CIVOS-IN
+
+# The 22 languages in the Eighth Schedule of the Constitution of India, mapped to
+# the codes Google's Translation API actually uses. Where the API uses a
+# script-qualified or regional variant, that variant is the code to check —
+# checking `mni` would report a false negative for Manipuri, which is served as
+# `mni-Mtei`, and Konkani is served as `gom`.
+scheduled_languages:
+  - { name: Assamese,  translation_code: as }
+  - { name: Bengali,   translation_code: bn }
+  - { name: Bodo,      translation_code: brx }
+  - { name: Dogri,     translation_code: doi }
+  - { name: Gujarati,  translation_code: gu }
+  - { name: Hindi,     translation_code: hi }
+  - { name: Kannada,   translation_code: kn }
+  - { name: Kashmiri,  translation_code: ks }
+  - { name: Konkani,   translation_code: gom }
+  - { name: Maithili,  translation_code: mai }
+  - { name: Malayalam, translation_code: ml }
+  - { name: Manipuri,  translation_code: mni-Mtei }
+  - { name: Marathi,   translation_code: mr }
+  - { name: Nepali,    translation_code: ne }
+  - { name: Odia,      translation_code: or }
+  - { name: Punjabi,   translation_code: pa }
+  - { name: Sanskrit,  translation_code: sa }
+  - { name: Santali,   translation_code: sat }
+  - { name: Sindhi,    translation_code: sd }
+  - { name: Tamil,     translation_code: ta }
+  - { name: Telugu,    translation_code: te }
+  - { name: Urdu,      translation_code: ur }
+
+# Locales worth probing for speech support beyond those that have synthesis
+# voices. Speech-to-Text rejects bare language codes, so each needs a region.
+extra_speech_locales:
+  - mai-IN
+  - sat-IN
+  - kok-IN
+  - ne-IN
+  - sd-IN
+  - ks-IN
+  - doi-IN
+  - mni-IN
+  - brx-IN
+  - sa-IN
+  - as-IN
+  - or-IN
+  - pa-IN
+  - ur-IN

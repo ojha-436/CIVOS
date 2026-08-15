@@ -1,0 +1,198 @@
+{
+  "verdict": "PROCEED_BQML",
+  "missing_families": [],
+  "run_at": "2026-08-14 17:41 UTC",
+  "project": "civos-in",
+  "location": "asia-south1",
+  "connection": "civos-in.asia-south1.civos_vertex",
+  "vertex": {
+    "vertex_models_seen": [
+      "gemini-2.5-flash",
+      "text-embedding-005",
+      "text-multilingual-embedding-002"
+    ],
+    "vertex_generate_errors": {
+      "gemini-3-flash": "404 NOT_FOUND. {'error': {'code': 404, 'message': 'Publisher model `projects/civos-in/locations/asia-south1/publishers/google/models/gemini-3-flash` was not found or your project does not have access to it. Ensure you are using a valid model name and that the model is available in the specified regi"
+    },
+    "vertex_generate": {
+      "ok": true,
+      "model": "gemini-2.5-flash",
+      "text": "OK"
+    },
+    "vertex_embed": {
+      "ok": true,
+      "model": "gemini-embedding-001",
+      "dims": 3072
+    }
+  },
+  "probes": [
+    {
+      "name": "st_functions",
+      "family": "gis",
+      "ok": true,
+      "needs_scale": false,
+      "winner": "ST_CONTAINS / ST_GEOGPOINT / ST_DWITHIN",
+      "attempts": [
+        {
+          "label": "ST_CONTAINS / ST_GEOGPOINT / ST_DWITHIN",
+          "status": "PASS",
+          "ok": true,
+          "elapsed_s": 1.1,
+          "error": null,
+          "note": null
+        }
+      ]
+    },
+    {
+      "name": "embedding_inline",
+      "family": "embedding",
+      "ok": false,
+      "needs_scale": false,
+      "winner": null,
+      "attempts": [
+        {
+          "label": "AI.GENERATE_EMBEDDING connection_id \u00b7 endpoint=gemini-embedding-001",
+          "status": "FAIL",
+          "ok": false,
+          "elapsed_s": 0.7,
+          "error": "400 Named argument connection_id not found in signature for call to function AI.GENERATE_EMBEDDING at [5:19]; reason: invalidQuery, location: query, message: Named argument connection_id not found in signature for call to function AI.GENERATE_EMBEDDING at [5:19]",
+          "note": null
+        },
+        {
+          "label": "AI.GENERATE_EMBEDDING connection_id \u00b7 endpoint=text-embedding-005",
+          "status": "FAIL",
+          "ok": false,
+          "elapsed_s": 0.7,
+          "error": "400 Named argument connection_id not found in signature for call to function AI.GENERATE_EMBEDDING at [5:19]; reason: invalidQuery, location: query, message: Named argument connection_id not found in signature for call to function AI.GENERATE_EMBEDDING at [5:19]",
+          "note": null
+        },
+        {
+          "label": "AI.GENERATE_EMBEDDING connection_id \u00b7 endpoint=text-multilingual-embedding-002",
+          "status": "FAIL",
+          "ok": false,
+          "elapsed_s": 1.0,
+          "error": "400 Named argument connection_id not found in signature for call to function AI.GENERATE_EMBEDDING at [5:19]; reason: invalidQuery, location: query, message: Named argument connection_id not found in signature for call to function AI.GENERATE_EMBEDDING at [5:19]",
+          "note": null
+        }
+      ]
+    },
+    {
+      "name": "embedding_remote_model",
+      "family": "embedding",
+      "ok": true,
+      "needs_scale": false,
+      "winner": "CREATE MODEL REMOTE + ML.GENERATE_EMBEDDING \u00b7 endpoint=gemini-embedding-001",
+      "attempts": [
+        {
+          "label": "CREATE MODEL REMOTE + ML.GENERATE_EMBEDDING \u00b7 endpoint=gemini-embedding-001",
+          "status": "PASS",
+          "ok": true,
+          "elapsed_s": 11.2,
+          "error": null,
+          "note": null
+        }
+      ]
+    },
+    {
+      "name": "ai_generate",
+      "family": "generation",
+      "ok": true,
+      "needs_scale": false,
+      "winner": "AI.GENERATE inline \u00b7 endpoint=gemini-2.5-flash",
+      "attempts": [
+        {
+          "label": "AI.GENERATE inline \u00b7 endpoint=gemini-3-flash",
+          "status": "FAIL",
+          "ok": false,
+          "elapsed_s": 1.3,
+          "error": "400 Unsupported endpoint: Publisher model `projects/924096812044/locations/asia-south1/publishers/google/models/gemini-3-flash` was not found or your project does not have access to it. Ensure you are using a valid model name and that the model is available in the specified region. For more information, see: https://docs.cloud.google.com/gemini-enterprise-agent-platform/resources/locations.; reason: invalidQuery, location: query, message: Unsupported endpoint: Publisher model `projects/924096812044/locations/asia-south1/publishers/google/models/gemini-3-flash` was not found or your project does not have access to it. Ensure you are using a valid model name and that the model is available in the specified region. For more information, see: https://docs.cloud.google.com/gemini-enterprise-agent-platform/resources/locations.",
+          "note": null
+        },
+        {
+          "label": "AI.GENERATE inline \u00b7 endpoint=gemini-2.5-flash",
+          "status": "PASS",
+          "ok": true,
+          "elapsed_s": 2.9,
+          "error": null,
+          "note": null
+        }
+      ]
+    },
+    {
+      "name": "ml_generate_text",
+      "family": "generation",
+      "ok": true,
+      "needs_scale": false,
+      "winner": "CREATE MODEL REMOTE + ML.GENERATE_TEXT \u00b7 endpoint=gemini-2.5-flash",
+      "attempts": [
+        {
+          "label": "CREATE MODEL REMOTE + ML.GENERATE_TEXT \u00b7 endpoint=gemini-3-flash",
+          "status": "FAIL",
+          "ok": false,
+          "elapsed_s": 0.9,
+          "error": "400 GET https://bigquery.googleapis.com/bigquery/v2/projects/civos-in/queries/1509885f-bc10-403c-9db0-a6c56181b406?maxResults=0&location=asia-south1&prettyPrint=false: Query error: Not found: Publisher model `projects/civos-in/locations/asia-south1/publishers/google/models/gemini-3-flash` was not found or your project does not have access to it. Ensure you are using a valid model name and that the model is available in the specified region. For more information, see: https://docs.cloud.google.com/gemini-enterprise-agent-platform/resources/locations. at [2:17]",
+          "note": null
+        },
+        {
+          "label": "CREATE MODEL REMOTE + ML.GENERATE_TEXT \u00b7 endpoint=gemini-2.5-flash",
+          "status": "PASS",
+          "ok": true,
+          "elapsed_s": 7.9,
+          "error": null,
+          "note": null
+        }
+      ]
+    },
+    {
+      "name": "vector_search",
+      "family": "vector",
+      "ok": true,
+      "needs_scale": false,
+      "winner": "VECTOR_SEARCH brute force, COSINE",
+      "attempts": [
+        {
+          "label": "VECTOR_SEARCH brute force, COSINE",
+          "status": "PASS",
+          "ok": true,
+          "elapsed_s": 0.9,
+          "error": null,
+          "note": null
+        }
+      ]
+    },
+    {
+      "name": "vector_index_ddl",
+      "family": "vector",
+      "ok": false,
+      "needs_scale": true,
+      "winner": null,
+      "attempts": [
+        {
+          "label": "CREATE VECTOR INDEX IVF/COSINE",
+          "status": "SUPPORTED_NEEDS_SCALE",
+          "ok": false,
+          "elapsed_s": 1.8,
+          "error": "400 GET https://bigquery.googleapis.com/bigquery/v2/projects/civos-in/queries/465e2ee5-bc64-4891-82a7-7824e34f81dd?maxResults=0&location=asia-south1&prettyPrint=false: Total rows 5 is smaller than min allowed 5000 for CREATE VECTOR INDEX query with the IVF index type. Please use VECTOR_SEARCH table-valued function directly to perform the similarity search.",
+          "note": "Feature exists; the probe table is below the minimum row count."
+        }
+      ]
+    },
+    {
+      "name": "arima_plus",
+      "family": "forecast",
+      "ok": true,
+      "needs_scale": false,
+      "winner": "CREATE MODEL ARIMA_PLUS + ML.FORECAST",
+      "attempts": [
+        {
+          "label": "CREATE MODEL ARIMA_PLUS + ML.FORECAST",
+          "status": "PASS",
+          "ok": true,
+          "elapsed_s": 6.5,
+          "error": null,
+          "note": null
+        }
+      ]
+    }
+  ]
+}

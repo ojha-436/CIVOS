@@ -1,0 +1,520 @@
+generated_at: 2026-08-14 17:52 UTC
+project: civos-in
+provenance:
+  tier_a: api-probed (Text-to-Speech voices.list ∩ Speech-to-Text recognition probe)
+  tier_b: api-probed (Speech-to-Text recognition probe)
+  tier_c: api-probed (Translation v3 getSupportedLanguages)
+  tier_d: universal by construction — no language dependency
+candidate_policy: Speech-to-Text exposes no list-locales API and rejects bare language
+  codes, so the candidate set is seeded from locales with Text-to-Speech voices plus
+  any --extra-locales. Tiers A and B are a probed LOWER BOUND, not the full Speech-to-Text
+  locale list.
+stt_targets:
+- model: long
+  location: global
+- model: chirp_2
+  location: us-central1
+candidates_probed: 75
+counts:
+  tier_a: 56
+  tier_b: 3
+  tier_c: 196
+  tier_d: universal
+tiers:
+  A:
+  - locale: af-ZA
+    tts_voices: 1
+    stt_models:
+    - long
+    - chirp_2
+  - locale: am-ET
+    tts_voices: 4
+    stt_models:
+    - long
+    - chirp_2
+  - locale: bg-BG
+    tts_voices: 31
+    stt_models:
+    - long
+    - chirp_2
+  - locale: bn-IN
+    tts_voices: 38
+    stt_models:
+    - chirp_2
+  - locale: ca-ES
+    tts_voices: 1
+    stt_models:
+    - long
+    - chirp_2
+  - locale: cs-CZ
+    tts_voices: 32
+    stt_models:
+    - long
+    - chirp_2
+  - locale: da-DK
+    tts_voices: 35
+    stt_models:
+    - long
+    - chirp_2
+  - locale: de-DE
+    tts_voices: 42
+    stt_models:
+    - long
+    - chirp_2
+  - locale: el-GR
+    tts_voices: 32
+    stt_models:
+    - long
+    - chirp_2
+  - locale: en-AU
+    tts_voices: 49
+    stt_models:
+    - long
+    - chirp_2
+  - locale: en-GB
+    tts_voices: 63
+    stt_models:
+    - long
+    - chirp_2
+  - locale: en-IN
+    tts_voices: 49
+    stt_models:
+    - long
+    - chirp_2
+  - locale: en-US
+    tts_voices: 99
+    stt_models:
+    - long
+    - chirp_2
+  - locale: es-ES
+    tts_voices: 49
+    stt_models:
+    - long
+    - chirp_2
+  - locale: es-US
+    tts_voices: 48
+    stt_models:
+    - long
+    - chirp_2
+  - locale: et-EE
+    tts_voices: 31
+    stt_models:
+    - long
+    - chirp_2
+  - locale: eu-ES
+    tts_voices: 1
+    stt_models:
+    - long
+    - chirp_2
+  - locale: fi-FI
+    tts_voices: 32
+    stt_models:
+    - long
+    - chirp_2
+  - locale: fil-PH
+    tts_voices: 10
+    stt_models:
+    - long
+    - chirp_2
+  - locale: fr-CA
+    tts_voices: 45
+    stt_models:
+    - long
+    - chirp_2
+  - locale: fr-FR
+    tts_voices: 42
+    stt_models:
+    - long
+    - chirp_2
+  - locale: gl-ES
+    tts_voices: 1
+    stt_models:
+    - long
+    - chirp_2
+  - locale: gu-IN
+    tts_voices: 38
+    stt_models:
+    - long
+    - chirp_2
+  - locale: he-IL
+    tts_voices: 38
+    stt_models:
+    - long
+    - chirp_2
+  - locale: hi-IN
+    tts_voices: 46
+    stt_models:
+    - long
+    - chirp_2
+  - locale: hr-HR
+    tts_voices: 30
+    stt_models:
+    - chirp_2
+  - locale: hu-HU
+    tts_voices: 32
+    stt_models:
+    - long
+    - chirp_2
+  - locale: id-ID
+    tts_voices: 38
+    stt_models:
+    - long
+    - chirp_2
+  - locale: is-IS
+    tts_voices: 1
+    stt_models:
+    - long
+    - chirp_2
+  - locale: it-IT
+    tts_voices: 40
+    stt_models:
+    - long
+    - chirp_2
+  - locale: ja-JP
+    tts_voices: 41
+    stt_models:
+    - long
+    - chirp_2
+  - locale: kn-IN
+    tts_voices: 38
+    stt_models:
+    - long
+    - chirp_2
+  - locale: ko-KR
+    tts_voices: 41
+    stt_models:
+    - long
+    - chirp_2
+  - locale: lt-LT
+    tts_voices: 31
+    stt_models:
+    - long
+    - chirp_2
+  - locale: lv-LV
+    tts_voices: 31
+    stt_models:
+    - long
+    - chirp_2
+  - locale: ml-IN
+    tts_voices: 38
+    stt_models:
+    - long
+    - chirp_2
+  - locale: mr-IN
+    tts_voices: 36
+    stt_models:
+    - long
+    - chirp_2
+  - locale: ms-MY
+    tts_voices: 8
+    stt_models:
+    - long
+    - chirp_2
+  - locale: nb-NO
+    tts_voices: 34
+    stt_models:
+    - long
+    - chirp_2
+  - locale: nl-NL
+    tts_voices: 34
+    stt_models:
+    - long
+    - chirp_2
+  - locale: pl-PL
+    tts_voices: 34
+    stt_models:
+    - long
+    - chirp_2
+  - locale: pt-BR
+    tts_voices: 43
+    stt_models:
+    - long
+    - chirp_2
+  - locale: pt-PT
+    tts_voices: 4
+    stt_models:
+    - long
+    - chirp_2
+  - locale: ro-RO
+    tts_voices: 32
+    stt_models:
+    - long
+    - chirp_2
+  - locale: ru-RU
+    tts_voices: 18
+    stt_models:
+    - long
+    - chirp_2
+  - locale: sk-SK
+    tts_voices: 32
+    stt_models:
+    - long
+    - chirp_2
+  - locale: sl-SI
+    tts_voices: 30
+    stt_models:
+    - long
+    - chirp_2
+  - locale: sr-RS
+    tts_voices: 31
+    stt_models:
+    - long
+    - chirp_2
+  - locale: sv-SE
+    tts_voices: 44
+    stt_models:
+    - long
+    - chirp_2
+  - locale: sw-KE
+    tts_voices: 30
+    stt_models:
+    - chirp_2
+  - locale: ta-IN
+    tts_voices: 38
+    stt_models:
+    - long
+    - chirp_2
+  - locale: te-IN
+    tts_voices: 34
+    stt_models:
+    - long
+    - chirp_2
+  - locale: th-TH
+    tts_voices: 32
+    stt_models:
+    - long
+    - chirp_2
+  - locale: tr-TR
+    tts_voices: 40
+    stt_models:
+    - long
+    - chirp_2
+  - locale: uk-UA
+    tts_voices: 32
+    stt_models:
+    - long
+    - chirp_2
+  - locale: vi-VN
+    tts_voices: 40
+    stt_models:
+    - long
+    - chirp_2
+  B:
+  - locale: as-IN
+    stt_models:
+    - chirp_2
+  - locale: or-IN
+    stt_models:
+    - chirp_2
+  - locale: sd-IN
+    stt_models:
+    - chirp_2
+  C:
+  - ab
+  - ace
+  - ach
+  - af
+  - ak
+  - alz
+  - am
+  - ar
+  - as
+  - awa
+  - ay
+  - az
+  - ba
+  - ban
+  - bbc
+  - be
+  - bem
+  - bew
+  - bg
+  - bho
+  - bik
+  - bm
+  - bn
+  - br
+  - bs
+  - bts
+  - btx
+  - bua
+  - ca
+  - ceb
+  - cgg
+  - chm
+  - ckb
+  - cnh
+  - co
+  - crh
+  - crs
+  - cs
+  - cv
+  - cy
+  - da
+  - de
+  - din
+  - doi
+  - dov
+  - dv
+  - dz
+  - ee
+  - el
+  - en
+  - eo
+  - es
+  - et
+  - eu
+  - fa
+  - ff
+  - fi
+  - fil
+  - fj
+  - fr
+  - fr-CA
+  - fy
+  - ga
+  - gaa
+  - gd
+  - gl
+  - gn
+  - gom
+  - gu
+  - ha
+  - haw
+  - he
+  - hi
+  - hil
+  - hmn
+  - hr
+  - hrx
+  - ht
+  - hu
+  - hy
+  - id
+  - ig
+  - ilo
+  - is
+  - it
+  - iw
+  - ja
+  - jv
+  - jw
+  - ka
+  - kk
+  - km
+  - kn
+  - ko
+  - kri
+  - ktu
+  - ku
+  - ky
+  - la
+  - lb
+  - lg
+  - li
+  - lij
+  - lmo
+  - ln
+  - lo
+  - lt
+  - ltg
+  - luo
+  - lus
+  - lv
+  - mai
+  - mak
+  - mg
+  - mi
+  - min
+  - mk
+  - ml
+  - mn
+  - mni-Mtei
+  - mr
+  - ms
+  - ms-Arab
+  - mt
+  - my
+  - ne
+  - new
+  - nl
+  - 'no'
+  - nr
+  - nso
+  - nus
+  - ny
+  - oc
+  - om
+  - or
+  - pa
+  - pa-Arab
+  - pag
+  - pam
+  - pap
+  - pl
+  - ps
+  - pt
+  - pt-PT
+  - qu
+  - rn
+  - ro
+  - rom
+  - ru
+  - rw
+  - sa
+  - scn
+  - sd
+  - sg
+  - shn
+  - si
+  - sk
+  - sl
+  - sm
+  - sn
+  - so
+  - sq
+  - sr
+  - ss
+  - st
+  - su
+  - sv
+  - sw
+  - szl
+  - ta
+  - te
+  - tet
+  - tg
+  - th
+  - ti
+  - tk
+  - tl
+  - tn
+  - tr
+  - ts
+  - tt
+  - ug
+  - uk
+  - ur
+  - uz
+  - vi
+  - xh
+  - yi
+  - yo
+  - yua
+  - yue
+  - zh
+  - zh-CN
+  - zh-TW
+  - zu
+adapter_check:
+  source: adapters/in/languages.yaml
+  instance: CIVOS-IN
+  claimed: 22
+  covered: 19
+  missing:
+  - name: Bodo
+    translation_code: brx
+  - name: Kashmiri
+    translation_code: ks
+  - name: Santali
+    translation_code: sat

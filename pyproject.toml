@@ -1,0 +1,36 @@
+[project]
+name = "civos"
+version = "0.1.0"
+description = "CIVOS — citizen-signal-driven infrastructure prioritisation for BRICS governments"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "Apache-2.0" }
+
+dependencies = [
+    "google-cloud-bigquery>=3.25",
+    "google-cloud-bigquery-connection>=1.15",
+    "google-genai>=1.0",
+    "google-cloud-translate>=3.15",
+    "google-cloud-texttospeech>=2.16",
+    "google-cloud-speech>=2.27",
+    "pydantic>=2.7",
+    "pyyaml>=6.0",
+    "typer>=0.12",
+    "rich>=13.7",
+    "httpx>=0.27",
+]
+
+[project.optional-dependencies]
+# Pulled in only if GATE 0 returns FALLBACK_VERTEX (see docs/GATE0-RESULT.md).
+fallback = [
+    "scikit-learn>=1.5",
+    "statsmodels>=0.14",
+    "numpy>=1.26",
+]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"

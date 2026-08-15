@@ -1,0 +1,91 @@
+# Terms that must never appear in core/. Data, not code — adding a country to the
+# watch list is a config edit, which is the same claim the product makes about
+# onboarding a country at all.
+#
+# Used by scripts/lint_country_literals.py (SPEC P0-14, plan.md 6.1).
+
+# Quoted two-letter codes. Matched only as string literals, never as bare words,
+# because "IN" is also a SQL keyword and "in" is an English preposition — the
+# reason a plain grep is useless here.
+iso_codes:
+  - IN
+  - ZA
+  - BR
+  - RU
+  - CN
+  - ET
+  - EG
+  - IR
+  - AE
+
+# Matched case-insensitively as whole words anywhere in core/.
+names:
+  - India
+  - Bharat
+  - Indian
+  - Brazil
+  - Brasil
+  - Russia
+  - Russian
+  - China
+  - Chinese
+  - South Africa
+  - Ethiopia
+  - Egypt
+
+# Administrative vocabulary that is country-specific. "district" itself is
+# allowed: it appears in prose about the product. A *named* district is not.
+admin_terms:
+  - taluka
+  - tehsil
+  - gram panchayat
+  - zila
+  - municipio
+  - oblast
+  - prefecture
+
+# Named government programmes. If one of these reaches core/, the scheme
+# catalogue has leaked out of adapters/<iso>/schemes.yaml.
+schemes:
+  - Jal Jeevan
+  - PMGSY
+  - RDSS
+  - DDUGJY
+  - Ayushman
+  - Samagra Shiksha
+  - PM SHRI
+  - Swachh Bharat
+  - AMRUT
+  - Bolsa Familia
+
+# Dataset names belong to the country adapter too.
+datasets:
+  - NFHS
+  - NITI
+  - IBGE
+  - Stats SA
+
+# Currency and language names. A language list in core would contradict the
+# "probed, not hardcoded" requirement in SPEC §6.3.
+misc:
+  - INR
+  - rupee
+  - "₹"
+  - Hindi
+  - Marathi
+  - Bengali
+  - Tamil
+  - Telugu
+  - Kannada
+  - Gujarati
+  - Punjabi
+  - Odia
+  - Assamese
+  - Zulu
+  - Xhosa
+  - Afrikaans
+  - Portuguese
+  - Mandarin
+
+# Files under core/ exempted from the scan, with a reason. Empty is the goal.
+exemptions: []
