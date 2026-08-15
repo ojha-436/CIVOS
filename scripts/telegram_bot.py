@@ -28,6 +28,13 @@ from pathlib import Path
 # Ensure the repo root is importable when run from scripts/
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+# Auto-load .env so `TELEGRAM_BOT_TOKEN` is available without a manual `export`.
+try:
+    from dotenv import load_dotenv
+    load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+except ImportError:
+    pass  # python-dotenv not installed — caller must export the var manually
+
 from telegram import Update
 from telegram.ext import (
     Application,

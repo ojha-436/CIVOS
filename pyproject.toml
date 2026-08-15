@@ -23,6 +23,7 @@ dependencies = [
     "uvicorn>=0.28.0",
     "python-multipart>=0.0.9",
     "python-telegram-bot>=21.0",
+    "python-dotenv>=1.0",
 ]
 
 [project.optional-dependencies]
