@@ -52,9 +52,29 @@ export default function ChoroplethMap({ data, selected, onHover, onSelect, onRea
             data: '/data/districts.geojson',
             promoteId: 'code',
           },
+          pok: {
+            type: 'geojson',
+            data: '/data/pok-boundary.geojson',
+          },
         },
         layers: [
           { id: 'bg', type: 'background', paint: { 'background-color': '#070a0e' } },
+          {
+            // POK fill — same dark grey as no-data districts, indicating the
+            // area is part of India per official Survey of India boundary but
+            // district-level administration data is not available.
+            id: 'pok-fill',
+            type: 'fill',
+            source: 'pok',
+            paint: { 'fill-color': '#1b212b', 'fill-opacity': 0.85 },
+          },
+          {
+            // POK border — thin dashed-looking line marking the official claim
+            id: 'pok-outline',
+            type: 'line',
+            source: 'pok',
+            paint: { 'line-color': '#ece5d8', 'line-width': 0.8, 'line-opacity': 0.4, 'line-dasharray': [3, 3] },
+          },
           {
             id: 'fill',
             type: 'fill',
@@ -100,10 +120,10 @@ export default function ChoroplethMap({ data, selected, onHover, onSelect, onRea
           },
         ],
       },
-      // Overridden by fitBounds once the geometry lands. A fixed centre/zoom left
-      // the country floating in a third of the frame on a wide display.
-      center: [82.5, 22.4],
-      zoom: 3.6,
+      // Centre of official India (incl. J&K+POK). fitBounds on load overrides
+      // this, but having the right initial value prevents a flash of wrong framing.
+      center: [82.5, 22.0],
+      zoom: 3.8,
       minZoom: 3,
       maxZoom: 9,
       attributionControl: false,
@@ -112,57 +132,25 @@ export default function ChoroplethMap({ data, selected, onHover, onSelect, onRea
     });
 
     m.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
+
     m.on('load', () => {
       loaded.current = true;
-      onReady();
-    });
 
-    // Frame the country to the stage once, from the geometry itself, so the map
-    // fills whatever aspect ratio the display happens to be. Left padding clears
-    // the calibration ticks; bottom padding clears the legend and scale bar.
-    let framed = false;
-    m.on('sourcedata', (e) => {
-      if (framed || e.sourceId !== 'districts' || !m.isSourceLoaded('districts')) return;
-      const feats = m.querySourceFeatures('districts');
-      if (!feats.length) return;
-      framed = true;
-
-      // Fit to the central mass of district centroids, not to the full extent.
-      // Outlying island territories are real and stay drawn, but including them
-      // in the bounds drags the frame south-east and leaves the mainland — where
-      // 99% of the districts are — small and off-centre.
-      const cx: number[] = [];
-      const cy: number[] = [];
-      for (const f of feats) {
-        const g = f.geometry;
-        const rings =
-          g.type === 'Polygon' ? g.coordinates : g.type === 'MultiPolygon' ? g.coordinates.flat() : [];
-        let sx = 0, sy = 0, n = 0;
-        for (const ring of rings)
-          for (const c of ring as [number, number][]) {
-            sx += c[0];
-            sy += c[1];
-            n++;
-          }
-        if (n) {
-          cx.push(sx / n);
-          cy.push(sy / n);
-        }
-      }
-      if (!cx.length) return;
-
-      cx.sort((a, z) => a - z);
-      cy.sort((a, z) => a - z);
-      const pct = (arr: number[], p: number) => arr[Math.floor((arr.length - 1) * p)];
-      const pad = 1.1; // degrees, so edge districts are not clipped by their centroid
-
+      // Official Survey of India bounds — includes:
+      //   West : 68.0°E  (Gujarat / Rajasthan)
+      //   East : 97.5°E  (Arunachal Pradesh)
+      //   South:  6.5°N  (Kanyakumari + Andaman & Nicobar)
+      //   North: 37.6°N  (J&K including Pakistan-Occupied Kashmir —
+      //                   official Indian government position per Survey of India)
+      // querySourceFeatures only sees viewport tiles, so centroid-based fitting
+      // produces wrong bounds when the initial viewport is partial. Hardcoded
+      // bounds are reliable, unambiguous, and match the constitutional claim.
       m.fitBounds(
-        new maplibregl.LngLatBounds(
-          [pct(cx, 0.004) - pad, pct(cy, 0.01) - pad],
-          [pct(cx, 0.996) + pad, pct(cy, 0.999) + pad],
-        ),
-        { padding: { top: 34, right: 34, bottom: 96, left: 56 }, duration: 0 },
+        new maplibregl.LngLatBounds([68.0, 6.5], [97.5, 37.6]),
+        { padding: { top: 40, right: 40, bottom: 100, left: 60 }, duration: 0 },
       );
+
+      onReady();
     });
 
     m.on('mousemove', 'fill', (e) => {
