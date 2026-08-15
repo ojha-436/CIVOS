@@ -1,0 +1,81 @@
+name: Deploy to Cloud Run
+
+on:
+  push:
+    branches: [main]
+
+env:
+  PROJECT_ID: civos-in
+  REGION: asia-south1
+  API_SERVICE: civos-api
+  CONSOLE_SERVICE: civos-console
+
+jobs:
+  deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      # ── 1. Checkout ───────────────────────────────────────────────────────
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ── 2. Authenticate with Google Cloud ────────────────────────────────
+      - name: Auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+
+      # ── 3. Deploy FastAPI (civos-api) ─────────────────────────────────────
+      - name: Deploy API
+        run: |
+          gcloud run deploy ${{ env.API_SERVICE }} \
+            --source . \
+            --region ${{ env.REGION }} \
+            --project ${{ env.PROJECT_ID }} \
+            --allow-unauthenticated \
+            --set-env-vars CIVOS_PROJECT=${{ env.PROJECT_ID }},CIVOS_BQ_LOCATION=${{ env.REGION }},CIVOS_BQ_DATASET=civos,CIVOS_BQ_CONNECTION=civos_vertex,CIVOS_GEMINI_MODEL=gemini-2.5-flash \
+            --memory 1Gi \
+            --timeout 120 \
+            --min-instances 0 \
+            --max-instances 3 \
+            --quiet
+
+      # ── 4. Read API URL for console env var ──────────────────────────────
+      - name: Get API URL
+        id: api_url
+        run: |
+          URL=$(gcloud run services describe ${{ env.API_SERVICE }} \
+            --region ${{ env.REGION }} \
+            --project ${{ env.PROJECT_ID }} \
+            --format="value(status.url)")
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+
+      # ── 5. Deploy Next.js console (civos-console) ────────────────────────
+      - name: Deploy Console
+        working-directory: console
+        run: |
+          gcloud run deploy ${{ env.CONSOLE_SERVICE }} \
+            --source . \
+            --region ${{ env.REGION }} \
+            --project ${{ env.PROJECT_ID }} \
+            --allow-unauthenticated \
+            --set-env-vars BACKEND_URL=${{ steps.api_url.outputs.url }} \
+            --memory 512Mi \
+            --timeout 60 \
+            --min-instances 0 \
+            --max-instances 2 \
+            --quiet
+
+      # ── 6. Print the live URLs ────────────────────────────────────────────
+      - name: Print live URLs
+        run: |
+          echo "API   → ${{ steps.api_url.outputs.url }}"
+          echo "Console → https://civos-console-924096812044.${{ env.REGION }}.run.app"
