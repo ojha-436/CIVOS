@@ -32,10 +32,25 @@ never automatic funding. It is a bias correction, not an override of citizen inp
 
 ## Status
 
-**Phase 0 complete** (14 Aug 2026). Foundations and de-risking done; the data,
-intake, intelligence and console layers are in progress. See
-[plan.md](plan.md) for the day-by-day build plan and
+**Phase 0 complete. Console built ahead of schedule against a frozen data
+contract.** See [plan.md](plan.md) for the day-by-day build plan and
 [memory.md](memory.md) for the decision log.
+
+The console was built before the data layer on purpose: it is the phase most
+likely to overrun and the thing evaluators actually click, so it now runs against
+a fixture generated to match `Warehouse.aggregate_scores()` exactly. When Phase 4
+lands, one fetch URL changes and nothing else does.
+
+```bash
+cd console && npm install && npm run dev     # http://localhost:3000
+```
+
+| | |
+|---|---|
+| `/` | Policymaker console — 594 real districts, choropleth, quadrants, weight sliders, drilldown dossier |
+| `/report` | Citizen intake — microphone, camera and text, mobile-first |
+
+![Console, equity-adjusted](docs/screenshots/console-adjusted.png)
 
 | Gate | Result |
 |---|---|

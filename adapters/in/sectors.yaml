@@ -1,0 +1,81 @@
+# CIVOS-IN — sector model (SPEC §7).
+#
+# Each sector binds three things: the official deficit indicator that measures it,
+# the funding route that can pay for it, and the visual asset types vision should
+# recognise in a citizen photograph. The indicator↔scheme binding is chosen to
+# serve the funding route — a recommendation with no funding route is a wish.
+#
+# Nothing here may move into core/. The country lint enforces that.
+
+country_code: IN
+instance: CIVOS-IN
+
+sectors:
+  - key: water_sanitation
+    label: Water & Sanitation
+    short: Water
+    sdg: [6]
+    indicator:
+      primary: pct_households_no_improved_water
+      label: Households without an improved drinking water source
+      secondary: pct_households_no_improved_sanitation
+      source: NFHS-5 district factsheets
+      year: 2021
+    schemes: [jal_jeevan_mission, swachh_bharat_gramin]
+    asset_types: [handpump, borewell, standpost, toilet_block, drain, overhead_tank]
+
+  - key: roads_transport
+    label: Roads & Transport
+    short: Roads
+    sdg: [9, 11]
+    indicator:
+      primary: pct_habitations_unconnected
+      label: Rural habitations without all-weather road connectivity
+      source: PMGSY / district statistics
+      year: 2023
+    schemes: [pmgsy, amrut]
+    asset_types: [road_surface, culvert, bridge, bus_stop, footpath]
+
+  - key: electricity
+    label: Electricity
+    short: Power
+    sdg: [7]
+    indicator:
+      primary: pct_households_no_electricity
+      label: Households without an electricity connection
+      source: NFHS-5; NITI National MPI
+      year: 2021
+    schemes: [rdss, ddugjy]
+    asset_types: [transformer, pole, street_light, service_line, feeder]
+
+  - key: health
+    label: Health Facilities
+    short: Health
+    sdg: [3]
+    indicator:
+      primary: pct_births_non_institutional
+      label: Births not delivered in a health facility
+      source: NFHS-5; Rural Health Statistics
+      year: 2021
+    schemes: [national_health_mission, ayushman_bharat_hwc]
+    asset_types: [phc_building, sub_centre, ambulance_access_road, waiting_area]
+
+  - key: education
+    label: Education
+    short: Education
+    sdg: [4]
+    indicator:
+      primary: pct_children_out_of_school
+      label: Children of school age not attending school
+      source: NFHS-5; NITI National MPI
+      year: 2021
+    schemes: [samagra_shiksha, pm_shri]
+    asset_types: [school_building, classroom, boundary_wall, school_toilet, playground]
+
+# Physical condition flags are country-agnostic and live in core/. Listed here
+# only so adapter authors can see the vocabulary vision will return.
+condition_flags_reference:
+  - structurally_unsafe
+  - standing_water
+  - unusable
+  - partially_functional

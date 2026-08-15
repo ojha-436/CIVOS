@@ -1,0 +1,113 @@
+# CIVOS-IN — funding routes (SPEC §7, P0-13).
+#
+# Real, named central schemes. This file is why a CIVOS dossier is something a
+# district officer can attach to a funding note rather than a chart they can do
+# nothing with: a recommendation with no funding route is a wish, one attached to
+# money that already exists can start next month.
+#
+# unit_cost_inr drives the indicative cost band in the dossier. Figures are
+# published scheme norms and are indicative only — the dossier says so.
+
+country_code: IN
+currency: INR
+
+schemes:
+  - key: jal_jeevan_mission
+    name: Jal Jeevan Mission
+    ministry: Ministry of Jal Shakti
+    sector: water_sanitation
+    eligibility: >
+      Rural habitations without functional household tap connections. Priority to
+      water-quality-affected habitations, aspirational districts, and SC/ST majority habitations.
+    unit: functional household tap connection
+    unit_cost_inr: 23000
+
+  - key: swachh_bharat_gramin
+    name: Swachh Bharat Mission (Grameen) Phase II
+    ministry: Department of Drinking Water and Sanitation
+    sector: water_sanitation
+    eligibility: >
+      Rural households without access to a toilet, and villages requiring solid
+      and liquid waste management assets to sustain ODF status.
+    unit: individual household latrine
+    unit_cost_inr: 12000
+
+  - key: pmgsy
+    name: Pradhan Mantri Gram Sadak Yojana
+    ministry: Ministry of Rural Development
+    sector: roads_transport
+    eligibility: >
+      Eligible unconnected habitations above the population threshold for the
+      relevant terrain category, plus upgradation of existing through routes.
+    unit: km of all-weather road
+    unit_cost_inr: 8500000
+
+  - key: amrut
+    name: AMRUT 2.0
+    ministry: Ministry of Housing and Urban Affairs
+    sector: roads_transport
+    eligibility: >
+      Statutory towns, for universal water supply coverage and sewerage or
+      septage management alongside urban mobility assets.
+    unit: urban infrastructure package
+    unit_cost_inr: 15000000
+
+  - key: rdss
+    name: Revamped Distribution Sector Scheme
+    ministry: Ministry of Power
+    sector: electricity
+    eligibility: >
+      DISCOM-implemented loss-reduction and metering works, and distribution
+      infrastructure strengthening in areas with poor supply reliability.
+    unit: distribution transformer
+    unit_cost_inr: 450000
+
+  - key: ddugjy
+    name: Deen Dayal Upadhyaya Gram Jyoti Yojana
+    ministry: Ministry of Power
+    sector: electricity
+    eligibility: >
+      Rural electrification, feeder separation, and last-mile connectivity for
+      un-electrified and partially electrified households.
+    unit: household service connection
+    unit_cost_inr: 3000
+
+  - key: national_health_mission
+    name: National Health Mission
+    ministry: Ministry of Health and Family Welfare
+    sector: health
+    eligibility: >
+      Facility strengthening against Indian Public Health Standards where
+      sub-centre or PHC shortfall is demonstrated against population norms.
+    unit: sub-centre upgrade
+    unit_cost_inr: 2500000
+
+  - key: ayushman_bharat_hwc
+    name: Ayushman Bharat — Health and Wellness Centre
+    ministry: Ministry of Health and Family Welfare
+    sector: health
+    eligibility: >
+      Conversion of existing sub-centres and PHCs into Health and Wellness
+      Centres delivering comprehensive primary health care.
+    unit: health and wellness centre
+    unit_cost_inr: 1700000
+
+  - key: samagra_shiksha
+    name: Samagra Shiksha
+    ministry: Ministry of Education
+    sector: education
+    eligibility: >
+      School infrastructure gaps against norms — additional classrooms, drinking
+      water, separate toilets, boundary walls and ramps.
+    unit: additional classroom
+    unit_cost_inr: 900000
+
+  - key: pm_shri
+    name: PM SHRI Schools
+    ministry: Ministry of Education
+    sector: education
+    eligibility: >
+      Selected existing schools upgraded as exemplar schools, with priority to
+      educationally backward blocks.
+    unit: school upgrade package
+    unit_cost_inr: 20000000

@@ -204,6 +204,54 @@ Python ever written. The lint parses instead — string literals and identifiers
 so adding a country to it is a config edit. Self-tested against a deliberate
 violation, because a lint that never fires proves nothing.
 
+### 3.15 The console was built before the data layer — deliberately
+
+Out of plan order (console is Phase 5), and the reasoning is the risk register:
+"Console overruns its 11 h · likelihood **High**". It is also the artefact judges
+actually click. So it was built now, against a **fixture generated to match
+`Warehouse.aggregate_scores()`** field for field. Phase 4 changes one fetch URL in
+`console/lib/data.ts` and nothing else moves.
+
+What is real in it already: **594 real district boundaries** (public GeoJSON,
+33 MB simplified to 880 KB with mapshaper, topology preserved so there are no gaps
+between neighbours), real district and state names, the five real sectors bound to
+real indicators, and ten real central schemes with published unit costs. What is
+synthetic: citizen signals and deficit values, both labelled in the interface.
+
+**Design direction: "the instrument."** Taken from §3.4 — exposing w₁–w₅ converts
+the engine "from an oracle into an instrument" — so the console is built as a
+backlit survey table. Instrument Serif + IBM Plex Sans/Mono, hairline rules,
+calibration ticks, tabular figures. The four quadrant hues are the only saturated
+colour in the entire interface; Silent Need is the only element allowed to glow.
+
+Three decisions worth not re-litigating:
+
+- **No basemap.** A tile provider means an API key and a billing surface for
+  something the design does not use, the districts *are* the subject, and with no
+  external tile request the console renders identically offline — which matters
+  when the demo is being filmed.
+- **The synthetic-data disclosure is a calibration strip, not a warning banner.**
+  P0-16 requires it to be persistent; a banner that looks dismissible gets
+  dismissed, and one that looks like part of the machine gets read.
+- **Hue carries quadrant, intensity carries priority** — applied by mixing toward
+  the map ground, not by lowering opacity. The first attempt painted four
+  saturated hues at similar strength across 594 districts and read as confetti.
+
+### 3.16 The raw-vs-adjusted toggle had a bug that flattened the whole argument
+
+Worth recording because it was invisible until the map was looked at. The first
+implementation applied the full formula in **both** modes, differing only in
+whether the participation correction was used. That meant `w₂·deficit` was
+contributing in raw mode too — so high-deficit silent districts already scored
+well *before* the correction, and the gold Silent Need districts were lit up in
+both views. The turn did not turn.
+
+The fix is also the more honest model: **raw mode ranks on complaint volume
+alone** — what a conventional grievance dashboard can actually see, having never
+joined against official deprivation data. Deficit and silence gap enter only in
+the corrected view. `w₂` and `w₃` are therefore marked inactive in raw mode rather
+than left as live controls that silently do nothing.
+
 ---
 
 ## 4. Process decisions

@@ -131,21 +131,21 @@ Lock this first. It is not a marketing artefact, it is the build spec. If a feat
 ## Phase 5 — The Console · 19–20 Aug · 11 h
 *What judges click. Carries the 20% deployability score, which is why this is Next.js and not Streamlit — a ministry-grade console reads as pilotable, a notebook-style app reads as a prototype.*
 
-**Day 6 (19 Aug) — 5.5 h**
+**Day 6 (19 Aug) — 5.5 h** · ⚡ **built early, 15 Aug** — see §Console, below
 
-| # | Task | Time |
-|---|---|---|
-| 5.1 | Next.js app, single page, three panels. No routing, no state library. Deliberately boring architecture. | 60 m |
-| 5.2 | MapLibre GL district choropleth, colour-ramped by `Priority`. | 120 m |
-| 5.3 | Sector filter + quadrant filter. **The raw-demand ↔ equity-adjusted toggle is the 1:45 money shot** — make the transition visibly dramatic. | 90 m |
-| 5.4 | Ranked district list, sortable, synced to map selection. Show modality mix per district (voice / text / image counts). | 60 m |
+| # | Task | Time | Status |
+|---|---|---|---|
+| 5.1 | Next.js app, single page, three panels. No routing, no state library. | 60 m | ✅ |
+| 5.2 | MapLibre GL district choropleth, colour-ramped by `Priority`. 594 real districts. | 120 m | ✅ |
+| 5.3 | Sector filter + quadrant filter. **The raw ↔ equity-adjusted toggle is the 1:45 money shot.** | 90 m | ✅ |
+| 5.4 | Ranked district list synced to map selection, with rank-movement deltas. | 60 m | ✅ (modality mix pending real data) |
 
 **Day 7 (20 Aug) — 5.5 h**
 
-| # | Task | Time |
-|---|---|---|
-| 5.5 | District drilldown drawer: all five sectors, every score term broken out, signal samples in original language + English, thumbnail strip. | 90 m |
-| 5.6 | **Weight sliders** (`w₁…w₅`) with live recompute. Converts the engine from an oracle into an instrument — a trust feature, not a toy. | 60 m |
+| # | Task | Time | Status |
+|---|---|---|---|
+| 5.5 | District drilldown drawer: every score term broken out, signal samples in original language + English, evidence strip, scheme + cost band. | 90 m | ✅ |
+| 5.6 | **Weight sliders** (`w₁…w₅`) with live recompute. An instrument, not an oracle. | 60 m | ✅ |
 | 5.7 | Dossier view: all 11 required elements including the **evidence photo strip**, numbered claims resolving to an evidence table. Grounded Gemini generation from a retrieved bundle only. | 120 m |
 | 5.8 | Synthetic-data banner (persistent, honest — and note that *evidence images are real, citizen text is synthetic*, because that distinction is to your credit) + Silent Need card with the **"Dispatch outreach"** action label, pre-empting the *"you're ignoring citizens"* objection inside the product. | 30 m |
 | 5.9 | Deploy to Cloud Run. Verify the public link works in an incognito window with no credentials, **including camera and mic permission prompts over HTTPS.** | 30 m |

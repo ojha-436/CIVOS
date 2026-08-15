@@ -24,3 +24,7 @@ data/interim/
 *.gpkg
 *.shp
 *.zip
+
+# Next.js build output
+console/.next/
+console/next-env.d.ts
