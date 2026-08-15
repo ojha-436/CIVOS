@@ -72,6 +72,7 @@ async def signal_endpoint(
     text: Annotated[str | None, Form()] = None,
     audio: Annotated[UploadFile | None, File()] = None,
     image: Annotated[UploadFile | None, File()] = None,
+    hint_sector: Annotated[str | None, Form()] = None,
 ):
     """Accept a citizen report in any modality and return a structured signal.
 
@@ -121,13 +122,19 @@ async def signal_endpoint(
             # Coordinates discarded here; gps and lat/lon go out of scope.
 
     # -- Gemini extraction --------------------------------------------------
+    # Append the citizen's optional sector hint to the text so the model
+    # can use it as a guide without overriding what it actually sees.
+    combined_text = text or ""
+    if hint_sector:
+        combined_text = (combined_text + f"\n[Citizen-selected category hint: {hint_sector}]").strip()
+
     try:
         result = extract(
             audio_bytes=audio_bytes,
             audio_mime=audio_mime,
             image_bytes=image_bytes,
             image_mime=image_mime,
-            text=text,
+            text=combined_text or None,
         )
     except Exception as exc:
         raise HTTPException(502, f"Extraction failed: {exc}") from exc
@@ -172,6 +179,7 @@ async def signal_endpoint(
             ] if present
         ],
         "received_at": datetime.now(timezone.utc).isoformat(),
+        "hint_sector": hint_sector,
     }
 
 

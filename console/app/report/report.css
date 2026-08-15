@@ -423,3 +423,63 @@ textarea.say::placeholder {
   font-size: 11.5px;
   line-height: 1.55;
 }
+
+/* ── Sector category hint ──────────────────────────────────────────────── */
+
+.sector-hint {
+  margin-top: 20px;
+}
+
+.sector-hint-label {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--paper-4);
+  margin-bottom: 10px;
+}
+
+.sector-hint-opt {
+  font-size: 10px;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--paper-4);
+  opacity: 0.7;
+  margin-left: 6px;
+}
+
+.sector-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sector-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  border-radius: 20px;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--paper-3);
+  font-size: 12px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.sector-chip:hover {
+  border-color: var(--paper-3);
+  color: var(--paper);
+}
+
+.sector-chip[data-active='true'] {
+  border-color: var(--q-gap);
+  background: color-mix(in srgb, var(--q-gap) 12%, transparent);
+  color: var(--q-gap);
+}
+
+.sector-chip-emoji {
+  font-size: 14px;
+  line-height: 1;
+}

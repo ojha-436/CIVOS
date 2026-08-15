@@ -65,6 +65,14 @@ const TypeIcon = () => (
   </svg>
 );
 
+const SECTORS = [
+  { key: 'water_sanitation', label: 'Water & Sanitation', emoji: '💧' },
+  { key: 'roads_transport',  label: 'Roads & Transport',  emoji: '🛣️' },
+  { key: 'electricity',      label: 'Electricity',        emoji: '⚡' },
+  { key: 'health',           label: 'Health',             emoji: '🏥' },
+  { key: 'education',        label: 'Education',          emoji: '📚' },
+];
+
 export default function Report() {
   const [recording, setRecording] = useState(false);
   const [seconds, setSeconds] = useState(0);
@@ -74,6 +82,7 @@ export default function Report() {
   const [preview, setPreview] = useState<Preview | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
+  const [hintSector, setHintSector] = useState<string | null>(null);
 
   const rec = useRef<MediaRecorder | null>(null);
   const chunks = useRef<Blob[]>([]);
@@ -146,6 +155,9 @@ export default function Report() {
     if (imageAtt) {
       formData.append('image', imageAtt.blob, 'photo.jpg');
     }
+    if (hintSector) {
+      formData.append('hint_sector', hintSector);
+    }
 
     try {
       // Use local FastAPI endpoint.
@@ -186,6 +198,9 @@ export default function Report() {
 
       const typed = text.trim();
 
+      const fallbackSector = hintSector
+        ? (SECTOR_LABELS[hintSector] || 'Water & Sanitation')
+        : 'Water & Sanitation';
       setPreview({
         language: hasAudio && !typed ? 'mr-IN' : typed ? 'detected on extraction' : 'none required',
         raw: typed || (hasAudio ? 'आमच्या वाडीतला हातपंप पाच महिन्यांपासून कोरडा आहे.' : '—'),
@@ -194,11 +209,11 @@ export default function Report() {
           : hasAudio
             ? 'The handpump in our hamlet has been dry for five months.'
             : 'Structured entirely from the photograph — no language required.',
-        sector: 'Water & Sanitation',
+        sector: fallbackSector,
         severity: hasImage ? 4 : 3,
         asset: hasImage ? 'handpump' : undefined,
         flags: hasImage ? ['unusable'] : undefined,
-        district: hasImage ? 'Nashik' : 'Nashik',
+        district: 'Nashik',
         geoConfidence: hasImage ? 'high' : 'inferred',
         modalities,
         isFallback: true,
@@ -214,6 +229,7 @@ export default function Report() {
     setText('');
     setPreview(null);
     setShowText(false);
+    setHintSector(null);
   }
 
   const mm = String(Math.floor(seconds / 60)).padStart(2, '0');
@@ -322,6 +338,27 @@ export default function Report() {
                 ))}
               </div>
             )}
+
+            {/* Optional category hint — Gemini auto-detects, but citizen can guide it */}
+            <div className="sector-hint rise d4">
+              <div className="sector-hint-label">
+                Category <span className="sector-hint-opt">optional — Gemini auto-detects</span>
+              </div>
+              <div className="sector-chips">
+                {SECTORS.map((s) => (
+                  <button
+                    key={s.key}
+                    className="sector-chip"
+                    data-active={hintSector === s.key}
+                    onClick={() => setHintSector(hintSector === s.key ? null : s.key)}
+                    type="button"
+                  >
+                    <span className="sector-chip-emoji">{s.emoji}</span>
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+            </div>
 
             {error && (
               <p style={{ color: 'var(--alarm)', fontSize: 12, marginTop: 12 }}>{error}</p>
