@@ -247,7 +247,8 @@ Public Good" is a specification, not a licence choice.
 | 0 — Foundations, interfaces, Gate 0 | ✅ complete |
 | 5 — Console and citizen intake | ✅ built early, against a frozen data contract |
 | 1 — Real deficit data layer | ✅ complete — NFHS-5 loaded, 4/5 sectors real |
-| 2–4 — Corpus, multimodal intake, intelligence | next |
+| 2 — Signal corpus, evidence images, **Gate 1** | ✅ complete — 2,537 signals, 150 real photographs |
+| 3–4 — Multimodal intake, intelligence layer | next |
 | 6–7 — Second country adapter, submission | pending |
 
 The console was built ahead of the data layer deliberately: it is the phase most
@@ -258,7 +259,7 @@ intelligence layer lands, one fetch URL changes and nothing else does.
 | Gate | Result |
 |---|---|
 | **Gate 0** — BigQuery ML/AI availability in `asia-south1` | ✅ `PROCEED_BQML` |
-| Gate 1 — geo-grounding accuracy ≥ 85% | pending |
+| **Gate 1** — geo-grounding accuracy ≥ 85% | ✅ **98.1%** (51/52), zero confidently wrong — [evidence](docs/GATE1-RESULT.md) |
 | Gate 2 — vision sector accuracy ≥ 80% | pending |
 
 ---

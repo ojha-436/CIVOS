@@ -2,7 +2,7 @@
 
 Everything decided so far and, more importantly, **why**. Written so that work can resume cold — after a gap, on a new machine, or in a new session — without re-deriving anything.
 
-**Last updated:** 15 Aug 2026 · Status: **Phases 0, 1 and most of 5 complete.** Gate 0 passed (`PROCEED_BQML`); the official NFHS-5 deficit layer is loaded (537/594 districts, 4/5 sectors); the console and citizen intake are built. **Next: Phase 2 — signal corpus, evidence images, and Gate 1 (geo-grounding).**
+**Last updated:** 15 Aug 2026 · Status: **Phases 0, 1, 2 and most of 5 complete.** Gate 1 passed (98.1%). Gate 0 passed (`PROCEED_BQML`); the official NFHS-5 deficit layer is loaded (537/594 districts, 4/5 sectors); the console and citizen intake are built. **Next: Phase 2 — signal corpus, evidence images, and Gate 1 (geo-grounding).**
 
 ---
 
@@ -304,6 +304,60 @@ which is synthetic by design.
 **Sanity check that the data is right:** worst water deficits land in Hailakandi
 and Cachar (Assam), Ukhrul and Tamenglong (Manipur), South Garo Hills (Meghalaya).
 Those are genuinely water-stressed districts. The ranking is not noise.
+
+### 3.18 Phase 2 — corpus, images, and GATE 1 passed at 98.1%
+
+**GATE 1: PASS — 51/52 = 98.1%**, threshold 85%. The district-picker fallback is
+not needed. Evidence in `docs/GATE1-RESULT.md`.
+
+**The metric that actually matters is `confidently_wrong = 0`.** Every single
+failure abstained rather than naming a district. That is the whole difference
+between a recoverable miss and an unrecoverable one: a wrong district silently
+attaches real deprivation data to the wrong place, and nothing downstream ever
+questions it.
+
+Resolver design, and why: **one Gemini call with the full 594-district gazetteer
+in the prompt**, so a returned code is valid by construction. The alternative —
+free-text district name, then fuzzy-match — reintroduces exactly the coin toss
+that put Sikkim's "East" in Delhi during Phase 1. **Ambiguity is then resolved in
+code, not by the model:** a name that maps to several states with none given
+causes an abstention, which is deterministic and testable in a way a prompt
+instruction is not.
+
+**The one miss is disputed and was deliberately not fixed.** Gir forest spans
+Junagadh, Gir Somnath (2013) and Amreli, so the resolver's abstention is probably
+right and my answer key wrong. Editing a key after seeing the score is precisely
+the tuning the test set was written first to prevent. A disclosed 98.1% is worth
+more than a manufactured 100%, and that principle matters more than the number.
+
+**Corpus: 2,537 signals over 501 distinct needs — a 5.1× dedup ratio**, inside
+SPEC's expected 3–8× band, across 319 districts and 13 languages. Not 3,000: some
+clusters returned fewer reports than asked. The real number is reported rather
+than topped up, because chasing a round number in synthetic data buys nothing.
+
+Two design decisions worth keeping:
+- **Generated per NEED, not per signal.** One dry borewell is one problem that
+  forty people report forty ways. The generator produces a distinct need, then
+  several citizens reporting *that same need* in different languages. This is what
+  makes the Signals-vs-Needs number mean something instead of being a ratio of one.
+- **Sampling weight = real deficit × connectivity^1.6.** Real deprivation says
+  where problems are; connectivity says who can report them. Multiplying the two
+  reproduces the distortion the product exists to correct. **46 districts in the
+  worst-deficit quartile produced zero signals** — that is the Silent Need
+  population, and it exists by construction rather than by luck.
+
+**Language tags needed normalising.** Left alone the model emitted 45 distinct
+"languages" from twelve — `hi-Latn-code-mixed`, `lang-en`, `kn-mix`. That is not
+cosmetic: SPEC §9 requires each dossier to report how many distinct languages its
+signals arrived in, and an inflated count is a false claim about reach. Normalised
+to 13, with an `is_code_mixed` flag carrying the mixing information instead.
+
+**Evidence images: 150 real photographs**, 30 per sector, Wikimedia Commons, every
+one attributed in `docs/IMAGE-ATTRIBUTION.md`. 45 candidates were rejected on
+licence — a DPG cannot ship assets a downstream ministry may not reuse. Two fixes
+along the way: truncated filenames collided so five images silently overwrote each
+other, and the fetched originals were 38.6 MB until a re-encode pass brought them
+to 6.8 MB.
 
 ---
 

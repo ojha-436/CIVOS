@@ -70,7 +70,7 @@ Lock this first. It is not a marketing artefact, it is the build spec. If a feat
 
 ---
 
-## Phase 2 — Signal Corpus, Evidence Images + The Gate · 16 Aug · 5.25 h
+## Phase 2 — Signal Corpus, Evidence Images + The Gate · 16 Aug · 5.25 h — ✅ **COMPLETE**
 
 | # | Task | Time |
 |---|---|---|
@@ -80,7 +80,14 @@ Lock this first. It is not a marketing artefact, it is the build spec. If a feat
 | 2.4 | Build the **50-case geo-grounding test set** by hand. Vague, realistic, messy. The most valuable hour of the week. | 60 m |
 | 2.5 | Geo-grounding v1: Gemini + district gazetteer + `ST_*` reconciliation. Measure against 2.4. | 90 m |
 
-> ### GATE 1 — Geo-grounding accuracy *(the riskiest assumption in the project)*
+> ### GATE 1 — Geo-grounding accuracy · **PASSED 15 Aug → 98.1% (51/52)**
+> Threshold was 85%. The district-picker fallback is **not needed**. Evidence: [docs/GATE1-RESULT.md](docs/GATE1-RESULT.md).
+>
+> The number that matters most is **confidently wrong = 0** — every failure abstained. A miss that declines is recoverable; a miss that names the wrong district attaches real deprivation data to the wrong place and nothing downstream questions it.
+>
+> The single miss is disputed and left unchanged: Gir forest spans Junagadh, Gir Somnath and Amreli, so the resolver's abstention is probably right and the answer key wrong. Editing an answer key after seeing the score is the tuning the test set was written first to prevent.
+>
+> <details><summary>Original gate criteria</summary>
 > Everything downstream inherits this error. Mushy geo-grounding makes `DemandIndex` noise, which makes the quadrants noise, which makes the silence turn collapse.
 >
 > - **≥ 85%** → proceed as designed.
@@ -89,6 +96,7 @@ Lock this first. It is not a marketing artefact, it is the build spec. If a feat
 > **The image modality softens this gate.** Photos with GPS EXIF resolve exactly via `ST_CONTAINS` with no inference at all, so a portion of your corpus is geo-perfect regardless of how 2.5 performs. Report the two paths separately: `geo_confidence = high` (EXIF) vs `inferred`.
 >
 > **Decide today. Do not carry this question into Day 5.**
+> </details>
 
 ---
 
