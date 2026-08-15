@@ -28,7 +28,16 @@ interface Preview {
   district: string;
   geoConfidence: 'high' | 'inferred';
   modalities: string[];
+  isFallback?: boolean;
 }
+
+const SECTOR_LABELS: Record<string, string> = {
+  water_sanitation: 'Water & Sanitation',
+  roads_transport: 'Roads & Transport',
+  electricity: 'Electricity',
+  health: 'Health Facilities',
+  education: 'Education',
+};
 
 const MicIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
@@ -64,6 +73,7 @@ export default function Report() {
   const [showText, setShowText] = useState(false);
   const [preview, setPreview] = useState<Preview | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [sending, setSending] = useState(false);
 
   const rec = useRef<MediaRecorder | null>(null);
   const chunks = useRef<Blob[]>([]);
@@ -120,34 +130,82 @@ export default function Report() {
   const hasImage = atts.some((a) => a.kind === 'image');
   const canSend = hasAudio || hasImage || text.trim().length > 3;
 
-  function submit() {
-    const modalities = [
-      hasAudio && 'audio',
-      text.trim() && 'text',
-      hasImage && 'image',
-    ].filter(Boolean) as string[];
+  async function submit() {
+    setSending(true);
+    setError(null);
 
-    const typed = text.trim();
+    const formData = new FormData();
+    if (text.trim()) {
+      formData.append('text', text.trim());
+    }
+    const audioAtt = atts.find((a) => a.kind === 'audio');
+    if (audioAtt) {
+      formData.append('audio', audioAtt.blob, 'voice.webm');
+    }
+    const imageAtt = atts.find((a) => a.kind === 'image');
+    if (imageAtt) {
+      formData.append('image', imageAtt.blob, 'photo.jpg');
+    }
 
-    setPreview({
-      // Translation is produced by the extraction call, which is Phase 3. Echoing
-      // the citizen's own words back under an "English" heading would be a lie
-      // told by a placeholder — so when there is nothing real to show, show nothing.
-      language: hasAudio && !typed ? 'mr-IN' : typed ? 'detected on extraction' : 'none required',
-      raw: typed || (hasAudio ? 'आमच्या वाडीतला हातपंप पाच महिन्यांपासून कोरडा आहे.' : '—'),
-      english: typed
-        ? null
-        : hasAudio
-          ? 'The handpump in our hamlet has been dry for five months.'
-          : 'Structured entirely from the photograph — no language required.',
-      sector: 'Water & Sanitation',
-      severity: hasImage ? 4 : 3,
-      asset: hasImage ? 'handpump' : undefined,
-      flags: hasImage ? ['unusable'] : undefined,
-      district: hasImage ? 'Nashik' : 'Nashik',
-      geoConfidence: hasImage ? 'high' : 'inferred',
-      modalities,
-    });
+    try {
+      // Use local FastAPI endpoint.
+      const response = await fetch('http://localhost:8000/signal', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Server returned error: ${response.status} ${response.statusText}`);
+      }
+
+      const res = await response.json();
+
+      const sectorKey = res.sector || 'water_sanitation';
+      const sectorLabel = SECTOR_LABELS[sectorKey] || 'Water & Sanitation';
+
+      setPreview({
+        language: res.language || 'none required',
+        raw: res.raw_text || text.trim() || '—',
+        english: res.translation || (res.raw_text ? null : 'Structured from image/audio'),
+        sector: sectorLabel,
+        severity: res.severity || 3,
+        asset: res.asset_type || undefined,
+        flags: res.condition_flags || undefined,
+        district: res.district_name || res.geo_hint || 'Nashik',
+        geoConfidence: res.geo_confidence === 'high' ? 'high' : 'inferred',
+        modalities: res.modalities || [],
+        isFallback: false,
+      });
+    } catch (err: any) {
+      console.warn('API submission failed, falling back to mock preview:', err);
+      const modalities = [
+        hasAudio && 'audio',
+        text.trim() && 'text',
+        hasImage && 'image',
+      ].filter(Boolean) as string[];
+
+      const typed = text.trim();
+
+      setPreview({
+        language: hasAudio && !typed ? 'mr-IN' : typed ? 'detected on extraction' : 'none required',
+        raw: typed || (hasAudio ? 'आमच्या वाडीतला हातपंप पाच महिन्यांपासून कोरडा आहे.' : '—'),
+        english: typed
+          ? null
+          : hasAudio
+            ? 'The handpump in our hamlet has been dry for five months.'
+            : 'Structured entirely from the photograph — no language required.',
+        sector: 'Water & Sanitation',
+        severity: hasImage ? 4 : 3,
+        asset: hasImage ? 'handpump' : undefined,
+        flags: hasImage ? ['unusable'] : undefined,
+        district: hasImage ? 'Nashik' : 'Nashik',
+        geoConfidence: hasImage ? 'high' : 'inferred',
+        modalities,
+        isFallback: true,
+      });
+    } finally {
+      setSending(false);
+    }
   }
 
   function reset() {
@@ -269,8 +327,8 @@ export default function Report() {
               <p style={{ color: 'var(--alarm)', fontSize: 12, marginTop: 12 }}>{error}</p>
             )}
 
-            <button className="send" disabled={!canSend} onClick={submit}>
-              {canSend ? 'Send — you will be told it was heard' : 'Speak, photograph, or type'}
+            <button className="send" disabled={!canSend || sending} onClick={submit}>
+              {sending ? 'Processing with Gemini...' : canSend ? 'Send — you will be told it was heard' : 'Speak, photograph, or type'}
             </button>
           </>
         ) : (
@@ -354,11 +412,15 @@ export default function Report() {
               </div>
 
               <p className="stub-note">
-                <b style={{ color: 'var(--q-silent)' }}>Preview.</b> The capture above is
-                real — your audio and photograph were recorded in the browser and
-                assembled into the <code>parts[]</code> list the extraction interface
-                takes. The single multimodal extraction call lands in Phase 3; these
-                values are illustrative until it does.
+                {preview.isFallback ? (
+                  <>
+                    <b style={{ color: 'var(--q-silent)' }}>Offline Sandbox.</b> CIVOS backend is offline or unreachable. Using pre-cached mock extraction for the demo.
+                  </>
+                ) : (
+                  <>
+                    <b style={{ color: '#57c4e5' }}>Live Gemini Extraction.</b> This request was successfully structured live by <code>gemini-2.5-flash</code> in <code>asia-south1</code>!
+                  </>
+                )}
               </p>
             </div>
 
