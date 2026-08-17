@@ -60,7 +60,7 @@ def main(
             if page.locator(".rank-item").count() < 10:
                 failures.append("ranked list did not populate")
 
-        shoot("console-raw", "/", 1680, 1000, check_map)
+        shoot("console-raw", "/console", 1680, 1000, check_map)
 
         # -- console, equity-adjusted (the money shot) ----------------------
         def flip(page):
@@ -69,7 +69,7 @@ def main(
             if page.get_attribute(".switch", "data-adjusted") != "true":
                 failures.append("equity toggle did not flip")
 
-        shoot("console-adjusted", "/", 1680, 1000, flip)
+        shoot("console-adjusted", "/console", 1680, 1000, flip)
 
         # -- drilldown ------------------------------------------------------
         def drill(page):
@@ -90,7 +90,19 @@ def main(
             if page.locator(".drawer").count() == 0:
                 failures.append("drilldown drawer did not open")
 
-        shoot("console-dossier", "/", 1680, 1000, drill)
+        shoot("console-dossier", "/console", 1680, 1000, drill)
+
+        # -- landing page ---------------------------------------------------
+        # New in the 17 Aug revision: "/" is the landing page and the console
+        # moved to /console. A submission deck that has no shot of the first page
+        # an evaluator lands on is missing its own front door.
+        def landing(page):
+            if page.locator(".lp-h1").count() == 0:
+                failures.append("landing hero absent")
+            if page.locator(".lp-cell.is-silent").count() == 0:
+                failures.append("landing quadrant matrix absent")
+
+        shoot("landing", "/", 1680, 1000, landing)
 
         # -- citizen intake, mobile -----------------------------------------
         def intake(page):
