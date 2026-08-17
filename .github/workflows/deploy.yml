@@ -3,6 +3,10 @@ name: Deploy to Cloud Run
 on:
   push:
     branches: [main]
+  # Lets the deploy be re-run from the Actions tab (or `gh workflow run`) without
+  # inventing a dummy commit — needed whenever only a repository *secret* has
+  # changed, since editing a secret does not itself trigger anything.
+  workflow_dispatch:
 
 env:
   PROJECT_ID: civos-in
@@ -102,7 +106,16 @@ jobs:
           echo "Telegram webhook → ${API_URL}/telegram/webhook"
 
       # ── 7. Print the live URLs ────────────────────────────────────────────
+      # Both read back from gcloud. The console URL used to be hardcoded and had
+      # already gone stale against the real service — a wrong URL printed at the
+      # end of a green deploy is worse than none, because it gets trusted.
       - name: Print live URLs
         run: |
-          echo "API   → ${{ steps.api_url.outputs.url }}"
-          echo "Console → https://civos-console-924096812044.${{ env.REGION }}.run.app"
+          CONSOLE=$(gcloud run services describe ${{ env.CONSOLE_SERVICE }} \
+            --region ${{ env.REGION }} \
+            --project ${{ env.PROJECT_ID }} \
+            --format="value(status.url)")
+          echo "API     → ${{ steps.api_url.outputs.url }}"
+          echo "Console → $CONSOLE"
+          echo "Landing → $CONSOLE/"
+          echo "Intake  → $CONSOLE/report"
