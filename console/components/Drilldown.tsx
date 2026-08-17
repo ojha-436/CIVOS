@@ -25,10 +25,13 @@ export default function Drilldown({ ds, district, row, sectorKey, weights, adjus
   const scheme = sector.schemes[0];
   const [lo, hi] = costBand(row.needs, scheme.unit_cost_inr);
 
-  // Population affected: share of the district carrying the deficit. Placeholder
-  // population until Phase 1, and the dossier says so rather than implying census
-  // precision it does not have.
-  const affected = Math.round((district.population * row.deficit) / 100);
+  // Population affected: the share of the district carrying the deficit, from
+  // Census 2011. `null` where no census figure could be reconciled — rendered as
+  // unavailable rather than as 0, because a confident zero is worse than a gap.
+  const affected =
+    district.population === null
+      ? null
+      : Math.round((district.population * row.deficit) / 100);
 
   const terms: { name: string; v: number; max: number; gold?: boolean }[] = [
     { name: adjusted ? 'Adjusted demand' : 'Demand index', v: adjusted ? row.adjusted_demand : row.demand, max: 100 },
@@ -101,10 +104,19 @@ export default function Drilldown({ ds, district, row, sectorKey, weights, adjus
                   ×{row.voice_correction.toFixed(2)}
                 </dd>
                 <dt>Population affected</dt>
-                <dd title="Derived from a placeholder district population — no census population is loaded yet">
-                  {affected.toLocaleString('en-IN')}{' '}
-                  <span style={{ color: 'var(--q-silent)', fontSize: 10 }}>est.</span>
-                </dd>
+                {affected === null ? (
+                  <dd
+                    style={{ color: 'var(--paper-4)' }}
+                    title="No Census 2011 population could be reconciled onto this district, so this figure is not derivable. Left empty rather than estimated."
+                  >
+                    no census figure
+                  </dd>
+                ) : (
+                  <dd title="Census 2011 district population × measured deficit. Population via Wikidata (CC0).">
+                    {affected.toLocaleString('en-IN')}{' '}
+                    <span style={{ color: 'var(--q-silent)', fontSize: 10 }}>est.</span>
+                  </dd>
+                )}
               </dl>
             </div>
           </div>

@@ -255,6 +255,22 @@ def main(
         for r in csv.DictReader(cap_path.open())
     }
     console.print(f"Participation capacity loaded: [bold]{len(capacity)}[/bold] districts")
+
+    # Census 2011 population, where scripts/build_population_layer.py could
+    # reconcile one. Optional: the fixture still builds without it, and districts
+    # without a figure carry None rather than an invented number.
+    pop_path = REPO / "data" / "fact_population.csv"
+    populations: dict[str, int] = {}
+    if pop_path.exists():
+        populations = {
+            r["admin_unit_code"]: int(r["population"]) for r in csv.DictReader(pop_path.open())
+        }
+        console.print(f"Census 2011 population loaded: [bold]{len(populations)}[/bold] districts")
+    else:
+        console.print(
+            "[yellow]No data/fact_population.csv — population-affected will be unavailable. "
+            "Run scripts/build_population_layer.py.[/yellow]"
+        )
     sectors_cfg = yaml.safe_load((REPO / "adapters" / "in" / "sectors.yaml").read_text())
     schemes_cfg = yaml.safe_load((REPO / "adapters" / "in" / "schemes.yaml").read_text())
     sectors = sectors_cfg["sectors"]
@@ -296,7 +312,12 @@ def main(
         # from scoring below rather than imputed to the median.
         connectivity = capacity.get(code)
         lon, lat = bbox_centroid(feat["geometry"])
-        population = int(180_000 + rnd("pop", code) * 3_400_000)
+        # Census 2011 population where it could be reconciled, None otherwise.
+        # This was `180_000 + hash(code) * 3_400_000` until 17 Aug 2026 — a fake
+        # number feeding the "population affected" line in every dossier. A
+        # district with no real figure now gets None and the dossier says the
+        # figure is unavailable, rather than being handed an invented one.
+        population = populations.get(code)
 
         feat["properties"] = {"code": code, "name": name, "state": state}
         districts.append(
@@ -307,9 +328,34 @@ def main(
                 "lon": lon,
                 "lat": lat,
                 "population": population,
+                # pop_scale is filled in after pass 1, once the median of the
+                # REAL populations is known — see below.
+                "pop_scale": population,
                 "connectivity": connectivity,
             }
         )
+
+    # -- population scale for the synthetic signal count --------------------
+    # Two different standards, deliberately:
+    #   `population`  is presented as a FACT, so it stays None where no census
+    #                 figure could be reconciled and the dossier says so.
+    #   `pop_scale`   only sizes the SYNTHETIC signal count, which is labelled
+    #                 synthetic everywhere it surfaces.
+    # Districts without a census figure get the national median rather than zero.
+    # Zero would hand them no signals at all, which would fabricate silence — and
+    # inventing silence out of missing data is the single error this product cannot
+    # afford, since silence is the thing it claims to detect.
+    real_pops = sorted(d["population"] for d in districts if d["population"] is not None)
+    median_pop = real_pops[len(real_pops) // 2] if real_pops else 1_000_000
+    n_scaled = 0
+    for d in districts:
+        if d["pop_scale"] is None:
+            d["pop_scale"] = median_pop
+            n_scaled += 1
+    console.print(
+        f"  population: [bold]{len(real_pops)}[/bold] real · {n_scaled} using the national "
+        f"median ({median_pop:,}) to scale synthetic signals only"
+    )
 
     # -- pass 2: per (district, sector) terms -------------------------------
     rows: list[dict] = []
@@ -352,7 +398,7 @@ def main(
             demand = clamp(heard * 92 + rnd("dem", k) * 20 - 6, 0, 99)
 
             participation = round(clamp(0.35 + conn * 7.4 + rnd("par", k) * 1.1, 0.05, 9.5), 2)
-            signals = max(0, int(participation * d["population"] / 1000 / 42))
+            signals = max(0, int(participation * d["pop_scale"] / 1000 / 42))
             needs = max(0, int(signals / (3.1 + rnd("dedup", k) * 4.4))) if signals else 0
             languages = 1 + int(rnd("lang", k) * 6) if signals else 0
 
@@ -444,11 +490,12 @@ def main(
             "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
             "instance": "CIVOS-IN",
             "provenance": {
-                "boundaries": "real — public district boundary data, simplified for web rendering",
+                "boundaries": "REAL — DataMeet Census-2011 district boundaries (CC-BY 4.0), simplified for web rendering. See docs/BOUNDARY-ATTRIBUTION.md",
                 "district_names": "real",
                 "deficit_indicators": "REAL — NFHS-5 2019-21 (IIPS/MoHFW), reconciled onto this boundary set. See docs/DATA-RECONCILIATION.md",
                 "citizen_signals": "SYNTHETIC — generated with a deliberate participation bias",
-                "population": "PLACEHOLDER",
+                "participation_capacity": "REAL — NFHS-5 women's schooling + household electricity. Both terms of the participation bias are real measurements, not a hash. See docs/DATA-RECONCILIATION.md",
+                "population": "Census 2011 via Wikidata (CC0), where reconciled; null otherwise",
                 "quotes": "SYNTHETIC — illustrative phrasing, real languages",
             },
             "median_participation_rate": median_pr,

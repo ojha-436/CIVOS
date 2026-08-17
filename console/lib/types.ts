@@ -49,7 +49,10 @@ export interface District {
   state: string;
   lon: number;
   lat: number;
-  population: number;
+  /** Census 2011 via Wikidata (CC0) where reconciled; null for ~18% of districts
+   *  that could not be matched by name. Null means "unknown", NOT zero — every
+   *  consumer must render it as unavailable rather than computing with it. */
+  population: number | null;
 }
 
 export interface Scheme {

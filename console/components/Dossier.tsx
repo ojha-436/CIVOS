@@ -85,7 +85,12 @@ export default function Dossier({ ds, district, row, sectorKey, weights, adjuste
   const quotes = row.quotes.map((i) => ds.quote_pool[sectorKey]?.[i]).filter(Boolean);
   const scheme: Scheme = sector.schemes[0];
   const [lo, hi] = costBand(row.needs, scheme.unit_cost_inr);
-  const affected = Math.round((district.population * row.deficit) / 100);
+  // null where no Census 2011 figure reconciled. Never coerce to 0 — a confident
+  // zero in a funding document is worse than an admitted gap.
+  const affected =
+    district.population === null
+      ? null
+      : Math.round((district.population * row.deficit) / 100);
   const photos = pickImages(district.code, sectorKey, Math.min(4, row.images || 4));
   const forecastDir = row.forecast > 0.5 ? '↑ rising' : row.forecast < -0.5 ? '↓ falling' : '→ stable';
 
@@ -108,6 +113,8 @@ export default function Dossier({ ds, district, row, sectorKey, weights, adjuste
       languages: row.languages,
       images: photos.length,
       deficit: row.deficit,
+      // Sent as null when unknown so the model states it is unavailable rather
+      // than reporting a zero as if it were a measurement.
       population_affected: affected,
       forecast_direction: forecastDir,
       evidence_strength: row.evidence,
@@ -136,11 +143,11 @@ export default function Dossier({ ds, district, row, sectorKey, weights, adjuste
         setProse(
           isSilent
             ? `${district.name} records a ${row.deficit.toFixed(1)}% ${sector.label.toLowerCase()} deficit per ${sector.source} ${sector.year} — placing it in the top tier of measured deprivation — yet the CIVOS corpus contains almost no citizen signals from this district. This is the defining feature of a Silent Need: the official data says conditions are severe; the absence of complaints does not mean satisfaction.\n\n` +
-              `With ${affected.toLocaleString('en-IN')} estimated residents exposed to this gap and demand trending ${forecastDir}, inaction risks this district falling permanently below the visibility threshold of participatory systems.\n\n` +
+              `With ${affected === null ? 'an unknown number of' : affected.toLocaleString('en-IN')} residents exposed to this gap and demand trending ${forecastDir}, inaction risks this district falling permanently below the visibility threshold of participatory systems.\n\n` +
               `Recommended action: dispatch a targeted outreach to this district to generate grounded demand signals before allocating funds. Once demand is confirmed, ${scheme.name} provides the most direct funding route.\n\n` +
               `Note: citizen signals in this dataset are synthetic, generated from real NFHS-5 deficits. Evidence photographs are real, openly-licensed images from Wikimedia Commons. All claims trace to the evidence bundle.`
             : `${district.name} shows ${row.signals.toLocaleString('en-IN')} citizen signals (${row.needs} distinct needs) about ${sector.label.toLowerCase()}, across ${row.languages} language(s), ${row.images > 0 ? `with ${row.images} photographic submissions corroborating the reports` : 'without photographic corroboration'}. This aligns with official data: ${row.deficit.toFixed(1)}% of the district's population lacks access to adequate ${sector.label.toLowerCase()} services (${sector.source} ${sector.year}).\n\n` +
-              `Priority score: ${p.toFixed(1)}/100. Demand is ${row.adjusted_demand.toFixed(1)} equity-adjusted, deficit is ${row.deficit.toFixed(1)}, and the 90-day trend is ${forecastDir}. An estimated ${affected.toLocaleString('en-IN')} residents are affected.\n\n` +
+              `Priority score: ${p.toFixed(1)}/100. Demand is ${row.adjusted_demand.toFixed(1)} equity-adjusted, deficit is ${row.deficit.toFixed(1)}, and the 90-day trend is ${forecastDir}. ${affected === null ? 'The number of residents affected cannot be derived: no Census 2011 population reconciled onto this district.' : `An estimated ${affected.toLocaleString('en-IN')} residents are affected.`}\n\n` +
               `${scheme.name} is the matched funding route: ${scheme.eligibility} Cost band for ${row.needs} needs: ${formatINR(lo)} – ${formatINR(hi)}.\n\n` +
               `Note: citizen signals in this dataset are synthetic, generated from real NFHS-5 deficits. Evidence photographs are real, openly-licensed images from Wikimedia Commons. All claims trace to the evidence bundle.`
         );
@@ -237,11 +244,17 @@ export default function Dossier({ ds, district, row, sectorKey, weights, adjuste
               {/* ⑥ Population affected */}
               <section className="dos-section">
                 <h4 className="label">⑥ Population affected (est.)</h4>
-                <div style={{ fontSize: 20, color: 'var(--gold)', fontVariantNumeric: 'tabular-nums' }}>
-                  {affected.toLocaleString('en-IN')}
+                <div
+                  style={{
+                    fontSize: affected === null ? 13 : 20,
+                    color: affected === null ? 'var(--paper-4)' : 'var(--gold)',
+                    fontVariantNumeric: 'tabular-nums',
+                  }}
+                >
+                  {affected === null ? 'no census figure reconciled' : affected.toLocaleString('en-IN')}
                 </div>
                 <div style={{ fontSize: 10.5, color: 'var(--paper-4)', marginTop: 2 }}>
-                  Derived from a placeholder district population — no census population loaded yet.
+                  Census 2011 district population × measured deficit. Population via Wikidata (CC0); shown as unavailable where no census figure could be reconciled.
                 </div>
               </section>
 
