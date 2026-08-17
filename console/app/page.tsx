@@ -462,8 +462,9 @@ export default function Landing() {
                   <div className="lp-tg-step">
                     <span className="sn">01</span>
                     <span className="sb">
-                      <b>Open the bot</b> — no install, no account creation, no form.
-                      Telegram over WhatsApp because it needs no Meta business verification.
+                      <b>Open the bot</b> — no CIVOS app to install, no account to create
+                      with us, no form. Telegram over WhatsApp because it needs no Meta
+                      business verification.
                     </span>
                   </div>
                   <div className="lp-tg-step">
@@ -514,8 +515,8 @@ export default function Landing() {
                       <span className="lp-tg-qr-k">Scan to report</span>
                       <span className="lp-tg-qr-h mono">@{TELEGRAM_HANDLE}</span>
                       <p>
-                        Point a phone camera at this and the bot opens. No install, no
-                        sign-up — the same intake the console reads from.
+                        Point a phone camera at this and the bot opens — the same intake the
+                        console reads from.
                       </p>
                       <a
                         className="lp-btn solid"
@@ -526,6 +527,15 @@ export default function Landing() {
                         <TelegramGlyph size={13} /> Open the bot{' '}
                         <span className="arrow">→</span>
                       </a>
+                      {/* On a desktop with no Telegram app installed, t.me shows an
+                          interstitial whose "Start bot" button fires a tg:// deep link
+                          with nothing to hand off to, so it appears dead. Telegram's own
+                          "Open in web" button on that page works. Saying so costs one
+                          line and saves an evaluator concluding the bot is broken. */}
+                      <span className="lp-tg-qr-note">
+                        On desktop without the Telegram app, choose{' '}
+                        <b>Open in web</b> on the page that appears.
+                      </span>
                     </div>
                   </div>
                 ) : (

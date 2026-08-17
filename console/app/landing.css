@@ -1014,6 +1014,18 @@ body:has(.lp) {
   color: var(--paper-3);
 }
 
+.lp-tg-qr-note {
+  margin-top: 10px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--paper-4);
+}
+
+.lp-tg-qr-note b {
+  color: var(--paper-2);
+  font-weight: 500;
+}
+
 @media (max-width: 480px) {
   .lp-tg-qr-card {
     flex-direction: column;
