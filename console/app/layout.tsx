@@ -1,29 +1,59 @@
 import type { Metadata } from 'next';
-import { Instrument_Serif, IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google';
+import localFont from 'next/font/local';
 import './globals.css';
 
-/* Instrument Serif is not an idle choice: the product's own argument is that
-   exposing the weights "converts the engine from an oracle into an instrument."
-   Paired with IBM Plex for the technical register and tabular figures. */
-const display = Instrument_Serif({
-  weight: '400',
-  subsets: ['latin'],
+/* Typefaces are vendored under app/fonts/ rather than fetched by
+   next/font/google at build time.
+ *
+ * That was not a style preference. On 2026-08-17 a Cloud Build deploy failed
+ * because Google Fonts rotated the IBM Plex Sans file hashes: the CSS it served
+ * still referenced woff2 URLs that had begun returning 404, so `next build`
+ * died with 18 module-not-found errors. Local builds kept passing only because
+ * .next/ still held the previously downloaded files — the failure was invisible
+ * until it reached CI.
+ *
+ * Self-hosting removes a live network dependency from the build entirely, which
+ * a system that claims to be a Digital Public Good ought not to have had: a
+ * ministry building this on a restricted or air-gapped network could never have
+ * compiled it. Builds are now reproducible and offline-capable.
+ *
+ * All three families are SIL OFL 1.1, which permits redistribution.
+ * Provenance and licence: docs/FONT-ATTRIBUTION.md
+ *
+ * Instrument Serif is not an idle choice: the product's own argument is that
+ * exposing the weights "converts the engine from an oracle into an instrument."
+ * Paired with IBM Plex for the technical register and tabular figures. */
+
+const display = localFont({
+  src: [{ path: './fonts/InstrumentSerif-Regular.woff2', weight: '400', style: 'normal' }],
   variable: '--font-display',
   display: 'swap',
+  // Georgia is the fallback in globals.css; matching its metrics here keeps the
+  // swap from shifting the very large hero headline.
+  fallback: ['Georgia', 'serif'],
+  adjustFontFallback: 'Times New Roman',
 });
 
-const body = IBM_Plex_Sans({
-  weight: ['400', '500', '600'],
-  subsets: ['latin'],
+const body = localFont({
+  src: [
+    { path: './fonts/IBMPlexSans-Regular.woff2', weight: '400', style: 'normal' },
+    { path: './fonts/IBMPlexSans-Medium.woff2', weight: '500', style: 'normal' },
+    { path: './fonts/IBMPlexSans-SemiBold.woff2', weight: '600', style: 'normal' },
+  ],
   variable: '--font-body',
   display: 'swap',
+  fallback: ['ui-sans-serif', 'system-ui', 'sans-serif'],
+  adjustFontFallback: 'Arial',
 });
 
-const mono = IBM_Plex_Mono({
-  weight: ['400', '500'],
-  subsets: ['latin'],
+const mono = localFont({
+  src: [
+    { path: './fonts/IBMPlexMono-Regular.woff2', weight: '400', style: 'normal' },
+    { path: './fonts/IBMPlexMono-Medium.woff2', weight: '500', style: 'normal' },
+  ],
   variable: '--font-mono',
   display: 'swap',
+  fallback: ['ui-monospace', 'monospace'],
 });
 
 export const metadata: Metadata = {
