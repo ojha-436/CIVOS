@@ -55,6 +55,111 @@ says so on the card itself.
 
 ---
 
+## The five verdicts, and what each one means
+
+Every district-sector pair gets exactly one verdict. Four are positions in the 2×2
+above; the fifth is a disclosure rather than a judgement.
+
+The two axes are deliberately independent:
+
+- **Demand** — how much citizens complain. The synthetic signal layer, generated
+  from real deprivation × real participation capacity.
+- **Deficit** — how bad conditions actually are. Real NFHS-5 2019-21.
+
+Each axis is split at **the median for that sector**, not at a fixed number, because
+a 15% water deficit and a 15% electricity deficit mean different things in India.
+For Water & Sanitation today those medians are demand 11.8 and deficit 15.7.
+
+Examples below are live values from `console/public/data/scores.json`.
+
+### 🔴 Act Now — *corroborated need*
+
+**High demand, high deficit.** Citizens complain and official data agrees.
+
+> **Cachar, Assam** — demand 25.2, deficit 49.3%
+
+Two independent sources point the same way, so there is nothing to argue about.
+**Fund it.** This is the quadrant a conventional grievance dashboard would also
+find; CIVOS claims no credit for it.
+
+### 🟡 Silent Need — *severe deficit, no voice*
+
+**Low demand, high deficit.** This is the product.
+
+> **Pashchimi Singhbhum, Jharkhand** — demand 6.2, deficit 41.5%, **22.9%** of women
+> with 10+ years of schooling against a 40.8% national mean
+
+Its deficit is close to Cachar's; its demand is a quarter of it. The reason is
+measurable rather than mysterious — fewer residents can navigate a grievance
+process, so fewer complaints arrive. Rank by volume and this district is defunded
+for being quiet.
+
+**CIVOS never auto-funds silence.** A Silent Need verdict dispatches **outreach** —
+*go and ask* — not a transfer. Auto-funding would replace one guess with another;
+the point is to repair a measurement gap, not to overrule citizens. The console says
+so on the card itself.
+
+### 🔵 Expectation Gap — *complaints exceed measured deficit*
+
+**High demand, low deficit.**
+
+> **Coimbatore, Tamil Nadu** — demand 21.2, deficit 10.8%, **470 signals**, 62.8%
+> schooling
+
+Note the shape: the highest signal count in the sector sitting on one of the lowest
+deficits. Two honest readings, and CIVOS does not choose between them:
+
+1. **The dataset is stale** — conditions worsened since NFHS-5 was collected in 2019-21.
+2. **The service exists but is bad** — a tap that runs twice a month still counts as
+   "connected" in a coverage statistic.
+
+Either way the action is **re-survey**, not fund. This quadrant is also a check on
+the model: it is where high participation capacity produces complaint volume out of
+proportion to need — the exact bias the equity correction removes.
+
+### ⚪ Stable — *no action indicated*
+
+**Low demand, low deficit.**
+
+> **Kohima, Nagaland** — demand 10.1, deficit 11.3%, 70.9% schooling
+
+Listed rather than hidden, so the four verdicts account for every scored
+district-sector and none is quietly dropped.
+
+### ⬛ No official data — *a disclosure, not a verdict*
+
+CIVOS could not load a real deficit value, so the district **cannot be placed on the
+deficit axis at all**.
+
+Those rows are **excluded from the ranking, never scored as zero.** A zero would
+rank them last — indistinguishable from *conditions here are excellent*. They render
+grey, and the calibration strip counts them permanently on screen.
+
+Two cases produce it:
+
+| | Count | Why |
+|---|---|---|
+| Districts NFHS-5 could not be reconciled onto | 2 of 641 | Boundary/census mismatch, plus one sentinel polygon for the area where enumeration did not happen |
+| **Roads & Transport, every district** | **641 of 641** | No open dataset carries a district-level road-connectivity deficit — see [docs/ROADS-SECTOR-GAP.md](docs/ROADS-SECTOR-GAP.md) |
+
+### Why the structure exists at all
+
+> **A map of complaints is a map of who owns a phone and knows how to complain.
+> It is not a map of need.**
+
+Rank by complaint volume and Coimbatore's 470 signals outrank Pashchimi Singhbhum's
+89 — money flows toward 62.8% schooling and away from 22.9%, which is the exact
+inversion of the mission. The quadrant model exists so that the district which
+*cannot* complain stays visible.
+
+**One thing to keep straight:** the deficit axis is **real** and the demand axis is
+**synthetic**, labelled as such everywhere it surfaces. What is real inside the
+synthetic layer is the *bias*: it is generated from measured deprivation × measured
+schooling and electricity, which is why Silent Need lands on genuinely deprived
+districts rather than wherever a hash pointed.
+
+---
+
 ## Try it
 
 Requires [Node 20+](https://nodejs.org). No cloud credentials needed — the console
