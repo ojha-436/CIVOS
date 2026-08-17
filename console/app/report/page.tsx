@@ -267,10 +267,10 @@ export default function Report() {
   return (
     <div className="intake">
       <header className="intake-head">
-        <div className="wordmark">
+        <Link href="/" className="wordmark" aria-label="CIVOS home">
           <b className="display">CIVOS</b>
           <span className="instance mono">IN</span>
-        </div>
+        </Link>
         <div className="intake-head-right">
           <ThemeToggle />
           <Link href="/console" className="btn-ghost">

@@ -994,15 +994,70 @@ input[type='range']::-moz-range-thumb {
   margin-top: 3px;
 }
 
+/* The quadrant verdict — a STATUS LABEL, not a control.
+ *
+ * This previously carried `border: 1px solid currentColor` with uppercase mono
+ * padding, which made it visually identical to `.btn-ghost` — and it sits inches
+ * from `.close-x`, a real button. People clicked "ACT NOW" expecting it to do
+ * something and nothing happened, which is a false affordance and squarely our
+ * fault, not theirs.
+ *
+ * Rebuilt as a tinted chip with a leading dot, borrowing the legend's own visual
+ * grammar for quadrants. It now reads as "this district's classification",
+ * matching the swatch beside the same name in the legend, and no longer promises
+ * an interaction it never had. The action for an Act Now district is the
+ * dossier button further down; for Silent Need it is the outreach panel. */
 .quadrant-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   font-family: var(--font-mono), monospace;
   font-size: 9.5px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  padding: 4px 9px;
-  border: 1px solid currentColor;
+  padding: 5px 10px 5px 9px;
+  border: 0;
+  background: color-mix(in srgb, currentColor 14%, transparent);
   border-radius: 2px;
   white-space: nowrap;
+  cursor: default;
+}
+
+/* The dot is the same mark the legend uses for this quadrant, which is what ties
+   the verdict back to the key rather than leaving it as a floating word. */
+.quadrant-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex: none;
+}
+
+/* ==========================================================================
+   Wordmark as home link
+   --------------------------------------------------------------------------
+   The logo is the home affordance every site has and this one was missing — it
+   was a plain <div>. Now an anchor on all three surfaces. Styling is explicit
+   because an <a> brings its own colour and underline.
+   ========================================================================== */
+
+a.wordmark {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  /* A real hit target rather than just the glyph bounds. */
+  padding: 2px 0;
+  transition: opacity 0.16s var(--ease);
+}
+
+a.wordmark:hover {
+  opacity: 0.72;
+}
+
+a.wordmark:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
 }
 
 .drawer-body {

@@ -318,7 +318,13 @@ Generate 3-4 paragraphs:
         client = genai.Client(vertexai=True, project=PROJECT, location=LOCATION)
         response = client.models.generate_content(
             model=MODEL,
-            contents=[gtypes.Content(parts=[gtypes.Part.from_text(bundle_prompt)], role="user")],
+            # `text=` is required, not stylistic: Part.from_text is keyword-only in
+            # google-genai 2.x, so the positional form this used raised
+            # "takes 1 positional argument but 2 were given" on every call. The
+            # except below turned that into a message inside the dossier instead
+            # of a failed request, which is why it survived unnoticed —
+            # api/extraction.py had the keyword form all along.
+            contents=[gtypes.Content(parts=[gtypes.Part.from_text(text=bundle_prompt)], role="user")],
             config=gtypes.GenerateContentConfig(temperature=0.3),
         )
         prose = (response.text or "").strip()

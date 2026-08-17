@@ -152,15 +152,22 @@ export default function Console() {
     <div className="shell">
       {/* ================= masthead ================= */}
       <header className="masthead">
-        <div className="wordmark">
+        <Link href="/" className="wordmark" aria-label="CIVOS home">
           <b className="display">CIVOS</b>
           <span className="instance mono">IN</span>
-        </div>
+        </Link>
         <div className="tagline">
           Citizen-signal infrastructure prioritisation · 594 districts · 5 sectors
         </div>
         <div className="masthead-right">
           <ThemeToggle />
+          {/* The clickable wordmark is the convention, but an explicit control
+              removes any doubt — the console is a deep page and there was no
+              visible way back to the top level at all. "←" rather than "↗"
+              because this ascends rather than moving sideways. */}
+          <Link href="/" className="btn-ghost">
+            ← Home
+          </Link>
           <Link href="/report" className="btn-ghost">
             Citizen intake ↗
           </Link>

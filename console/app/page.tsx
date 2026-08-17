@@ -80,10 +80,10 @@ export default function Landing() {
           ================================================================ */}
       <nav className="lp-nav" data-stuck={stuck}>
         <div className="lp-nav-inner">
-          <div className="wordmark">
+          <Link href="/" className="wordmark" aria-label="CIVOS home">
             <b className="display">CIVOS</b>
             <span className="instance mono">IN</span>
-          </div>
+          </Link>
 
           <div className="lp-nav-links">
             <a href="#blind-spot">The blind spot</a>
@@ -916,10 +916,10 @@ export default function Landing() {
         <div className="lp-wrap">
           <div className="lp-foot-grid">
             <div>
-              <div className="wordmark">
+              <Link href="/" className="wordmark" aria-label="CIVOS home">
                 <b className="display">CIVOS</b>
                 <span className="instance mono">IN</span>
-              </div>
+              </Link>
               <p className="lp-foot-blurb">
                 The civic operating system — citizen-signal-driven infrastructure
                 prioritisation for BRICS governments. Built as a Digital Public Good, mapped
