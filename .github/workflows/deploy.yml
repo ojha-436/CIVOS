@@ -41,7 +41,7 @@ jobs:
             --region ${{ env.REGION }} \
             --project ${{ env.PROJECT_ID }} \
             --allow-unauthenticated \
-            --set-env-vars CIVOS_PROJECT=${{ env.PROJECT_ID }},CIVOS_BQ_LOCATION=${{ env.REGION }},CIVOS_BQ_DATASET=civos,CIVOS_BQ_CONNECTION=civos_vertex,CIVOS_GEMINI_MODEL=gemini-2.5-flash \
+            --set-env-vars CIVOS_PROJECT=${{ env.PROJECT_ID }},CIVOS_BQ_LOCATION=${{ env.REGION }},CIVOS_BQ_DATASET=civos,CIVOS_BQ_CONNECTION=civos_vertex,CIVOS_GEMINI_MODEL=gemini-2.5-flash,TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }},TELEGRAM_WEBHOOK_SECRET=${{ secrets.TELEGRAM_WEBHOOK_SECRET }} \
             --memory 1Gi \
             --timeout 120 \
             --min-instances 0 \
@@ -74,7 +74,34 @@ jobs:
             --max-instances 2 \
             --quiet
 
-      # ── 6. Print the live URLs ────────────────────────────────────────────
+      # ── 6. Point Telegram at the freshly-deployed webhook ─────────────────
+      # Cloud Run scales to zero, so long-polling cannot run there. Telegram
+      # pushes updates to /telegram/webhook instead, authenticated by a secret
+      # header. Re-registered on every deploy so the URL can never go stale.
+      #
+      # Skipped rather than failed when the secrets are absent: the rest of the
+      # deploy is independent of the messaging channel, and a missing bot token
+      # should not take the console down with it.
+      - name: Register Telegram webhook
+        env:
+          BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          HOOK_SECRET: ${{ secrets.TELEGRAM_WEBHOOK_SECRET }}
+          API_URL: ${{ steps.api_url.outputs.url }}
+        run: |
+          if [ -z "$BOT_TOKEN" ] || [ -z "$HOOK_SECRET" ]; then
+            echo "::warning::TELEGRAM_BOT_TOKEN / TELEGRAM_WEBHOOK_SECRET not set — skipping webhook registration. The bot will not answer."
+            exit 0
+          fi
+          # --data-urlencode keeps the values out of the process list and the log.
+          RESP=$(curl -sS -X POST "https://api.telegram.org/bot${BOT_TOKEN}/setWebhook" \
+            --data-urlencode "url=${API_URL}/telegram/webhook" \
+            --data-urlencode "secret_token=${HOOK_SECRET}" \
+            --data-urlencode 'allowed_updates=["message","edited_message"]' \
+            --data-urlencode "drop_pending_updates=true")
+          echo "$RESP" | grep -q '"ok":true' || { echo "setWebhook failed: $RESP"; exit 1; }
+          echo "Telegram webhook → ${API_URL}/telegram/webhook"
+
+      # ── 7. Print the live URLs ────────────────────────────────────────────
       - name: Print live URLs
         run: |
           echo "API   → ${{ steps.api_url.outputs.url }}"

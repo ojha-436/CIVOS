@@ -41,6 +41,14 @@ package = false
 line-length = 100
 target-version = "py312"
 
+[tool.pytest.ini_options]
+# `package = false` means the repo is never installed, so `api` and `core` are
+# only importable if the root is on sys.path. Without this, collecting
+# tests/test_api.py fails with ModuleNotFoundError and the suite looks broken
+# rather than unrun.
+pythonpath = ["."]
+testpaths = ["tests"]
+
 [dependency-groups]
 dev = [
     "playwright>=1.62.0",

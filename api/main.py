@@ -35,6 +35,7 @@ from fastapi.responses import JSONResponse
 
 from api.extraction import extract
 from api.geo import parse_exif_gps, resolve_district
+from api.telegram import router as telegram_router
 
 app = FastAPI(
     title="CIVOS API",
@@ -50,6 +51,11 @@ app.add_middleware(
 )
 
 K_ANONYMITY = 5
+
+# The Telegram channel. Mounted as a router so the messaging-app requirement of
+# PS-01 shares one extraction path with the web widget rather than forking it —
+# POST /telegram/webhook, GET /telegram/status.
+app.include_router(telegram_router)
 
 
 # ---------------------------------------------------------------------------

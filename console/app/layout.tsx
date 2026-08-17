@@ -27,9 +27,18 @@ const mono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'CIVOS-IN — citizen-signal infrastructure prioritisation',
+  title: {
+    default: 'CIVOS — the civic operating system',
+    template: '%s · CIVOS-IN',
+  },
   description:
-    'Aggregates citizen development requests by voice, text and photograph, corrects for participation bias, and emits budget-ready project dossiers tied to real funding schemes.',
+    'Citizens report what their area needs by voice, text or photograph, in any language. CIVOS merges duplicates into distinct needs, corrects for the fact that the poorest districts complain the least, and emits a costed project dossier tied to a real government funding scheme.',
+  openGraph: {
+    title: 'CIVOS — the civic operating system',
+    description:
+      'A map of complaints is a map of who owns a phone. CIVOS finds the districts with the worst conditions and no voice.',
+    type: 'website',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

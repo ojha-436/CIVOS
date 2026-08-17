@@ -270,7 +270,7 @@ export default function Report() {
           <b className="display">CIVOS</b>
           <span className="instance mono">IN</span>
         </div>
-        <Link href="/" className="btn-ghost">
+        <Link href="/console" className="btn-ghost">
           Console ↗
         </Link>
       </header>

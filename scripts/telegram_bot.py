@@ -47,40 +47,12 @@ from telegram.ext import (
 from api.extraction import extract
 from api.geo import parse_exif_gps, resolve_district
 
+# One receipt, two transports. The webhook (api/telegram.py) is what runs in
+# production; this polling script is the faster local loop because it needs no
+# public URL. They must never drift, so the formatter lives in exactly one place.
+from api.telegram import format_result as _format_result
+
 TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
-
-
-def _format_result(result, district_name: str | None, geo_confidence: str) -> str:
-    """Build the citizen-facing confirmation message."""
-    sector_label = (result.sector or "unclassified").replace("_", " ").title()
-    severity_dots = "●" * (result.severity or 0) + "○" * (5 - (result.severity or 0))
-    lines = [
-        "✓ *Received and structured.*",
-        "",
-    ]
-    if result.raw_text:
-        lines.append(f"*In your words:* {result.raw_text[:200]}")
-    if result.translation and result.translation != result.raw_text:
-        lines.append(f"*English:* {result.translation[:200]}")
-    lines += [
-        "",
-        f"*Sector:* {sector_label}",
-        f"*Severity:* {severity_dots}",
-    ]
-    if result.asset_type:
-        flags = ", ".join(f.replace("_", " ") for f in result.condition_flags) if result.condition_flags else ""
-        lines.append(f"*Asset:* {result.asset_type.replace('_', ' ')}" + (f" — {flags}" if flags else ""))
-    if result.visual_description:
-        lines.append(f"*Seen:* {result.visual_description[:200]}")
-
-    loc = district_name or result.geo_hint or "unknown"
-    lines.append(f"*Registered in:* {loc} _(geo: {geo_confidence})_")
-    lines += [
-        "",
-        "_Your audio/photo has been analysed and deleted. No image or recording is stored._",
-        "_If GPS was present, it was used once to find your district and then discarded._",
-    ]
-    return "\n".join(lines)
 
 
 async def cmd_start(update: Update, _ctx: ContextTypes.DEFAULT_TYPE) -> None:

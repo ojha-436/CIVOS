@@ -69,7 +69,8 @@ npm run dev          # http://localhost:3000
 
 | Route | What it is |
 |---|---|
-| **`/`** | **Policymaker console** — 594 real districts, quadrant choropleth, live weight sliders, drilldown dossier |
+| **`/`** | **Landing** — what CIVOS is, the participation-bias argument, the three loops, and the Telegram channel |
+| **`/console`** | **Policymaker console** — 594 real districts, quadrant choropleth, live weight sliders, drilldown dossier |
 | **`/report`** | **Citizen intake** — microphone, camera and text in one widget, mobile-first |
 
 <table>
