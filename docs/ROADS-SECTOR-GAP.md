@@ -98,6 +98,47 @@ committed to a public repository, so this route is open to a **deployment** and 
 to this repository as it stands. It is the shortest path to closing the gap — see
 below.
 
+### 5. The indicator has now been located — and named
+
+The Census 2011 **Village Directory** does carry it. Confirmed via the SHRUG
+metadata, which documents the Village Directory road fields:
+
+| Variable | Meaning |
+|---|---|
+| `pc11_vd_rd_all_wthr` | **All Weather Road** ← exactly what `sectors.yaml` asks for |
+| `pc11_vd_rd_p_btr` | Black-topped (pucca) road |
+| `pc11_vd_rd_k_grav` | Gravel (kuchha) road |
+| `pc11_vd_rd_nhw` / `_shw` / `_mdr` / `_odr` | highway and district-road classes |
+
+Aggregations exist at village, subdistrict, **district** and constituency level, so
+no habitation-level spatial work is needed — the figure is a straight count of
+villages with all-weather road access over total villages per district.
+
+So the sector is not blocked by the indicator not existing. It is blocked by
+licensing and credentials, below.
+
+### 6. SHRUG — the convenient mirror, rejected on licence
+
+[SHRUG](https://www.devdatalab.org/shrug) (Development Data Lab) republishes the
+Village Directory with clean district aggregations and would make this a one-hour
+job. It is licensed **CC BY-NC-SA 4.0**.
+
+**Rejected.** Two independent problems:
+
+- **NC (non-commercial)** is not an open licence under the Open Definition, and
+  DPGA indicator 2 requires an *approved open licence*. CIVOS argues for itself as
+  a Digital Public Good; importing an NC-restricted layer would break that claim
+  and would restrict what a ministry could do with the result.
+- **SA (share-alike)** would force the derived data to carry BY-NC-SA, propagating
+  the restriction into `OWNERSHIP.md`'s CC-BY-4.0 data claim.
+
+This is the **same class of error as the GADM boundary layer**, which was found and
+replaced on the same day. Fixing one licence conflict and then introducing another
+would be worse than leaving the sector grey.
+
+The underlying figures are Government of India census statistics and are openly
+licensed *at source*. It is only this particular republication that is restricted.
+
 ## Why it was not derived anyway
 
 The connectivity figure *could* be approximated: buffer every road that is not
@@ -118,13 +159,15 @@ ones.*
 
 ## What would actually close the gap
 
-1. **PMGSY OMMS habitation connectivity status** — the Online Management and
-   Monitoring System tracks connected/unconnected status per habitation. Not part
-   of the GeoSadak open release; would need a data request to the Ministry of Rural
-   Development, or an API key on `data.gov.in`.
-2. **Census 2011 Village Amenities (Directory)** — records approach-road type per
-   village and would aggregate cleanly to district level. Behind a `data.gov.in`
-   API key, which cannot be committed to a public repository.
+1. **Census 2011 Village Amenities on `data.gov.in`** — the authoritative source
+   for the fields in §5, published by the **Ministry of Home Affairs / Office of the
+   Registrar General** under the **Open Government License – India**, which *is*
+   compatible with this project's licensing. This is the right answer. It needs a
+   free `data.gov.in` API key.
+2. **PMGSY OMMS habitation connectivity status** — the Online Management and
+   Monitoring System tracks connected/unconnected per habitation. Not in the
+   GeoSadak open release; would need a data request to the Ministry of Rural
+   Development.
 
 Both are viable for a real deployment. Neither is reachable from a public repository
 with no credentials, which is the constraint this build works under.
