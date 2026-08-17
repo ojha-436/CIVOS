@@ -71,9 +71,39 @@ export const metadata: Metadata = {
   },
 };
 
+/* Applies the stored theme before first paint.
+ *
+ * This has to be a blocking inline script rather than an effect: setting the
+ * attribute after hydration means the page paints dark, then snaps to light,
+ * which is worse than having no toggle at all for anyone light-sensitive.
+ *
+ * Dark is the base — the absence of an attribute means dark — so this only ever
+ * writes an override. prefers-color-scheme is deliberately NOT consulted: most
+ * browsers report `light` when the user has expressed no preference at all, so
+ * honouring it would flip the majority of visitors away from the intended
+ * design on the strength of a non-preference. Light is an explicit choice here,
+ * and it persists once made.
+ *
+ * Wrapped in try/catch because localStorage throws outright in Safari private
+ * browsing, and a theme preference is not worth taking the page down for. */
+const THEME_INIT = `(function(){try{var t=localStorage.getItem('civos-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t)}}catch(e){}})()`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
+    /* suppressHydrationWarning is required, not cosmetic. THEME_INIT writes
+       data-theme onto this element before React hydrates, so the client tree
+       legitimately differs from the server tree by exactly that attribute.
+       React's default response is to warn on every load — noise that would
+       mask a real mismatch later. It suppresses one level only, which is
+       precisely the <html> attributes and nothing inside. */
+    <html
+      lang="en"
+      className={`${display.variable} ${body.variable} ${mono.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
+      </head>
       <body>{children}</body>
     </html>
   );

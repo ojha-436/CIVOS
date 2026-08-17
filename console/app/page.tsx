@@ -93,6 +93,7 @@ export default function Landing() {
           </div>
 
           <div className="lp-nav-right">
+            <ThemeToggle />
             <Link href="/report" className="lp-btn sm">
               Report a need
             </Link>
@@ -997,14 +998,68 @@ export default function Landing() {
             </div>
           </div>
 
+          {/* The colophon. The event line moves up here from the base row so the
+              name is not printed twice within 40px of itself. */}
+          <div className="lp-colophon">
+            <span className="lp-colophon-k">Created &amp; designed by</span>
+            <span className="lp-colophon-n">Prince Kumar Ojha</span>
+            <div className="lp-colophon-rule" aria-hidden="true" />
+            <span className="lp-colophon-r">
+              Solo build · Build with AI: Code for Communities, Second Edition · PS-01
+            </span>
+          </div>
+
           <div className="lp-foot-base">
             <span>Apache-2.0 code · CC-BY-4.0 docs, schema &amp; data</span>
-            <span>Build with AI: Code for Communities — Second Edition · PS-01</span>
             <span>© 2026 Prince Kumar Ojha</span>
           </div>
         </div>
       </footer>
     </div>
+  );
+}
+
+/* ============================================================================
+   Theme toggle
+   ----------------------------------------------------------------------------
+   Reads and writes the DOM attribute directly and holds no React state. That is
+   not laziness: the blocking script in layout.tsx may already have set
+   data-theme before hydration, so any useState default would disagree with the
+   real theme for one frame and flip the icon. With both glyphs in the markup and
+   CSS choosing between them, there is nothing to get out of sync.
+   ========================================================================== */
+
+function ThemeToggle() {
+  const toggle = () => {
+    const root = document.documentElement;
+    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    try {
+      localStorage.setItem('civos-theme', next);
+    } catch {
+      /* Safari private browsing throws on write; the theme still applies for
+         this page view, it just will not be remembered. */
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      className="lp-theme"
+      onClick={toggle}
+      /* A static label, because the button's meaning ("change the theme") does
+         not change even though its icon does — and a label that flips on click
+         is announced twice by a screen reader for one action. */
+      aria-label="Switch between light and dark theme"
+      title="Switch between light and dark theme"
+    >
+      <span className="t-sun" aria-hidden="true">
+        <SunGlyph />
+      </span>
+      <span className="t-moon" aria-hidden="true">
+        <MoonGlyph />
+      </span>
+    </button>
   );
 }
 
@@ -1153,6 +1208,23 @@ function TelegramGlyph({ size = 16 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
       <path d="M21.94 4.3 18.9 19.1c-.23 1.02-.84 1.27-1.7.79l-4.7-3.47-2.27 2.19c-.25.25-.46.46-.95.46l.34-4.8 8.73-7.9c.38-.34-.08-.53-.59-.19L6.98 13.1l-4.64-1.45c-1.01-.32-1.03-1.01.21-1.5l18.14-7c.84-.3 1.58.2 1.25 1.15z" />
+    </svg>
+  );
+}
+
+function SunGlyph() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="4.2" />
+      <path d="M12 2.2v2.4M12 19.4v2.4M2.2 12h2.4M19.4 12h2.4M5.1 5.1l1.7 1.7M17.2 17.2l1.7 1.7M18.9 5.1l-1.7 1.7M6.8 17.2l-1.7 1.7" />
+    </svg>
+  );
+}
+
+function MoonGlyph() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M20.5 14.6A8.6 8.6 0 1 1 9.4 3.5a6.9 6.9 0 0 0 11.1 11.1z" />
     </svg>
   );
 }
