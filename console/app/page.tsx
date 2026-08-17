@@ -698,11 +698,16 @@ export default function Landing() {
                   regex would match nearly every line of Python ever written.
                 </p>
 
+                {/* The switch demonstrates the ADAPTER SHAPE, not a shipped second
+                    instance. adapters/ contains in/ only today, and a page whose
+                    argument is "a labelled substitution beats mystery data" cannot
+                    quietly imply otherwise — so the label says so plainly. It comes
+                    off the moment adapters/za/ carries real data. */}
                 <div
                   className="lp-instance"
                   data-i={instance}
                   role="group"
-                  aria-label="Switch CIVOS instance"
+                  aria-label="Preview the CIVOS-IN and CIVOS-ZA adapter shape"
                 >
                   <button type="button" onClick={() => setInstance(0)} aria-pressed={instance === 0}>
                     CIVOS-IN
@@ -711,6 +716,15 @@ export default function Landing() {
                     CIVOS-ZA
                   </button>
                 </div>
+
+                <p className="lp-instance-note">
+                  <b>Illustrative.</b> <code className="mono">adapters/in/</code> is built and
+                  live; <code className="mono">adapters/za/</code> is the adapter shape a second
+                  country fills, not a shipped instance. What <em>is</em> verifiable today is the
+                  half that matters architecturally — the lint below proves{' '}
+                  <code className="mono">core/</code> holds no country literals, so no code
+                  changes when the folder is added.
+                </p>
               </div>
 
               <div className="lp-adapter" data-reveal>
@@ -726,9 +740,12 @@ export default function Landing() {
                     </span>
                   </div>
                   <div>
-                    <span className="path">adapters/za/</span>{' '}
+                    <span className="path" style={{ opacity: 0.55 }}>
+                      adapters/za/
+                    </span>{' '}
                     <span className={instance === 1 ? 'swap' : 'cmt'}>
-                      languages · sectors · schemes · datasets
+                      languages · sectors · schemes · datasets{' '}
+                      <span style={{ opacity: 0.7 }}>← not yet authored</span>
                     </span>
                   </div>
                   <div style={{ height: 10 }} />

@@ -183,6 +183,35 @@ def rnd_from(*parts: str) -> float:
 # ---------------------------------------------------------------------------
 
 
+def load_connectivity() -> dict[str, float]:
+    """Real participation capacity per district, from NFHS-5.
+
+    Built by scripts/build_deficit_layer.py from women's schooling and household
+    electricity — see docs/DATA-RECONCILIATION.md for the formula and the reason
+    the weighting is stated rather than hidden.
+
+    This replaced `sha256(district_code)`. The hash produced a correctly *shaped*
+    participation bias with no real-world content, which meant the specific set of
+    districts the engine flagged as Silent Need was arbitrary — indefensible for
+    the product's headline output.
+
+    Districts absent from the file have no capacity value and are dropped from
+    sampling by the caller. They are never given the median: a district a health
+    survey failed to reach is exactly the kind most likely to be genuinely
+    low-capacity, so imputing the middle would erase the signal.
+    """
+    path = OUT / "fact_participation_capacity.csv"
+    if not path.exists():
+        raise SystemExit(
+            "data/fact_participation_capacity.csv missing — run "
+            "`uv run python scripts/build_deficit_layer.py` first."
+        )
+    return {
+        r["admin_unit_code"]: float(r["connectivity"])
+        for r in csv.DictReader(path.open())
+    }
+
+
 def build_plan(target: int, rng: random.Random) -> list[dict]:
     """Choose which (district, sector) pairs get how many signals.
 
@@ -195,6 +224,8 @@ def build_plan(target: int, rng: random.Random) -> list[dict]:
     correct — the poorest, least connected districts end up under-represented
     relative to their measured need, which is what makes the Silent Need quadrant
     populate with districts that genuinely deserve attention.
+
+    Both terms are now real NFHS-5 values.
     """
     units = {r["admin_unit_code"]: r for r in csv.DictReader((OUT / "dim_admin_unit.csv").open())}
     deficits: dict[tuple[str, str], float] = {}
@@ -203,13 +234,27 @@ def build_plan(target: int, rng: random.Random) -> list[dict]:
         deficits.setdefault(key, []).append(float(r["deficit_pct"]))
     sector_deficit = {k: sum(v) / len(v) for k, v in deficits.items()}
 
+    # Same real connectivity the console fixture uses, so the two views of the
+    # same synthetic world agree. If these ever diverge, the corpus and the map
+    # describe different countries.
+    connectivity = load_connectivity()
+
     pool: list[tuple[tuple[str, str], float]] = []
+    skipped_no_capacity = 0
     for (code, sector), deficit in sector_deficit.items():
-        # Same deterministic connectivity the console fixture uses, so the two
-        # views of the same synthetic world agree.
-        conn = rnd_from("conn", code)
+        conn = connectivity.get(code)
+        if conn is None:
+            skipped_no_capacity += 1
+            continue
         weight = deficit * (conn ** 1.6) + 0.05
         pool.append(((code, sector), weight))
+
+    if not pool:
+        raise SystemExit("no district-sector pairs have both a deficit and a capacity value.")
+    console.print(
+        f"  sampling pool: [bold]{len(pool)}[/bold] district-sector pairs "
+        f"([yellow]{skipped_no_capacity}[/yellow] skipped — no capacity value, not imputed)"
+    )
 
     keys = [k for k, _ in pool]
     weights = [w for _, w in pool]
@@ -231,6 +276,9 @@ def build_plan(target: int, rng: random.Random) -> list[dict]:
             "district": units[code]["name"],
             "state": units[code]["state"],
             "deficit": sector_deficit[(code, sector)],
+            # Carried on the job so generate() uses the same real value rather
+            # than recomputing a hash. Camera ownership tracks capacity too.
+            "conn": connectivity[code],
         }
         for (code, sector), n in plan.items()
     ]
@@ -274,8 +322,9 @@ def generate(job: dict, sectors_cfg: dict, client, rng: random.Random) -> list[d
         # Recency spread over the 90-day decay window in SPEC §8.
         age = int(rnd_from("age", sid) * 120)
         # Image attachment tracks connectivity — camera ownership is not evenly
-        # distributed, and SPEC §13 wants that skew visible, not hidden.
-        conn = rnd_from("conn", job["code"])
+        # distributed, and SPEC §13 wants that skew visible, not hidden. Real
+        # NFHS-5 capacity, carried on the job by build_plan().
+        conn = job["conn"]
         has_image = rnd_from("img", sid) < (0.10 + 0.45 * conn)
         rows.append({
             "signal_id": sid,

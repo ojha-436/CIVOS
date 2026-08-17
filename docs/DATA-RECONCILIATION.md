@@ -1,6 +1,6 @@
 # Deficit layer — provenance and reconciliation
 
-Built 2026-08-15 07:16 UTC. Regenerate with `uv run python scripts/build_deficit_layer.py`.
+Built 2026-08-17 09:55 UTC. Regenerate with `uv run python scripts/build_deficit_layer.py`.
 
 ## Source
 
@@ -14,6 +14,19 @@ National Family Health Survey 2019-21 (NFHS-5), district factsheets. Internation
 | `pratapvardhan/NFHS-5` | 341 | CC-BY-4.0 | independent cross-check |
 
 The values themselves are Government of India statistics and are attributed to NFHS-5 above; the repositories are transport, not authorship.
+
+### On the "none stated" licence
+
+The primary extraction states no licence, which by default means all rights reserved. That is worth addressing directly rather than leaving as a blank cell in a table, because it reads as an unexamined risk and it is not one.
+
+1. **The figures are facts, not expression.** A district's measured percentage of households without piped water is a Government of India survey statistic. Facts are not copyrightable; only a creative arrangement of them is, and a factsheet transcription is the opposite of a creative arrangement.
+2. **Neither repository is the origin.** The canonical source is `rchiips.org` (IIPS / MoHFW), recorded above together with the exact 404 and TLS failure that prevented retrieval at source.
+3. **Two independent extractions agree to the decimal.** The cross-validation below is not only a quality check — it is evidence that neither repository *authored* anything. Two parties cannot independently produce identical creative work from the same PDFs; they can only both transcribe the same facts.
+4. **A CC-BY-4.0 route to the same values exists.** The cross-check extraction is CC-BY-4.0 and covers 341 districts, independently licensing the same figures where it overlaps.
+
+CIVOS therefore attributes the data to **NFHS-5 (IIPS / MoHFW, Government of India)** and treats both repositories as retrieval mechanisms. If IIPS restores `rchiips.org`, this script should be pointed at the source PDFs and this section reduced to a footnote.
+
+This is a reasoned position, not legal advice. A ministry deploying CIVOS in production should retrieve the factsheets from IIPS directly, which is correct practice regardless of licensing.
 
 ## Cross-validation
 
@@ -66,8 +79,29 @@ Nicobar (Andaman & Nicobar Island), North & Middle Andaman (Andaman & Nicobar Is
 
 NFHS-5 reports **coverage** ("% with an improved water source"). The engine needs **deprivation**, so `deficit_pct = 100 − coverage_pct`. Stated explicitly because getting it backwards would invert the entire product.
 
+## Participation capacity — who can actually file a complaint
+
+The synthetic corpus applies a participation bias of `deficit × connectivity^1.6`. The shape is the whole argument — real deprivation multiplied by ability-to-report is what makes the Silent Need quadrant populate. But `connectivity` used to be `sha256(district_code)`: a hash with no real-world meaning, which meant the specific set of districts classified Silent Need was **arbitrary**. "Why is this district silent?" had no answer.
+
+It is now built from two real NFHS-5 values on the same districts:
+
+| Input | Proxies | Weight |
+|---|---|---|
+| Women with 10 or more years of schooling (%) | literacy and the agency to navigate a grievance process | 0.6 |
+| Population living in households with electricity (%) | household infrastructure a phone depends on | 0.4 |
+
+Composite raw range **39.0 – 92.8**, min-max normalised to `[0,1]`. **537 of 594 districts** carry a capacity value.
+
+**The weighting is a judgement, not a measurement.** It is stated here so it can be argued with, on the same principle that exposes the `w1..w5` scoring weights as sliders in the console rather than burying them.
+
+**Districts missing either input get no capacity value and are excluded — not imputed.** A district a health survey failed to reach is precisely the kind of district most likely to be genuinely low-capacity, so filling it with the median would erase the signal the product exists to find.
+
+Written to `data/fact_participation_capacity.csv`.
+
 ## Still placeholder
 
-- **District population** — no census population loaded; the population-affected figure in dossiers remains a placeholder.
+- **District population** — no census population loaded. The population-affected figure in dossiers is derived from a placeholder, is labelled as such in the interface, and the dossier prompt now requires the model to say so in prose as well.
 - **Roads & Transport deficit** — see above.
 - **Citizen signals** — synthetic by design, and labelled as such in the interface.
+
+No longer placeholder: **participation / connectivity**, previously a hash — see above.

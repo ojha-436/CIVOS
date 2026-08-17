@@ -1542,6 +1542,30 @@ body:has(.lp) {
   color: var(--ink-900);
 }
 
+/* The "illustrative" disclosure under the instance switch. Styled as a note
+   rather than a warning: it is a scope statement, not an error, and the whole
+   design premise is that disclosure which looks like part of the machine gets
+   read while a yellow banner gets dismissed. */
+.lp-instance-note {
+  margin: 14px 0 0;
+  max-width: 62ch;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--paper-4);
+  border-left: 1px solid var(--rule-strong);
+  padding-left: 13px;
+}
+
+.lp-instance-note b {
+  color: var(--paper-2);
+  font-weight: 500;
+}
+
+.lp-instance-note em {
+  font-style: italic;
+  color: var(--paper-3);
+}
+
 /* ==========================================================================
    07 — Provenance table
    ========================================================================== */

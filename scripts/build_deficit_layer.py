@@ -102,6 +102,39 @@ INDICATORS: dict[str, dict] = {
     },
 }
 
+# ---------------------------------------------------------------------------
+# Participation capacity — who can actually file a complaint
+# ---------------------------------------------------------------------------
+#
+# These are NOT deficit indicators and are deliberately kept out of INDICATORS so
+# they can never reach fact_deficit_indicator.csv and be scored as a sector.
+#
+# They exist because the synthetic corpus needs a participation-bias term, and
+# that term used to be `sha256(district_code)` — a hash with no real-world
+# meaning. Since the Silent Need quadrant is defined by low participation against
+# high deficit, a hashed participation term meant the product's headline output
+# was arbitrary: "why is this district silent?" had no answer.
+#
+# Schooling is the standard proxy for the literacy and agency needed to navigate a
+# grievance process. Electricity coverage proxies the household infrastructure a
+# phone depends on. Both are real NFHS-5 values on the same districts, reconciled
+# by the same pipeline as the deficit layer, so no new provenance is introduced.
+#
+# Electricity is not re-parsed: `pct_households_no_electricity` above already
+# captures it, and its `coverage_pct` is the share of households WITH electricity.
+CAPACITY_INDICATORS: dict[str, dict] = {
+    "pct_women_10yr_schooling": {
+        "match": "10 or more years of schooling",
+        "alt": "10 or more years of schooling",
+        "label": "Women with 10 or more years of schooling",
+    },
+}
+
+# The composite. Weighting is a judgement, not a measurement — stated here and in
+# docs/PARTICIPATION-CAPACITY.md so it can be argued with, exactly as the w1..w5
+# scoring weights are exposed as sliders in the console.
+CAPACITY_WEIGHTS = {"schooling": 0.6, "electricity": 0.4}
+
 # States renamed or created since the 2011-era boundary file. Reconciliation falls
 # back to national name matching anyway, but these make the common cases exact.
 STATE_ALIASES = {
@@ -173,7 +206,7 @@ def load_mirror_a() -> dict[tuple[str, str], dict]:
                     "values": {},
                 },
             )
-            for ikey, spec in INDICATORS.items():
+            for ikey, spec in {**INDICATORS, **CAPACITY_INDICATORS}.items():
                 if spec["match"] in ind and not (ikey.endswith("non_institutional") and "public" in ind):
                     try:
                         rec["values"][ikey] = float(r["NFHS 5"])
@@ -356,6 +389,10 @@ def main(
                     "coverage_pct", "deficit_pct", "source", "year"])
         for code, m in matched.items():
             for ikey, val in m["nfhs"]["values"].items():
+                # Capacity indicators ride along in the same parse but are not
+                # deficits and must never be written as a scored sector row.
+                if ikey not in INDICATORS:
+                    continue
                 spec = INDICATORS[ikey]
                 w.writerow([
                     code, sector_of[ikey], ikey, spec["label"],
@@ -365,8 +402,58 @@ def main(
                 ])
                 n_facts += 1
 
+    # -- participation capacity ---------------------------------------------
+    # Replaces the sha256 connectivity term. Two real NFHS-5 values per district,
+    # min-max normalised to [0,1] so the composite is comparable across districts
+    # and drops into the existing `deficit × conn^1.6` weight unchanged.
+    #
+    # Districts missing either input get NO capacity value. They are not given the
+    # median: a district that a health survey failed to reach is precisely the kind
+    # of district most likely to be genuinely low-capacity, so imputing the middle
+    # would erase the signal the product exists to find. Downstream excludes them
+    # and says so, matching how missing deficit is already handled.
+    cap_rows: list[tuple[str, float, float, float]] = []
+    for code, m in matched.items():
+        vals = m["nfhs"]["values"]
+        schooling = vals.get("pct_women_10yr_schooling")
+        electricity = vals.get("pct_households_no_electricity")  # coverage, not deficit
+        if schooling is None or electricity is None:
+            continue
+        raw = (
+            CAPACITY_WEIGHTS["schooling"] * schooling
+            + CAPACITY_WEIGHTS["electricity"] * electricity
+        )
+        cap_rows.append((code, schooling, electricity, raw))
+
+    n_cap = 0
+    cap_stats: dict | None = None
+    if cap_rows:
+        raws = [r[3] for r in cap_rows]
+        lo, hi = min(raws), max(raws)
+        span = (hi - lo) or 1.0
+        cap_stats = {"lo": lo, "hi": hi, "n": len(cap_rows), "total": len(geo)}
+        with open(OUT / "fact_participation_capacity.csv", "w", newline="", encoding="utf-8") as fh:
+            w = csv.writer(fh)
+            w.writerow(["admin_unit_code", "pct_women_10yr_schooling",
+                        "pct_households_with_electricity", "capacity_raw",
+                        "connectivity", "source", "year"])
+            for code, schooling, electricity, raw in sorted(cap_rows):
+                w.writerow([
+                    code, round(schooling, 1), round(electricity, 1), round(raw, 2),
+                    round((raw - lo) / span, 4), "NFHS-5", 2021,
+                ])
+                n_cap += 1
+        console.print(
+            f"\n[bold]Participation capacity[/bold] — "
+            f"{CAPACITY_WEIGHTS['schooling']}·schooling + {CAPACITY_WEIGHTS['electricity']}·electricity"
+        )
+        console.print(f"  raw range {lo:.1f} – {hi:.1f}  →  normalised to [0,1]")
+        console.print(f"  districts with capacity: [bold]{n_cap}[/bold] / {len(geo)}")
+        console.print(f"  districts without (excluded, not imputed): {len(geo) - n_cap}")
+
     console.print(f"\n  wrote data/dim_admin_unit.csv ({len(geo)} rows)")
     console.print(f"  wrote data/fact_deficit_indicator.csv ({n_facts} rows)")
+    console.print(f"  wrote data/fact_participation_capacity.csv ({n_cap} rows)")
 
     covered_sectors = sorted({sector_of[k] for k in INDICATORS})
     missing = [s["key"] for s in sectors if s["key"] not in covered_sectors]
@@ -397,6 +484,49 @@ def main(
     md.append(
         "The values themselves are Government of India statistics and are attributed to NFHS-5 "
         "above; the repositories are transport, not authorship."
+    )
+    md.append("")
+    md.append("### On the \"none stated\" licence")
+    md.append("")
+    md.append(
+        "The primary extraction states no licence, which by default means all rights reserved. "
+        "That is worth addressing directly rather than leaving as a blank cell in a table, "
+        "because it reads as an unexamined risk and it is not one."
+    )
+    md.append("")
+    md.append(
+        "1. **The figures are facts, not expression.** A district's measured percentage of "
+        "households without piped water is a Government of India survey statistic. Facts are not "
+        "copyrightable; only a creative arrangement of them is, and a factsheet transcription is "
+        "the opposite of a creative arrangement."
+    )
+    md.append(
+        "2. **Neither repository is the origin.** The canonical source is `rchiips.org` "
+        "(IIPS / MoHFW), recorded above together with the exact 404 and TLS failure that "
+        "prevented retrieval at source."
+    )
+    md.append(
+        "3. **Two independent extractions agree to the decimal.** The cross-validation below is "
+        "not only a quality check — it is evidence that neither repository *authored* anything. "
+        "Two parties cannot independently produce identical creative work from the same PDFs; "
+        "they can only both transcribe the same facts."
+    )
+    md.append(
+        "4. **A CC-BY-4.0 route to the same values exists.** The cross-check extraction is "
+        "CC-BY-4.0 and covers "
+        f"{len(b)} districts, independently licensing the same figures where it overlaps."
+    )
+    md.append("")
+    md.append(
+        "CIVOS therefore attributes the data to **NFHS-5 (IIPS / MoHFW, Government of India)** and "
+        "treats both repositories as retrieval mechanisms. If IIPS restores `rchiips.org`, this "
+        "script should be pointed at the source PDFs and this section reduced to a footnote."
+    )
+    md.append("")
+    md.append(
+        "This is a reasoned position, not legal advice. A ministry deploying CIVOS in production "
+        "should retrieve the factsheets from IIPS directly, which is correct practice regardless "
+        "of licensing."
     )
     md.append("")
     md.append("## Cross-validation")
@@ -474,11 +604,59 @@ def main(
         "getting it backwards would invert the entire product."
     )
     md.append("")
+    md.append("## Participation capacity — who can actually file a complaint")
+    md.append("")
+    md.append(
+        "The synthetic corpus applies a participation bias of `deficit × connectivity^1.6`. The "
+        "shape is the whole argument — real deprivation multiplied by ability-to-report is what "
+        "makes the Silent Need quadrant populate. But `connectivity` used to be "
+        "`sha256(district_code)`: a hash with no real-world meaning, which meant the specific set "
+        "of districts classified Silent Need was **arbitrary**. \"Why is this district silent?\" "
+        "had no answer."
+    )
+    md.append("")
+    md.append("It is now built from two real NFHS-5 values on the same districts:")
+    md.append("")
+    md.append("| Input | Proxies | Weight |")
+    md.append("|---|---|---|")
+    md.append(
+        f"| Women with 10 or more years of schooling (%) | literacy and the agency to navigate a "
+        f"grievance process | {CAPACITY_WEIGHTS['schooling']} |"
+    )
+    md.append(
+        f"| Population living in households with electricity (%) | household infrastructure a "
+        f"phone depends on | {CAPACITY_WEIGHTS['electricity']} |"
+    )
+    md.append("")
+    if cap_stats:
+        md.append(
+            f"Composite raw range **{cap_stats['lo']:.1f} – {cap_stats['hi']:.1f}**, min-max "
+            f"normalised to `[0,1]`. **{cap_stats['n']} of {cap_stats['total']} districts** carry "
+            f"a capacity value."
+        )
+        md.append("")
+    md.append(
+        "**The weighting is a judgement, not a measurement.** It is stated here so it can be "
+        "argued with, on the same principle that exposes the `w1..w5` scoring weights as sliders "
+        "in the console rather than burying them."
+    )
+    md.append("")
+    md.append(
+        "**Districts missing either input get no capacity value and are excluded — not imputed.** "
+        "A district a health survey failed to reach is precisely the kind of district most likely "
+        "to be genuinely low-capacity, so filling it with the median would erase the signal the "
+        "product exists to find."
+    )
+    md.append("")
+    md.append("Written to `data/fact_participation_capacity.csv`.")
+    md.append("")
     md.append("## Still placeholder")
     md.append("")
-    md.append("- **District population** — no census population loaded; the population-affected figure in dossiers remains a placeholder.")
+    md.append("- **District population** — no census population loaded. The population-affected figure in dossiers is derived from a placeholder, is labelled as such in the interface, and the dossier prompt now requires the model to say so in prose as well.")
     md.append("- **Roads & Transport deficit** — see above.")
     md.append("- **Citizen signals** — synthetic by design, and labelled as such in the interface.")
+    md.append("")
+    md.append("No longer placeholder: **participation / connectivity**, previously a hash — see above.")
 
     (REPO / "docs" / "DATA-RECONCILIATION.md").write_text("\n".join(md) + "\n")
     console.print("  wrote docs/DATA-RECONCILIATION.md")

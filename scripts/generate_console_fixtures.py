@@ -240,6 +240,21 @@ def main(
 ) -> None:
     src = Path(geojson)
     gj = json.loads(src.read_text())
+
+    # Real participation capacity, replacing the sha256 term. Must be the same
+    # file scripts/generate_corpus.py reads, or the corpus and the map describe
+    # different countries.
+    cap_path = REPO / "data" / "fact_participation_capacity.csv"
+    if not cap_path.exists():
+        raise SystemExit(
+            "data/fact_participation_capacity.csv missing — run "
+            "`uv run python scripts/build_deficit_layer.py` first."
+        )
+    capacity = {
+        r["admin_unit_code"]: float(r["connectivity"])
+        for r in csv.DictReader(cap_path.open())
+    }
+    console.print(f"Participation capacity loaded: [bold]{len(capacity)}[/bold] districts")
     sectors_cfg = yaml.safe_load((REPO / "adapters" / "in" / "sectors.yaml").read_text())
     schemes_cfg = yaml.safe_load((REPO / "adapters" / "in" / "schemes.yaml").read_text())
     sectors = sectors_cfg["sectors"]
@@ -254,9 +269,18 @@ def main(
     seen: set[str] = set()
     for feat in gj["features"]:
         props = feat.get("properties") or {}
-        state = (props.get("NAME_1") or "Unknown").strip()
-        name = (props.get("NAME_2") or "Unknown").strip()
-        code = f"IN-{state_abbr(state)}-{slug(name)}"
+        # Two accepted property schemas:
+        #   NAME_1 / NAME_2  — the upstream boundary source's own convention
+        #   state / name     — this script's OWN previous output
+        # Accepting the second means the fixture can be rebuilt from the file
+        # committed in console/public/data/, so the whole data pipeline is
+        # reproducible from the repository alone. It could not be before, which
+        # made the fixture effectively un-regenerable by anyone but the author —
+        # a poor property for something claiming to be a Digital Public Good.
+        state = (props.get("NAME_1") or props.get("state") or "Unknown").strip()
+        name = (props.get("NAME_2") or props.get("name") or "Unknown").strip()
+        # Prefer an existing code so round-tripping is stable and cannot drift.
+        code = (props.get("code") or f"IN-{state_abbr(state)}-{slug(name)}").strip()
         n = 2
         base = code
         while code in seen:
@@ -264,9 +288,13 @@ def main(
             n += 1
         seen.add(code)
 
-        # Connectivity stands in for urbanisation, literacy and smartphone
-        # ownership — the things that decide whether a citizen can complain.
-        connectivity = rnd("conn", code)
+        # Connectivity stands in for literacy and household infrastructure — the
+        # things that decide whether a citizen can complain. REAL NFHS-5 values,
+        # loaded from data/fact_participation_capacity.csv; this was a hash of the
+        # district code until 17 Aug 2026, which made the Silent Need set
+        # arbitrary. Districts with no capacity value keep None and are excluded
+        # from scoring below rather than imputed to the median.
+        connectivity = capacity.get(code)
         lon, lat = bbox_centroid(feat["geometry"])
         population = int(180_000 + rnd("pop", code) * 3_400_000)
 
@@ -285,8 +313,19 @@ def main(
 
     # -- pass 2: per (district, sector) terms -------------------------------
     rows: list[dict] = []
+    no_capacity = 0
+    deficit_without_capacity: list[str] = []
     for d in districts:
         conn = d["connectivity"]
+        if conn is None:
+            # No real capacity value, so no defensible participation figure —
+            # participation zeroes out below. The district's ROWS ARE STILL
+            # EMITTED, because dropping them would remove it from the "no official
+            # data" count in the calibration strip and it would disappear silently
+            # instead of being disclosed. Rendering grey and counted is the honest
+            # state; absent from the totals is not.
+            no_capacity += 1
+            conn = 0.0
         for sec in sectors:
             key = sec["key"]
             k = f"{d['code']}|{key}"
@@ -298,6 +337,14 @@ def main(
             real = real_deficits.get((d["code"], key))
             has_deficit = real is not None
             deficit = real if has_deficit else 0.0
+
+            # Guard the assumption the zeroing above relies on. Today capacity and
+            # deficit come from the same reconciliation, so a district has both or
+            # neither. If that ever changes, a district with a real deficit and no
+            # capacity would be rendered with zero signals — i.e. fabricated as
+            # "silent" on missing data rather than on evidence. Fail loudly instead.
+            if has_deficit and d["connectivity"] is None:
+                deficit_without_capacity.append(f"{d['code']}|{key}")
 
             # A district is only heard from when it has BOTH a problem and the
             # means to report it. This is the bias the engine exists to correct.
@@ -443,7 +490,19 @@ def main(
     from collections import Counter
 
     q = Counter(r["quadrant"] for r in rows)
+    if deficit_without_capacity:
+        raise SystemExit(
+            f"{len(deficit_without_capacity)} district-sectors have a real deficit but no "
+            f"participation capacity, e.g. {deficit_without_capacity[:3]}. Zeroing their "
+            "participation would fabricate silence from missing data. Extend "
+            "CAPACITY_INDICATORS coverage or exclude these rows explicitly."
+        )
+
     console.print(f"Wrote [bold]{len(rows)}[/bold] rows over {len(districts)} districts → {OUT}")
+    console.print(
+        f"  districts with real participation capacity: [bold]{len(districts) - no_capacity}[/bold]"
+        f" · without (participation zeroed, still disclosed as no-data): {no_capacity}"
+    )
     for name, n in q.most_common():
         console.print(f"  {name:18s} {n}")
     sn = [r for r in rows if r["quadrant"] == "silent_need" and not r["suppressed"]]

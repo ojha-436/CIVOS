@@ -298,7 +298,7 @@ EVIDENCE BUNDLE:
 - Priority score: {priority_score:.1f}/100
 - Citizen signals: {signals} (from {needs} distinct needs, in {languages} language(s), {images} with photos)
 - Official deficit: {deficit:.1f}% ({source})
-- Population affected (est.): {population_affected:,}
+- Population affected (est.): {population_affected:,}  [DERIVED FROM A PLACEHOLDER DISTRICT POPULATION — NOT A CENSUS COUNT]
 - 90-day demand trend: {forecast_direction}
 - Evidence strength (share of needs with photos): {evidence_strength:.1f}%
 - Representative citizen quotes:
@@ -312,7 +312,15 @@ Generate 3-4 paragraphs:
 1. The situation (what citizens say + what official data confirms)
 2. Why this district needs attention (silence gap or corroboration)
 3. Recommended action and funding route
-4. Data quality and caveats (include: citizen layer is synthetic, evidence photos are real)
+4. Data quality and caveats. You MUST state all three of these:
+   - the citizen signal layer is synthetic, generated from real deficits
+   - the evidence photographs are real and openly licensed
+   - the population-affected figure derives from a placeholder district
+     population, not a census count
+
+If you cite the population-affected figure anywhere above, attach that caveat to
+it there too. A dossier is attached to funding requests and audited; a number
+whose provenance travels separately from the number is worse than no number.
 """
 
         client = genai.Client(vertexai=True, project=PROJECT, location=LOCATION)
