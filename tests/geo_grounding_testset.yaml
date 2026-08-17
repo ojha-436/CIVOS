@@ -95,8 +95,13 @@ cases:
     tier: T2
     lang: en
     text: "Dhubri town and the villages around it flood every single year."
-    note: "Boundary file spells this Dhuburi."
-    expected: IN-AS-dhuburi
+    note: "Dhubri. The GADM boundary file spelled this Dhuburi; the DataMeet
+      Census-2011 set spells it Dhubri. Identifier updated 17 Aug 2026 because the
+      BOUNDARY SOURCE changed — the district is the same real district, and the
+      original note recorded that the odd spelling came from the file rather than
+      from the answer. This is not score tuning: see t4-01, which is a genuine miss
+      and is deliberately left unchanged."
+    expected: IN-AS-dhubri
 
   - id: t2-02
     tier: T2
@@ -117,8 +122,10 @@ cases:
     tier: T2
     lang: en
     text: "Nowrangpur block office says the borewell scheme was completed. It was not."
-    note: "Nabarangpur, also written Nowrangpur."
-    expected: IN-OR-nabarangpur
+    note: "Nabarangpur, also written Nowrangpur. The DataMeet Census-2011 boundary
+      set spells it Nabarangapur; identifier updated 17 Aug 2026 with the boundary
+      source change, same real district."
+    expected: IN-OR-nabarangapur
 
   - id: t2-05
     tier: T2

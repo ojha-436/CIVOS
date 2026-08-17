@@ -1,13 +1,13 @@
 {
   "verdict": "PASS",
-  "accuracy": 0.9807692307692307,
-  "correct": 51,
+  "accuracy": 0.9423076923076923,
+  "correct": 49,
   "total": 52,
-  "resolvable_accuracy": 0.9772727272727273,
+  "resolvable_accuracy": 0.9318181818181818,
   "abstain_accuracy": 1.0,
-  "confidently_wrong": 0,
+  "confidently_wrong": 1,
   "model": "gemini-2.5-flash",
-  "run_at": "2026-08-15 07:23 UTC",
+  "run_at": "2026-08-17 10:40 UTC",
   "results": [
     {
       "id": "t1-01",
@@ -85,8 +85,8 @@
       "id": "t2-01",
       "tier": "T2",
       "lang": "en",
-      "expected": "IN-AS-dhuburi",
-      "got": "IN-AS-dhuburi",
+      "expected": "IN-AS-dhubri",
+      "got": "IN-AS-dhubri",
       "correct": true,
       "reason": "state+district"
     },
@@ -104,16 +104,16 @@
       "tier": "T2",
       "lang": "bn",
       "expected": "IN-WB-puruliya",
-      "got": "IN-WB-puruliya",
-      "correct": true,
-      "reason": "state+district"
+      "got": null,
+      "correct": false,
+      "reason": "model error: 1 validation error for GeoProposal\n  Invalid JSON: EOF while parsing a string at line 1 column 65311 [type=json_invalid, input_value='{\"place_mentions\": [\"\\\\u...0932\\\\"
     },
     {
       "id": "t2-04",
       "tier": "T2",
       "lang": "en",
-      "expected": "IN-OR-nabarangpur",
-      "got": "IN-OR-nabarangpur",
+      "expected": "IN-OR-nabarangapur",
+      "got": "IN-OR-nabarangapur",
       "correct": true,
       "reason": "state+district"
     },
@@ -257,8 +257,8 @@
       "tier": "T3",
       "lang": "mr",
       "expected": "IN-MH-nandurbar",
-      "got": "IN-MH-nandurbar",
-      "correct": true,
+      "got": "IN-MH-dhule",
+      "correct": false,
       "reason": "state+district"
     },
     {

@@ -1,8 +1,8 @@
 # GATE 1 — geo-grounding accuracy
 
-**Verdict: `PASS` · 51/52 = 98.1%** (threshold 85%)
+**Verdict: `PASS` · 49/52 = 94.2%** (threshold 85%)
 
-Run 2026-08-15 07:23 UTC · model `gemini-2.5-flash` · temperature 0 · asia-south1
+Run 2026-08-17 10:40 UTC · model `gemini-2.5-flash` · temperature 0 · asia-south1
 
 Proceed as designed. Geo-grounding is accurate enough that the demand signal it produces is not dominated by placement error.
 
@@ -10,18 +10,18 @@ Proceed as designed. Geo-grounding is accurate enough that the demand signal it 
 
 | Slice | Cases | Correct | Accuracy |
 |---|---|---|---|
-| Resolvable (a district is the right answer) | 44 | 43 | 97.7% |
+| Resolvable (a district is the right answer) | 44 | 41 | 93.2% |
 | Abstain (null is the right answer) | 8 | 8 | 100.0% |
 
-**Confidently wrong: 0.** This is the number that matters most — a named-but-wrong district attaches real deprivation data to the wrong place and nothing downstream questions it. A miss that abstains is recoverable; a miss that answers is not.
+**Confidently wrong: 1.** This is the number that matters most — a named-but-wrong district attaches real deprivation data to the wrong place and nothing downstream questions it. A miss that abstains is recoverable; a miss that answers is not.
 
 ## By difficulty tier
 
 | Tier | What it tests | Cases | Correct | Accuracy |
 |---|---|---|---|---|
 | T1 | district named outright | 9 | 9 | 100% |
-| T2 | district named, different spelling | 8 | 8 | 100% |
-| T3 | only a town, block or tehsil named | 16 | 16 | 100% |
+| T2 | district named, different spelling | 8 | 7 | 88% |
+| T3 | only a town, block or tehsil named | 16 | 15 | 94% |
 | T4 | only a landmark named | 6 | 5 | 83% |
 | T5 | name exists in several states | 8 | 8 | 100% |
 | T6 | genuinely unresolvable | 5 | 5 | 100% |
@@ -38,10 +38,11 @@ Proceed as designed. Geo-grounding is accurate enough that the demand signal it 
 | ✅ | `t1-06` | T1 | bn | `IN-WB-murshidabad` | `IN-WB-murshidabad` | state+district |
 | ✅ | `t1-07` | T1 | en | `IN-OR-malkangiri` | `IN-OR-malkangiri` | state+district |
 | ✅ | `t1-08` | T1 | hi | `IN-MP-jhabua` | `IN-MP-jhabua` | state+district |
-| ✅ | `t2-01` | T2 | en | `IN-AS-dhuburi` | `IN-AS-dhuburi` | state+district |
+| ✅ | `t2-01` | T2 | en | `IN-AS-dhubri` | `IN-AS-dhubri` | state+district |
 | ✅ | `t2-02` | T2 | en | `IN-KA-chamrajnagar` | `IN-KA-chamrajnagar` | state+district |
-| ✅ | `t2-03` | T2 | bn | `IN-WB-puruliya` | `IN-WB-puruliya` | state+district |
-| ✅ | `t2-04` | T2 | en | `IN-OR-nabarangpur` | `IN-OR-nabarangpur` | state+district |
+| ❌ | `t2-03` | T2 | bn | `IN-WB-puruliya` | `null` | model error: 1 validation error for GeoProposal
+  Invalid JSON: EOF while parsing a string at line 1 column 65311 [type=json_invalid, input_value='{"place_mentions": ["\\u...0932\\ |
+| ✅ | `t2-04` | T2 | en | `IN-OR-nabarangapur` | `IN-OR-nabarangapur` | state+district |
 | ✅ | `t2-05` | T2 | gu | `IN-GJ-kachchh` | `IN-GJ-kachchh` | state+district |
 | ✅ | `t2-06` | T2 | en | `IN-OR-baleshwar` | `IN-OR-baleshwar` | state+district |
 | ✅ | `t2-07` | T2 | en | `IN-AS-karimganj` | `IN-AS-karimganj` | state+district |
@@ -57,7 +58,7 @@ Proceed as designed. Geo-grounding is accurate enough that the demand signal it 
 | ✅ | `t3-10` | T3 | mr | `IN-MH-nashik` | `IN-MH-nashik` | state+district |
 | ✅ | `t3-11` | T3 | mr | `IN-MH-pune` | `IN-MH-pune` | state+district |
 | ✅ | `t3-12` | T3 | en | `IN-MH-thane` | `IN-MH-thane` | state+district |
-| ✅ | `t3-13` | T3 | mr | `IN-MH-nandurbar` | `IN-MH-nandurbar` | state+district |
+| ❌ | `t3-13` | T3 | mr | `IN-MH-nandurbar` | `IN-MH-dhule` | state+district |
 | ✅ | `t3-14` | T3 | en | `IN-KL-wayanad` | `IN-KL-wayanad` | state+district |
 | ✅ | `t3-15` | T3 | hi | `IN-BR-supaul` | `IN-BR-supaul` | state+district |
 | ❌ | `t4-01` | T4 | en | `IN-GJ-junagadh` | `null` | spans multiple districts |
@@ -91,6 +92,6 @@ Cases where, on review, the resolver's answer looks defensible and the answer ke
 
 ## Method and its limitation
 
-The resolver is a single Gemini call with the full 594-district gazetteer in the prompt, so a returned district is valid by construction. Ambiguity is then resolved in code, not by the model: if a district name maps to several states and none is given, the resolver abstains. That rule is deterministic and testable in a way a prompt instruction is not.
+The resolver is a single Gemini call with the full 641-district gazetteer in the prompt, so a returned district is valid by construction. Ambiguity is then resolved in code, not by the model: if a district name maps to several states and none is given, the resolver abstains. That rule is deterministic and testable in a way a prompt instruction is not.
 
 **This is a self-graded exam.** The test set was authored by the same party that built the resolver — though it was written and committed first, before any resolver code existed, which constrains but does not eliminate the bias. Treat this as a build gate, not an independent benchmark.

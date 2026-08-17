@@ -154,8 +154,8 @@ export default function Landing() {
 
             <div className="lp-metrics rise d5">
               <div className="lp-metric">
-                <span className="v">594</span>
-                <span className="k">districts, with real boundaries and administrative codes</span>
+                <span className="v">641</span>
+                <span className="k">districts, with real boundaries, administrative codes and census codes</span>
                 <span className="src">Real</span>
               </div>
               <div className="lp-metric">
@@ -164,8 +164,8 @@ export default function Landing() {
                 <span className="src">Probed, not claimed</span>
               </div>
               <div className="lp-metric">
-                <span className="v">98.1%</span>
-                <span className="k">geo-grounding accuracy — zero confidently wrong</span>
+                <span className="v">94.2%</span>
+                <span className="k">geo-grounding accuracy, re-measured against the 641-district gazetteer</span>
                 <span className="src">Gate 1</span>
               </div>
               <div className="lp-metric">
@@ -818,7 +818,7 @@ export default function Landing() {
                         <i className="dot" /> Real
                       </span>
                     </td>
-                    <td>594 districts, public boundary data simplified for web rendering</td>
+                    <td>641 districts — DataMeet Census-2011 boundaries, CC-BY 4.0, simplified for web rendering</td>
                   </tr>
                   <tr>
                     <td>Sector deficit indicators</td>
@@ -828,7 +828,7 @@ export default function Landing() {
                       </span>
                     </td>
                     <td>
-                      NFHS-5 2019–21 (IIPS / MoHFW) — 537 of 594 districts, 4 of 5 sectors.
+                      NFHS-5 2019–21 (IIPS / MoHFW) — 639 of 641 districts, 4 of 5 sectors.
                       Cross-validated against a second independent extraction: 100%
                       identical.
                     </td>
@@ -905,7 +905,7 @@ export default function Landing() {
           <div className="lp-wrap lp-cta-inner">
             <h2 data-reveal>Go and look at the quiet districts.</h2>
             <p data-reveal style={{ '--i': 1 } as React.CSSProperties}>
-              The console opens on 594 real districts. Flip the equity correction on and
+              The console opens on 641 real districts. Flip the equity correction on and
               watch the ranking move — that movement is the entire argument, and it takes
               one click to check it yourself.
             </p>

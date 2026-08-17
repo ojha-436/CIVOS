@@ -45,7 +45,7 @@ export default function Console() {
   );
 
   /* Rank for the current sector under the current weights. Recomputed on every
-     slider move — 594 rows, so it stays well inside a frame. */
+     slider move — 641 rows, so it stays well inside a frame. */
   const ranked = useMemo(() => {
     if (!ds) return [];
     return ds.rows
@@ -134,7 +134,7 @@ export default function Console() {
       <div className="boot">
         <div className="boot-inner">
           <div className="display">CIVOS</div>
-          <div className="label">Loading 594 districts · 2,970 district-sector rows</div>
+          <div className="label">Loading 641 districts · 3,205 district-sector rows</div>
           <div className="sweep">
             <i />
           </div>
@@ -157,7 +157,7 @@ export default function Console() {
           <span className="instance mono">IN</span>
         </Link>
         <div className="tagline">
-          Citizen-signal infrastructure prioritisation · 594 districts · 5 sectors
+          Citizen-signal infrastructure prioritisation · 641 districts · 5 sectors
         </div>
         <div className="masthead-right">
           <ThemeToggle />

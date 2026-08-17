@@ -390,7 +390,7 @@ export default function Dossier({ ds, district, row, sectorKey, weights, adjuste
               <section className="dos-section">
                 <h4 className="label">⑩ Confidence statement & caveats</h4>
                 <p style={{ fontSize: 11, color: 'var(--paper-3)', lineHeight: 1.65 }}>
-                  Geo-grounding accuracy: 98.1% on a 50-case hand-built test set (Gate 1, 15 Aug 2026). Evidence
+                  Geo-grounding accuracy: 94.2% on a 52-case hand-built test set (Gate 1, re-measured 17 Aug 2026 against the DataMeet 641-district gazetteer). Evidence
                   strength {row.evidence.toFixed(1)}% — share of needs with ≥ 1 photo. Citizen signal layer is
                   <strong> synthetic</strong>, generated from real NFHS-5 deficits with a deliberate participation
                   bias; this is required for the Silent Need demonstration and is labelled throughout.

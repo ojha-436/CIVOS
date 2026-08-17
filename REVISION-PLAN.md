@@ -17,13 +17,12 @@ ordered so that stopping at any point leaves the system in a defensible state.
 The front end, the multimodal intake, the Telegram channel and the real deficit
 layer are all built and live. Two things undermine the product's own central claim
 — *measurement integrity* — and both sit in the synthesis layer rather than the
-interface. One of them (`connectivity`) decides which districts appear as **Silent
-Need**, the single output the whole pitch rests on, and it is currently a hash of
-the district code. Fixing it is cheap, uses data already downloaded, and converts
-the most attackable claim in the submission into the most defensible one.
+interface. One of them (`connectivity`) decided which districts appeared as **Silent
+Need**, the single output the whole pitch rests on, and it was a hash of the
+district code. **Both are now fixed** — see the status table below.
 
-Separately, the largest single scoring gap is **Cross-Border Applicability (20%)**,
-which is entirely unbuilt and is currently *implied* by the landing page.
+The largest remaining scoring gap is **Cross-Border Applicability (20%)**, which is
+still unbuilt; the landing page no longer implies otherwise.
 
 ---
 
@@ -34,34 +33,77 @@ which is entirely unbuilt and is currently *implied* by the landing page.
 | **R0** | Stop implying `adapters/za/` exists | ✅ **done** | Integrity | A judge finds a false claim on the front page |
 | **R1** | Make `connectivity` a real indicator | ✅ **done** | Problem–Solution Fit 20% · Impact 10% | "Why is this district silent?" has no answer |
 | **R2** | Stop the dossier prose laundering placeholders | ✅ **done** | Impact 10% | Exported dossier states a hashed number as fact |
-| **R3** | Document boundary provenance + resolve the licence | ⚠️ **partly** — source identified, decision needed | Deployability 20% | GADM may prohibit redistribution entirely |
+| **R3** | Boundary provenance + licence | ✅ **done** — GADM replaced with DataMeet (CC-BY 4.0) | Deployability 20% | GADM prohibited redistribution |
 | **R4** | Write down the NFHS extraction licence argument | ✅ **done** | Deployability 20% | A blank licence cell reads as an oversight |
 | **R5** | Load real district population | ⬜ open · 1.5 h | Impact 10% | Last remaining placeholder in a scored output |
 | **R6** | Real Roads & Transport deficit | ⬜ open · 2–3 h | Problem–Solution Fit 20% | 1 of 5 sectors stays empty |
 | **R7** | `CIVOS-ZA` adapter on real data | ⬜ open · 6–10 h | **Cross-Border 20%** | Largest single scoring gap in the submission |
 
-**R0, R1, R2 and R4 are complete.** Every integrity issue found in the review is
-closed. R3 turned out to be more serious than estimated and now needs a decision
-rather than an afternoon — see below. R7 remains the biggest score and the hardest
-call.
+**R0–R4 are complete.** Every integrity and licensing issue found in the review is
+closed. R7 remains the biggest score and the hardest call.
+
+### What R3 produced — better than a licence fix
+
+Replacing GADM with the **DataMeet Census-2011** set (CC-BY 4.0, redistribution
+permitted) improved the data materially:
+
+| | GADM (before) | DataMeet (after) |
+|---|---|---|
+| Licence | redistribution prohibited | **CC-BY 4.0** |
+| Districts | 594 | **641** |
+| NFHS-5 reconciliation | 537/594 = 90.4%, fuzzy names | **639/641 = 99.7%** |
+| Match method | name matching | **628 by exact census code** |
+| "No official data" in the console | 57 district-sectors | **2** |
+| Rebuildable from the repo | no | **yes** (`scripts/build_boundaries.py`) |
+
+The census-code join is the substantive win: it removes the class of silent error
+that once married Sikkim's *East* district to Delhi's *East*.
+
+**A sentinel polygon had to be caught.** The upstream shapefile carries
+`DISTRICT = "Data Not Available"` with census codes `99/99` for the un-enumerated
+area, and NFHS carries a matching placeholder row — so the join produced a
+"district" at 0% schooling and 0% electricity. Left in, it dragged the
+participation-capacity floor from 39.0 to 0.0 and compressed every real district's
+connectivity. It is now flagged in the boundary properties, excluded from
+reconciliation and capacity, and still rendered as no-official-data.
+
+**Gate 1 was re-run, and the number went down.** The gazetteer changed from 594 to
+641 districts, so 98.1% was no longer a measurement of the shipped system. Re-run:
+**PASS at 94.2% (49/52), with 1 confidently wrong** (Nandurbar to Dhule; Nandurbar
+was split from Dhule in 1998). Two original misses were stale identifiers — the
+answer key encoded GADM's spellings `Dhuburi` and `Nabarangpur`, and the resolver
+returned the same real districts under DataMeet's `Dhubri` and `Nabarangapur`.
+Those two were updated; **the genuine Junagadh miss was left untouched**, per the
+rule this project already wrote down: editing an answer key after seeing the score
+is the tuning the test set exists to prevent.
+
+The run was **not** re-rolled for a better number. Live claims on the landing page
+and in the dossier now read 94.2%, and the "zero confidently wrong" line is gone
+because this run had one.
+
+**Open follow-up:** two Gate 1 runs disagreed (98.1% then 94.2%, different misses),
+so the resolver is nondeterministic at this sample size. A 3-run median with the
+variance disclosed would be a more honest headline than any single run. Not done —
+flagged.
 
 ### What R1 actually produced
 
+Figures below are after R3's boundary swap, on 641 districts.
+
 | | Mean *women with 10+ yrs schooling* |
 |---|---|
-| Silent Need districts | **33.5%** |
-| All other scored districts | 42.8% |
-| National mean | 40.5% |
+| Silent Need districts | **33.9%** |
+| All other scored districts | 43.0% |
+| National mean | 40.8% |
 
-Highest-priority Silent Need districts are now **Koraput, Jamui, Bahraich, Chatra,
-Deoghar, Mayurbhanj, Purnia, Araria** — schooling 14–28%, several of them NITI
-Aayog Aspirational Districts. Equity-adjusted top of the ranking is **Cachar,
-Hailakandi, Pakur, Dumka, Dindori**, with rank movements up to **▲231**.
+Highest-priority Silent Need districts are **Pashchimi Singhbhum, Koraput, Jamui,
+Bahraich, Chatra, Deoghar, Purnia** — schooling 14–28%, several of them NITI Aayog
+Aspirational Districts. Equity-adjusted top of the ranking is **Cachar, Pakur,
+Hailakandi**, with rank movements up to **▲278**.
 
-As predicted, the Silent Need set moved: for Water & Sanitation, 128 districts
-(was 112) with 79 retained, 49 newly flagged, 33 dropped. **Screenshots in
-`docs/screenshots/` are now stale and the demo narration needs re-reading against
-the new ranking.**
+Water & Sanitation Silent Need is now **158** district-sectors, and "no official
+data" fell from 57 to **2**. **Screenshots in `docs/screenshots/` are stale and the
+demo narration needs re-reading against the new ranking.**
 
 Two things were found while implementing, neither in the original plan:
 

@@ -222,7 +222,7 @@ def run_eval(resolver: Resolver, cases: list[dict], workers: int) -> list[dict]:
         return list(pool.map(one, cases))
 
 
-def write_report(results: list[dict], threshold: float) -> tuple[float, str]:
+def write_report(results: list[dict], threshold: float, gaz: Gazetteer) -> tuple[float, str]:
     total = len(results)
     correct = sum(1 for r in results if r["correct"])
     acc = correct / total
@@ -322,10 +322,11 @@ def write_report(results: list[dict], threshold: float) -> tuple[float, str]:
     md.append("## Method and its limitation")
     md.append("")
     md.append(
-        "The resolver is a single Gemini call with the full 594-district gazetteer in the prompt, "
-        "so a returned district is valid by construction. Ambiguity is then resolved in code, not "
-        "by the model: if a district name maps to several states and none is given, the resolver "
-        "abstains. That rule is deterministic and testable in a way a prompt instruction is not."
+        f"The resolver is a single Gemini call with the full {len(gaz.rows)}-district gazetteer in "
+        "the prompt, so a returned district is valid by construction. Ambiguity is then resolved in "
+        "code, not by the model: if a district name maps to several states and none is given, the "
+        "resolver abstains. That rule is deterministic and testable in a way a prompt instruction "
+        "is not."
     )
     md.append("")
     md.append(
@@ -371,7 +372,7 @@ def main(
     console.rule(f"[bold]GATE 1[/bold] · {len(cases)} cases · {MODEL}")
 
     results = run_eval(resolver, cases, workers)
-    acc, verdict = write_report(results, threshold)
+    acc, verdict = write_report(results, threshold, gaz)
 
     t = Table(title="GATE 1")
     t.add_column("tier"); t.add_column("cases", justify="right"); t.add_column("correct", justify="right")

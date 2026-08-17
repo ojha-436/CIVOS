@@ -1,6 +1,6 @@
 # Deficit layer — provenance and reconciliation
 
-Built 2026-08-17 09:55 UTC. Regenerate with `uv run python scripts/build_deficit_layer.py`.
+Built 2026-08-17 10:29 UTC. Regenerate with `uv run python scripts/build_deficit_layer.py`.
 
 ## Source
 
@@ -44,24 +44,24 @@ Two independent PDF extractions agreeing to the decimal across every indicator i
 
 ## Reconciliation against the boundary set
 
-**537 of 594 rendered districts (90.4%)** carry real NFHS-5 values.
+**639 of 641 rendered districts (99.7%)** carry real NFHS-5 values.
 
 | Method | Districts |
 |---|---|
-| `exact_state_district` | 510 |
-| `fuzzy_within_state` | 27 |
+| `census_code` | 628 |
+| `exact_state_district` | 10 |
+| `excluded_sentinel` | 1 |
+| `fuzzy_within_state` | 1 |
 
 The boundary file is 2011-era, so it predates **Telangana** (created 2014) and **Ladakh** (2019), and many districts have been split or renamed since. Those states are aliased back to their parent for matching. Districts that still do not match are listed below, **excluded from the ranking, and rendered grey** — they are not given an invented value.
 
-### Boundary districts with no NFHS-5 row (57)
+### Boundary districts with no NFHS-5 row (2)
 
-Andaman Islands (Andaman and Nicobar), Nicobar Islands (Andaman and Nicobar), Cuddapah (Andhra Pradesh), Nellore (Andhra Pradesh), Warangal (Andhra Pradesh), Upper Dibang Valley (Arunachal Pradesh), North Cachar Hills (Assam), Sibsagar (Assam), Bhabua (Bihar), Kanker (Chhattisgarh), Kawardha (Chhattisgarh), Dadra and Nagar Haveli (Dadra and Nagar Haveli), Daman (Daman and Diu), Junagadh (Daman and Diu), Delhi (Delhi), Sonepat (Haryana), Anantnag (Kashmir South) (Jammu and Kashmir), Bagdam (Jammu and Kashmir), Baramula (Kashmir North) (Jammu and Kashmir), Kupwara (Muzaffarabad) (Jammu and Kashmir), Ladakh (Leh) (Jammu and Kashmir), Rajauri (Jammu and Kashmir), Koderma (Jharkhand), Saraikela Kharsawan (Jharkhand), Bangalore Urban (Karnataka), Kavaratti (Lakshadweep), East Nimar (Madhya Pradesh), Narsinghpur (Madhya Pradesh), West Nimar (Madhya Pradesh), Garhchiroli (Maharashtra), Greater Bombay (Maharashtra), East Imphal (Manipur), West Imphal (Manipur), Jaintia Hills (Meghalaya), Boudh (Orissa), Deogarh (Orissa), Keonjhar (Orissa), Sonepur (Orissa), Nawan Shehar (Punjab), East (Sikkim), North Sikkim (Sikkim), South Sikkim (Sikkim), West Sikkim (Sikkim), Nilgiris (Tamil Nadu), Tirunelveli Kattabo (Tamil Nadu), Allahabad (Uttar Pradesh), Badaun (Uttar Pradesh), Hathras (Uttar Pradesh), Kanpur (Uttar Pradesh), Lakhimpur Kheri (Uttar Pradesh), Sant Ravi Das Nagar (Uttar Pradesh), Barddhaman (West Bengal), Darjiling (West Bengal), East Midnapore (West Bengal), North 24 Parganas (West Bengal), South 24 Parganas (West Bengal), West Midnapore (West Bengal)
+Data Not Available (Jammu & Kashmir), Saraikela-kharsawan (Jharkhand)
 
-### NFHS-5 districts with no boundary (107)
+### NFHS-5 districts with no boundary (16)
 
-Nicobar (Andaman & Nicobar Island), North & Middle Andaman (Andaman & Nicobar Island), South Andaman (Andaman & Nicobar Island), Sri Potti Sriramulu Nellore (Andhra Pradesh), Y.S.R. (Andhra Pradesh), Anjaw (Arunachal Pradesh), Dibang Valley (Arunachal Pradesh), Baksa (Assam), Chirang (Assam), Dima Hasao (Assam), Kamrup Metropolitan (Assam), Sivasagar (Assam), Udalguri (Assam), Arwal (Bihar), Kaimur (Bhabua) (Bihar), Bijapur (Chhattisgarh), Kabeerdham (Chhattisgarh), Narayanpur (Chhattisgarh), Uttar Bastar Kanker (Chhattisgarh), Daman (Daman & Diu), Diu (Daman & Diu), Central (NCT of Delhi), East (NCT of Delhi), New Delhi (NCT of Delhi), North (NCT of Delhi), North East (NCT of Delhi), North West (NCT of Delhi), South (NCT of Delhi), South West (NCT of Delhi), West (NCT of Delhi), Dadra & Nagar Haveli (Dadra & Nagar Haveli), Tapi (Gujarat), Mewat (Haryana), Palwal (Haryana), Sonipat (Haryana), Khunti (Jharkhand), Kodarma (Jharkhand), Ramgarh (Jharkhand), Anantnag (Jammu & Kashmir), Badgam (Jammu & Kashmir), Bandipore (Jammu & Kashmir), Baramula (Jammu & Kashmir), Data Not Available (Jammu & Kashmir), Ganderbal (Jammu & Kashmir), Kishtwar (Jammu & Kashmir), Kulgam (Jammu & Kashmir), Kupwara (Jammu & Kashmir), Rajouri (Jammu & Kashmir), Ramban (Jammu & Kashmir), Reasi (Jammu & Kashmir), Samba (Jammu & Kashmir), Shupiyan (Jammu & Kashmir), Bangalore (Karnataka), Chikkaballapura (Karnataka), Ramanagara (Karnataka), Yadgir (Karnataka), Leh (Ladakh) (Ladakh), Lakshadweep (Lakshadweep), Gadchiroli (Maharashtra), Mumbai (Maharashtra), Mumbai Suburban (Maharashtra), East Jaintia Hills (Meghalaya), North Garo Hills (Meghalaya), West Jaintia Hills (Meghalaya), Imphal East (Manipur), Imphal West (Manipur), Alirajpur (Madhya Pradesh), Khandwa (East Nimar) (Madhya Pradesh), Khargone (West Nimar) (Madhya Pradesh), Narsimhapur (Madhya Pradesh), Singrauli (Madhya Pradesh), Kiphire (Nagaland), Longleng (Nagaland), Peren (Nagaland), Baudh (Odisha), Debagarh (Odisha), Kendujhar (Odisha), Subarnapur (Odisha), Barnala (Punjab), Sahibzada Ajit Singh Nagar (Punjab)
-
-… and 27 more.
+Data Not Available (Jammu & Kashmir), East Jaintia Hills (Meghalaya), North Garo Hills (Meghalaya), Theni (Tamil Nadu), Adilabad (Telangana), Hyderabad (Telangana), Karimnagar (Telangana), Khammam (Telangana), Mahabubnagar (Telangana), Medak (Telangana), Nalgonda (Telangana), Nizamabad (Telangana), Ranga Reddy (Telangana), Warangal Rural (Telangana), Warangal Urban (Telangana), Paschim Medinipur (West Bengal)
 
 ## Sector coverage
 
@@ -90,7 +90,7 @@ It is now built from two real NFHS-5 values on the same districts:
 | Women with 10 or more years of schooling (%) | literacy and the agency to navigate a grievance process | 0.6 |
 | Population living in households with electricity (%) | household infrastructure a phone depends on | 0.4 |
 
-Composite raw range **39.0 – 92.8**, min-max normalised to `[0,1]`. **537 of 594 districts** carry a capacity value.
+Composite raw range **39.0 – 92.8**, min-max normalised to `[0,1]`. **639 of 641 districts** carry a capacity value.
 
 **The weighting is a judgement, not a measurement.** It is stated here so it can be argued with, on the same principle that exposes the `w1..w5` scoring weights as sliders in the console rather than burying them.
 

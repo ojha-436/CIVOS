@@ -275,23 +275,44 @@ def reconcile(nfhs: dict, geo_districts: list[dict]) -> tuple[dict, list, list]:
     """
     by_state_district: dict[tuple[str, str], tuple] = {}
     by_district: dict[str, list[tuple]] = defaultdict(list)
+    # Census-code index. The boundary set now carries ST_CEN_CD / DT_CEN_CD, and
+    # NFHS-5's own extraction carries the same pair, so most districts can be
+    # joined on an integer tuple. This is the reliable path; name matching below
+    # is now the fallback rather than the primary mechanism.
+    by_census: dict[tuple[int, int], tuple] = {}
     for key, rec in nfhs.items():
         st, dt = key
         st = STATE_ALIASES.get(st, st)
         by_state_district[(st, dt)] = key
         by_district[dt].append(key)
+        try:
+            by_census[(int(float(rec["st_cen_cd"])), int(float(rec["dt_cen_cd"])))] = key
+        except (TypeError, ValueError, KeyError):
+            pass
 
     matched: dict[str, dict] = {}
     unmatched_geo: list[dict] = []
     how = defaultdict(int)
 
     for g in geo_districts:
+        # Sentinel polygons carry no measurement and must never be matched — the
+        # NFHS extraction has its own placeholder row, and joining the two yields a
+        # fake district with 0% on every indicator.
+        if g.get("placeholder"):
+            unmatched_geo.append(g)
+            how["excluded_sentinel"] += 1
+            continue
         gst = STATE_ALIASES.get(norm(g["state"]), norm(g["state"]))
         gdt = norm(g["name"])
         hit = None
 
         method = ""
-        if (gst, gdt) in by_state_district:
+        # Census code first — an exact integer join cannot marry Sikkim's East to
+        # Delhi's East, which is precisely the failure name matching produced.
+        gcen = (g.get("st_cen_cd"), g.get("dt_cen_cd"))
+        if gcen[0] is not None and gcen[1] is not None and gcen in by_census:
+            hit, method = by_census[gcen], "census_code"
+        elif (gst, gdt) in by_state_district:
             hit, method = by_state_district[(gst, gdt)], "exact_state_district"
         else:
             same_state = [k for k in nfhs if STATE_ALIASES.get(k[0], k[0]) == gst]
@@ -352,9 +373,24 @@ def main(
     console.print("\n[bold]Reconciling against the rendered boundary set[/bold]")
     gj = json.loads((REPO / "console" / "public" / "data" / "districts.geojson").read_text())
     geo = [
-        {"code": f["properties"]["code"], "name": f["properties"]["name"], "state": f["properties"]["state"]}
+        {
+            "code": f["properties"]["code"],
+            "name": f["properties"]["name"],
+            "state": f["properties"]["state"],
+            # Present since the boundary set moved to DataMeet Census 2011; absent
+            # in older files, in which case reconcile() falls back to names.
+            "st_cen_cd": f["properties"].get("st_cen_cd"),
+            "dt_cen_cd": f["properties"].get("dt_cen_cd"),
+            "placeholder": bool(f["properties"].get("placeholder")),
+        }
         for f in gj["features"]
     ]
+    n_placeholder = sum(1 for g in geo if g["placeholder"])
+    if n_placeholder:
+        console.print(
+            f"  [yellow]{n_placeholder} sentinel polygon(s) excluded from matching[/yellow] "
+            "— area where census enumeration did not happen, not a district with poor indicators"
+        )
     matched, un_geo, un_nfhs, how = reconcile(a, geo)
     rate = 100 * len(matched) / len(geo)
     console.print(f"  matched [bold]{len(matched)}/{len(geo)}[/bold] boundary districts ({rate:.1f}%)")
