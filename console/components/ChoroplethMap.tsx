@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import maplibregl, { Map as MLMap } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import type { QuadrantKey } from '@/lib/types';
+import { MAP_CHROME, readTheme, type Theme } from '@/lib/theme';
 
 /* No basemap, deliberately.
  *
@@ -27,17 +28,35 @@ interface Props {
   onHover: (code: string | null) => void;
   onSelect: (code: string) => void;
   onReady: () => void;
+  theme?: Theme;
 }
 
-export default function ChoroplethMap({ data, selected, onHover, onSelect, onReady }: Props) {
+export default function ChoroplethMap({
+  data,
+  selected,
+  onHover,
+  onSelect,
+  onReady,
+  theme,
+}: Props) {
   const holder = useRef<HTMLDivElement>(null);
   const map = useRef<MLMap | null>(null);
   const loaded = useRef(false);
   const hovered = useRef<string | null>(null);
+  /* Bumped once the style is ready. The theme effect below reads `loaded` and
+     would otherwise bail out and never re-run if a theme change (or the parent's
+     first post-mount theme correction) landed before `load` fired. */
+  const [styleReady, setStyleReady] = useState(0);
 
   // -- init ---------------------------------------------------------------
   useEffect(() => {
     if (!holder.current || map.current) return;
+
+    /* Read the theme directly here rather than using the prop. The map is built
+       once, in a mount effect, and the parent's useTheme() has not corrected
+       from its SSR-safe 'dark' default yet at that moment — building with the
+       prop would construct a dark map and repaint it a frame later. */
+    const c0 = MAP_CHROME[readTheme()];
 
     const m = new maplibregl.Map({
       container: holder.current,
@@ -58,22 +77,27 @@ export default function ChoroplethMap({ data, selected, onHover, onSelect, onRea
           },
         },
         layers: [
-          { id: 'bg', type: 'background', paint: { 'background-color': '#070a0e' } },
+          { id: 'bg', type: 'background', paint: { 'background-color': c0.bg } },
           {
-            // POK fill — same dark grey as no-data districts, indicating the
-            // area is part of India per official Survey of India boundary but
+            // POK fill — same neutral as no-data districts, indicating the area
+            // is part of India per official Survey of India boundary but
             // district-level administration data is not available.
             id: 'pok-fill',
             type: 'fill',
             source: 'pok',
-            paint: { 'fill-color': '#1b212b', 'fill-opacity': 0.85 },
+            paint: { 'fill-color': c0.pok, 'fill-opacity': 0.85 },
           },
           {
             // POK border — thin dashed-looking line marking the official claim
             id: 'pok-outline',
             type: 'line',
             source: 'pok',
-            paint: { 'line-color': '#ece5d8', 'line-width': 0.8, 'line-opacity': 0.4, 'line-dasharray': [3, 3] },
+            paint: {
+              'line-color': c0.ink,
+              'line-width': 0.8,
+              'line-opacity': 0.4,
+              'line-dasharray': [3, 3],
+            },
           },
           {
             id: 'fill',
@@ -83,8 +107,8 @@ export default function ChoroplethMap({ data, selected, onHover, onSelect, onRea
               'fill-color': [
                 'case',
                 ['==', ['feature-state', 'visible'], false],
-                '#0c1017',
-                ['coalesce', ['feature-state', 'colour'], '#0c1017'],
+                c0.empty,
+                ['coalesce', ['feature-state', 'colour'], c0.empty],
               ],
               'fill-opacity': [
                 'case',
@@ -99,9 +123,9 @@ export default function ChoroplethMap({ data, selected, onHover, onSelect, onRea
             type: 'line',
             source: 'districts',
             paint: {
-              'line-color': '#ece5d8',
+              'line-color': c0.ink,
               'line-width': 0.4,
-              'line-opacity': 0.13,
+              'line-opacity': c0.outlineOpacity,
             },
           },
           {
@@ -109,14 +133,14 @@ export default function ChoroplethMap({ data, selected, onHover, onSelect, onRea
             type: 'line',
             source: 'districts',
             filter: ['==', ['get', 'code'], ''],
-            paint: { 'line-color': '#ece5d8', 'line-width': 1.4, 'line-opacity': 0.9 },
+            paint: { 'line-color': c0.ink, 'line-width': 1.4, 'line-opacity': 0.9 },
           },
           {
             id: 'selected',
             type: 'line',
             source: 'districts',
             filter: ['==', ['get', 'code'], ''],
-            paint: { 'line-color': '#f3c14b', 'line-width': 2.2 },
+            paint: { 'line-color': c0.selected, 'line-width': 2.2 },
           },
         ],
       },
@@ -135,6 +159,7 @@ export default function ChoroplethMap({ data, selected, onHover, onSelect, onRea
 
     m.on('load', () => {
       loaded.current = true;
+      setStyleReady((t) => t + 1);
 
       // Official Survey of India bounds — includes:
       //   West : 68.0°E  (Gujarat / Rajasthan)
@@ -229,6 +254,31 @@ export default function ChoroplethMap({ data, selected, onHover, onSelect, onRea
       m.off('sourcedata', onData);
     };
   }, [data]);
+
+  // -- theme -----------------------------------------------------------------
+  // Repainted layer by layer rather than with setStyle(). setStyle would rebuild
+  // the sources and discard every feature-state with them, so all 594 district
+  // fills would go blank until the next data pass rewrote them. Six
+  // setPaintProperty calls are also just cheaper.
+  useEffect(() => {
+    const m = map.current;
+    if (!m || !loaded.current || !theme) return;
+    const c = MAP_CHROME[theme];
+
+    m.setPaintProperty('bg', 'background-color', c.bg);
+    m.setPaintProperty('pok-fill', 'fill-color', c.pok);
+    m.setPaintProperty('pok-outline', 'line-color', c.ink);
+    m.setPaintProperty('outline', 'line-color', c.ink);
+    m.setPaintProperty('outline', 'line-opacity', c.outlineOpacity);
+    m.setPaintProperty('hover', 'line-color', c.ink);
+    m.setPaintProperty('selected', 'line-color', c.selected);
+    m.setPaintProperty('fill', 'fill-color', [
+      'case',
+      ['==', ['feature-state', 'visible'], false],
+      c.empty,
+      ['coalesce', ['feature-state', 'colour'], c.empty],
+    ]);
+  }, [theme, styleReady]);
 
   // -- selection ring ------------------------------------------------------
   useEffect(() => {

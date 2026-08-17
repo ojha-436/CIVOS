@@ -7,6 +7,8 @@ import { loadDataset } from '@/lib/data';
 import { DEFAULT_WEIGHTS, WEIGHT_META, priority, formatCompact, rampColour } from '@/lib/scoring';
 import { QUADRANTS, type Dataset, type QuadrantKey, type Weights } from '@/lib/types';
 import Drilldown from '@/components/Drilldown';
+import ThemeToggle from '@/components/ThemeToggle';
+import { useTheme, MAP_GROUND, QUADRANT_HEX_BY_THEME } from '@/lib/theme';
 import type { MapDatum } from '@/components/ChoroplethMap';
 
 const ChoroplethMap = dynamic(() => import('@/components/ChoroplethMap'), { ssr: false });
@@ -18,17 +20,14 @@ const QKEYS: QuadrantKey[] = ['act_now', 'silent_need', 'expectation_gap', 'stab
 
 /* Literal hex, because the ramp mixes channels numerically and cannot read a
    CSS custom property. Kept in step with the tokens in globals.css. */
-const QUADRANT_HEX: Record<QuadrantKey, string> = {
-  act_now: '#ff6a45',
-  silent_need: '#f3c14b',
-  expectation_gap: '#57c4e5',
-  stable: '#4a5566',
-  no_data: '#1b212b',
-};
+/* Quadrant hues for the choropleth now live in lib/theme.ts, keyed by theme —
+   the light set is re-picked rather than inverted, because #f3c14b on paper
+   measures ~1.6:1 and Silent Need is the one mark that must never be faint. */
 
 export default function Console() {
   const [ds, setDs] = useState<Dataset | null>(null);
   const [mapReady, setMapReady] = useState(false);
+  const theme = useTheme();
   const [sector, setSector] = useState('water_sanitation');
   const [adjusted, setAdjusted] = useState(false);
   const [weights, setWeights] = useState<Weights>(DEFAULT_WEIGHTS);
@@ -84,6 +83,8 @@ export default function Console() {
   }, [ranked, ds, sector]);
 
   const mapData = useMemo(() => {
+    const hex = QUADRANT_HEX_BY_THEME[theme];
+    const ground = MAP_GROUND[theme];
     const m = new Map<string, MapDatum>();
     if (!ranked.length) return m;
     const max = ranked[0].p || 1;
@@ -96,7 +97,7 @@ export default function Console() {
       // rendering of it would be a design failure, not a neutral choice.
       const boost = row.quadrant === 'silent_need' ? 1.55 : 1;
       m.set(row.code, {
-        colour: rampColour(QUADRANT_HEX[row.quadrant], v, boost),
+        colour: rampColour(hex[row.quadrant], v, boost, ground),
         q: row.quadrant,
         visible: onQuads.has(row.quadrant),
       });
@@ -106,11 +107,11 @@ export default function Console() {
     // rendering gap.
     ds?.rows.forEach((r) => {
       if (r.sector === sector && !r.has_deficit) {
-        m.set(r.code, { colour: QUADRANT_HEX.no_data, q: 'no_data', visible: true });
+        m.set(r.code, { colour: hex.no_data, q: 'no_data', visible: true });
       }
     });
     return m;
-  }, [ranked, onQuads, ds, sector]);
+  }, [ranked, onQuads, ds, sector, theme]);
 
   const visibleRank = useMemo(
     () => ranked.filter(({ row }) => onQuads.has(row.quadrant)),
@@ -159,6 +160,7 @@ export default function Console() {
           Citizen-signal infrastructure prioritisation · 594 districts · 5 sectors
         </div>
         <div className="masthead-right">
+          <ThemeToggle />
           <Link href="/report" className="btn-ghost">
             Citizen intake ↗
           </Link>
@@ -197,6 +199,7 @@ export default function Console() {
       <div className="body">
         <div className="stage">
           <ChoroplethMap
+            theme={theme}
             data={mapData}
             selected={selected}
             onHover={setHover}

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import ThemeToggle from '@/components/ThemeToggle';
 import './report.css';
 
 type DistrictEntry = { code: string; name: string };
@@ -270,9 +271,12 @@ export default function Report() {
           <b className="display">CIVOS</b>
           <span className="instance mono">IN</span>
         </div>
-        <Link href="/console" className="btn-ghost">
-          Console ↗
-        </Link>
+        <div className="intake-head-right">
+          <ThemeToggle />
+          <Link href="/console" className="btn-ghost">
+            Console ↗
+          </Link>
+        </div>
       </header>
 
       <main className="intake-main">

@@ -1759,87 +1759,13 @@ body:has(.lp) {
 }
 
 /* ==========================================================================
-   LIGHT THEME
+   LIGHT THEME — landing-page specifics
    --------------------------------------------------------------------------
-   Scoped to `:root[data-theme='light']:has(.lp)` on purpose. The tokens are
-   redefined at :root so `body`'s own background (set in globals.css) follows,
-   but the `:has(.lp)` guard means the selector cannot match on /console or
-   /report — neither of which is designed for a light ground, and the console
-   least of all: its dark basemap and its "Silent Need is the only element
-   permitted to glow" premise both depend on it.
-
-   This is NOT a mechanical inversion. Two things had to be redrawn by hand:
-
-   1. The quadrant hues. --q-silent #f3c14b measures ~1.6:1 on a cream ground —
-      inverting the greys alone would have made the single most important signal
-      in the product unreadable. Every hue below is re-picked to clear WCAG AA
-      (≥4.5:1) as text on the light ground:
-         q-act    #b83a17  ≈ 5.1:1
-         q-silent #8a6410  ≈ 4.7:1
-         q-gap    #10647d  ≈ 5.8:1
-         q-stable #5a6472  ≈ 4.9:1
-
-   2. Emphasis. Glow does not exist on paper, so Silent Need earns its focus
-      through a solid tinted fill and a heavier border instead of a halo.
+   The palette itself now lives in globals.css at :root[data-theme='light'], so
+   the console and the citizen intake share it. Only the values this page wrote
+   as literals — translucent chrome, atmospheric washes, shadows — need
+   restating here.
    ========================================================================== */
-
-:root[data-theme='light']:has(.lp) {
-  /* -- ground: warm paper, lightest surface ------------------------------- */
-  --ink-900: #f4efe3;
-
-  /* Surfaces read as *offset from ground*, same as the dark theme — but the
-     direction of that offset depends on the job. Panels lift toward white;
-     fills and tracks press down into the paper. */
-  --ink-800: #fbf8f1;
-  --ink-700: #ffffff;
-  --ink-600: #e7e0d1;
-  --ink-500: #cfc6b3;
-
-  /* -- ink on paper ------------------------------------------------------- */
-  /* Steps chosen for measured contrast, not even lightness spacing, so the
-     dimmest tier still clears AA rather than merely looking like hierarchy.
-       paper   ≈ 14:1   paper-2 ≈ 8.7:1
-       paper-3 ≈ 6.2:1  paper-4 ≈ 4.8:1 */
-  --paper: #16202b;
-  --paper-2: #333d4a;
-  --paper-3: #4a5462;
-  --paper-4: #5d6675;
-
-  /* -- rules & calibration ------------------------------------------------ */
-  --rule: rgba(22, 32, 43, 0.14);
-  --rule-strong: rgba(22, 32, 43, 0.28);
-  --tick: rgba(22, 32, 43, 0.3);
-
-  /* -- quadrants ---------------------------------------------------------- */
-  --q-act: #b83a17;
-  --q-silent: #8a6410;
-  --q-gap: #10647d;
-  --q-stable: #5a6472;
-
-  --q-act-dim: rgba(184, 58, 23, 0.11);
-  --q-silent-dim: rgba(138, 100, 16, 0.13);
-  --q-gap-dim: rgba(16, 100, 125, 0.11);
-  --q-stable-dim: rgba(90, 100, 114, 0.12);
-
-  --gold: #8a6410;
-  --alarm: #b83a17;
-
-  --q-nodata: #9aa2ad;
-}
-
-/* Grain: the dark theme's `overlay` blend lifts a dark ground, but on paper it
-   only muddies. `multiply` at a lower opacity gives the same tooth. */
-:root[data-theme='light'] body:has(.lp)::after {
-  mix-blend-mode: multiply;
-  opacity: 0.32;
-}
-
-:root[data-theme='light'] .lp ::selection {
-  background: var(--gold);
-  color: #fff;
-}
-
-/* -- surfaces that had hardcoded dark rgba -------------------------------- */
 
 :root[data-theme='light'] .lp-nav[data-stuck='true'] {
   background: rgba(244, 239, 227, 0.86);
@@ -1915,49 +1841,6 @@ body:has(.lp) {
    so the polarity scanners expect is preserved in both themes. */
 .lp-tg-qr {
   background: #ece5d8;
-}
-
-/* ==========================================================================
-   Theme toggle
-   ========================================================================== */
-
-.lp-theme {
-  width: 34px;
-  height: 34px;
-  flex: none;
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--rule-strong);
-  background: none;
-  color: var(--paper-2);
-  cursor: pointer;
-  padding: 0;
-  transition: background 0.2s var(--ease), color 0.2s var(--ease),
-    border-color 0.2s var(--ease);
-}
-
-.lp-theme:hover {
-  background: var(--paper);
-  color: var(--ink-900);
-  border-color: var(--paper);
-}
-
-.lp-theme svg {
-  display: block;
-}
-
-/* Both icons ship in the markup and CSS picks one, so the button never renders
-   the wrong glyph for a frame before hydration catches up. */
-.lp-theme .t-moon {
-  display: none;
-}
-
-:root[data-theme='light'] .lp-theme .t-sun {
-  display: none;
-}
-
-:root[data-theme='light'] .lp-theme .t-moon {
-  display: block;
 }
 
 /* ==========================================================================

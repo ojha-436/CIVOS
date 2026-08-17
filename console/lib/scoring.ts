@@ -73,6 +73,11 @@ export function formatINR(n: number): string {
  * the bottom of the distribution recede into the map while the top burns through,
  * which is the only part a minister acts on.
  */
+/* The argument above is ground-relative, not dark-specific: mixing toward
+ * whatever the map ground happens to be is what makes the bottom of the
+ * distribution recede. So the ground is a parameter, and the light theme passes
+ * its paper instead of this ink. Defaulted so existing callers are unaffected.
+ * Both values live in lib/theme.ts MAP_GROUND. */
 const GROUND: [number, number, number] = [13, 18, 25];
 
 function hexToRgb(hex: string): [number, number, number] {
@@ -80,11 +85,16 @@ function hexToRgb(hex: string): [number, number, number] {
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
 }
 
-export function rampColour(hex: string, v: number, boost = 1): string {
+export function rampColour(
+  hex: string,
+  v: number,
+  boost = 1,
+  ground: [number, number, number] = GROUND,
+): string {
   // Steep gamma: without it the middle of the distribution dominates the frame.
   const t = Math.min(1, Math.pow(Math.max(v, 0), 2.1) * boost);
   const [r, g, b] = hexToRgb(hex);
-  const mix = (c: number, i: number) => Math.round(GROUND[i] + (c - GROUND[i]) * (0.06 + t * 0.94));
+  const mix = (c: number, i: number) => Math.round(ground[i] + (c - ground[i]) * (0.06 + t * 0.94));
   return `rgb(${mix(r, 0)},${mix(g, 1)},${mix(b, 2)})`;
 }
 

@@ -34,6 +34,40 @@
   font-size: 21px;
 }
 
+.intake-head-right {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+/* ==========================================================================
+   LIGHT THEME — the three literals the tokens could not reach
+   --------------------------------------------------------------------------
+   Everything else on this page is already token-driven and follows the palette
+   in globals.css on its own. These three are hand-written gradients.
+   ========================================================================== */
+
+/* The ground's top-lit wash: a lift toward light on a dark ground, so on paper
+   the equivalent gesture is a lift toward white rather than a darkening. */
+:root[data-theme='light'] .intake {
+  background: radial-gradient(120% 80% at 50% -10%, #fffdf7 0%, var(--ink-900) 58%);
+}
+
+/* The microphone. On dark it is a lit dome — lighter at the top, receding into
+   the ground. Inverting that literally would make a grey hole in the paper, so
+   on light it is a raised paper dome with a soft ink shadow instead. */
+:root[data-theme='light'] .mic {
+  background: radial-gradient(circle at 50% 34%, #ffffff, var(--ink-600));
+  box-shadow: 0 6px 18px rgba(22, 32, 43, 0.1);
+}
+
+/* Recording. The dark theme uses a deep ember; on paper the same alarm reads as
+   a warm blush, since a dark red disc would look like a hole rather than a
+   live state. */
+:root[data-theme='light'] .mic[data-rec='true'] {
+  background: radial-gradient(circle at 50% 34%, #f7ded4, #e9c3b4);
+}
+
 .intake-main {
   width: 100%;
   max-width: 460px;

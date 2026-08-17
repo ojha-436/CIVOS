@@ -57,6 +57,72 @@
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* ============================================================================
+   LIGHT THEME
+   ----------------------------------------------------------------------------
+   Applies to every surface — console, citizen intake and landing page — because
+   an accessibility affordance that only exists on the marketing page is not an
+   accessibility affordance.
+
+   This is NOT a mechanical inversion. Two things had to be redrawn by hand:
+
+   1. The quadrant hues. --q-silent #f3c14b measures ~1.6:1 on a cream ground, so
+      inverting the greys alone would have left the single most important signal
+      in the product unreadable. Each hue is re-picked and measured against the
+      light ground:
+         q-act    #b83a17  ≈ 5.0:1
+         q-silent #8a6410  ≈ 4.7:1
+         q-gap    #10647d  ≈ 5.8:1
+         q-stable #5a6472  ≈ 5.2:1
+
+   2. Emphasis. The dark theme's premise is that Silent Need is "the only element
+      permitted to glow". Glow does not exist on paper — a halo there just blurs
+      an edge — so on light, Silent Need earns the same primacy through a solid
+      tinted fill and a heavier border instead.
+
+   `lib/theme.ts` mirrors these hues for the choropleth, which is painted in JS.
+   The map and the legend beside it must never disagree about what Silent Need
+   looks like, so those two lists are kept in step deliberately.
+   ========================================================================== */
+
+:root[data-theme='light'] {
+  /* -- ground: warm paper. Surfaces read as *offset from ground*, same as the
+     dark theme, but the direction depends on the job: panels lift toward white,
+     fills and tracks press down into the paper. --------------------------- */
+  --ink-900: #f4efe3;
+  --ink-800: #fbf8f1;
+  --ink-700: #ffffff;
+  --ink-600: #e7e0d1;
+  --ink-500: #cfc6b3;
+
+  /* -- ink on paper. Steps chosen for measured contrast rather than even
+     lightness spacing, so even the dimmest tier clears AA instead of merely
+     looking like hierarchy: 14.4 / 9.6 / 6.7 / 5.1. ----------------------- */
+  --paper: #16202b;
+  --paper-2: #333d4a;
+  --paper-3: #4a5462;
+  --paper-4: #5d6675;
+
+  --rule: rgba(22, 32, 43, 0.14);
+  --rule-strong: rgba(22, 32, 43, 0.28);
+  --tick: rgba(22, 32, 43, 0.32);
+
+  --q-act: #b83a17;
+  --q-silent: #8a6410;
+  --q-gap: #10647d;
+  --q-stable: #5a6472;
+
+  --q-act-dim: rgba(184, 58, 23, 0.11);
+  --q-silent-dim: rgba(138, 100, 16, 0.13);
+  --q-gap-dim: rgba(16, 100, 125, 0.11);
+  --q-stable-dim: rgba(90, 100, 114, 0.12);
+
+  --gold: #8a6410;
+  --alarm: #b83a17;
+
+  --q-nodata: #9aa2ad;
+}
+
 *,
 *::before,
 *::after {
@@ -1339,6 +1405,151 @@ input[type='range']::-moz-range-thumb {
 
 .maplibregl-canvas:focus {
   outline: none;
+}
+
+/* ==========================================================================
+   LIGHT THEME — surfaces the tokens could not reach
+   --------------------------------------------------------------------------
+   Everything below is a value that was written as a literal dark colour rather
+   than a token, so it cannot follow the palette on its own. Grouped here rather
+   than scattered inline so the light theme is auditable in one place.
+   ========================================================================== */
+
+/* Grain: `overlay` lifts a dark ground but only muddies paper. `multiply` at a
+   lower opacity gives the same tooth without the grey cast. */
+:root[data-theme='light'] body::after {
+  mix-blend-mode: multiply;
+  opacity: 0.3;
+}
+
+/* -- map stage & shell ----------------------------------------------------- */
+
+:root[data-theme='light'] .stage {
+  background: radial-gradient(120% 90% at 42% 34%, #fffdf7 0%, var(--ink-900) 62%);
+}
+
+/* -- floating overlays: were translucent near-black -------------------------- */
+
+:root[data-theme='light'] .legend {
+  background: rgba(251, 248, 241, 0.88);
+}
+
+:root[data-theme='light'] .readout {
+  background: rgba(251, 248, 241, 0.94);
+}
+
+/* Shadows on paper must come from tinted ink. Pure black over a warm ground
+   reads as grey dirt rather than depth. */
+:root[data-theme='light'] .drawer-scrim {
+  background: rgba(22, 32, 43, 0.28);
+}
+
+:root[data-theme='light'] .drawer {
+  box-shadow: 0 -24px 56px rgba(22, 32, 43, 0.16);
+}
+
+:root[data-theme='light'] .dossier-scrim {
+  background: rgba(22, 32, 43, 0.42);
+}
+
+:root[data-theme='light'] .dossier-modal {
+  box-shadow: 0 24px 64px rgba(22, 32, 43, 0.2);
+}
+
+/* -- the priority scale bar ------------------------------------------------
+   The dark ramp ran ink → dull gold → gold, i.e. it got *brighter* with
+   priority. On paper the equivalent gesture is to get darker and more saturated,
+   so the ramp is rebuilt rather than recoloured. */
+:root[data-theme='light'] .scale-bar {
+  background: linear-gradient(
+    90deg,
+    #e7e0d1 0%,
+    #cbbe95 34%,
+    #ab8a3a 68%,
+    var(--q-silent) 100%
+  );
+}
+
+/* -- MapLibre's own chrome ------------------------------------------------- */
+
+:root[data-theme='light'] .maplibregl-ctrl-group {
+  background: rgba(251, 248, 241, 0.9) !important;
+}
+
+/* The control icons ship as dark SVGs. The dark theme inverts them to read on
+   near-black; on paper they are already correct, so inverting would hide them. */
+:root[data-theme='light'] .maplibregl-ctrl-group button span {
+  filter: opacity(0.62);
+}
+
+:root[data-theme='light'] .maplibregl-ctrl-group button:hover span {
+  filter: opacity(1);
+}
+
+/* -- glows -----------------------------------------------------------------
+   Every box-shadow halo in this stylesheet exists to make a small mark read
+   against a dark ground. On paper a halo only softens the edge and costs the
+   shape its definition, so they all come off and the colour carries alone. */
+:root[data-theme='light'] .dot,
+:root[data-theme='light'] .q-row.silent .q-swatch,
+:root[data-theme='light'] input[type='range']:hover::-webkit-slider-thumb,
+:root[data-theme='light'] input[type='range']:focus-visible::-webkit-slider-thumb {
+  box-shadow: none;
+}
+
+/* -- evidence tile hatch --------------------------------------------------- */
+
+:root[data-theme='light'] .ev::before {
+  opacity: 0.75;
+}
+
+/* -- boot sweep ------------------------------------------------------------ */
+
+:root[data-theme='light'] .sweep {
+  background: var(--ink-600);
+}
+
+/* ==========================================================================
+   Theme toggle — shared by console, intake and landing
+   ========================================================================== */
+
+.theme-toggle {
+  width: 30px;
+  height: 30px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--rule-strong);
+  background: none;
+  color: var(--paper-2);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.18s var(--ease), color 0.18s var(--ease),
+    border-color 0.18s var(--ease);
+}
+
+.theme-toggle:hover {
+  background: var(--paper);
+  color: var(--ink-900);
+  border-color: var(--paper);
+}
+
+.theme-toggle svg {
+  display: block;
+}
+
+/* Both glyphs are in the markup; CSS chooses. Nothing to get out of sync with
+   the pre-hydration attribute. */
+.theme-toggle .t-moon {
+  display: none;
+}
+
+:root[data-theme='light'] .theme-toggle .t-sun {
+  display: none;
+}
+
+:root[data-theme='light'] .theme-toggle .t-moon {
+  display: block;
 }
 
 /* -- no-data disclosure ---------------------------------------------------- */
