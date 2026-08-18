@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import ThemeToggle from '@/components/ThemeToggle';
+import RequireAuth from '@/components/RequireAuth';
+import AccountMenu from '@/components/AccountMenu';
 import './report.css';
 
 type DistrictEntry = { code: string; name: string };
@@ -77,7 +79,7 @@ const SECTORS = [
   { key: 'education',        label: 'Education',          emoji: '📚' },
 ];
 
-export default function Report() {
+function ReportInner() {
   const [recording, setRecording] = useState(false);
   const [seconds, setSeconds] = useState(0);
   const [atts, setAtts] = useState<Attachment[]>([]);
@@ -272,6 +274,7 @@ export default function Report() {
           <span className="instance mono">IN</span>
         </Link>
         <div className="intake-head-right">
+          <AccountMenu />
           <ThemeToggle />
           <Link href="/console" className="btn-ghost">
             Console ↗
@@ -289,7 +292,16 @@ export default function Report() {
             </h1>
             <p className="ask-sub rise d1">
               Speak in any language. Or photograph the problem. There is no form and
-              nothing to install.
+              nothing to install. Prefer not to sign in?{' '}
+              <a
+                href="https://t.me/Civos_in_bot"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: 'var(--paper-2)', textUnderlineOffset: 2 }}
+              >
+                report on Telegram
+              </a>{' '}
+              — that channel needs no account.
             </p>
 
             <div className="mic-zone rise d2">
@@ -543,5 +555,19 @@ export default function Report() {
         </div>
       </div>
     </div>
+  );
+}
+
+
+/* Gated by product decision, 18 Aug 2026. Worth naming the trade-off rather than
+   burying it: a login is a barrier, and this product's whole argument is that
+   barriers exclude the citizens it exists to reach. The accessibility floor now
+   runs through Telegram (@Civos_in_bot), which needs no CIVOS account, and the
+   landing-page copy says so instead of claiming the web form needs none. */
+export default function Report() {
+  return (
+    <RequireAuth>
+      <ReportInner />
+    </RequireAuth>
   );
 }

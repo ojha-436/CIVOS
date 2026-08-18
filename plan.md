@@ -20,11 +20,24 @@ Lock this first. It is not a marketing artefact, it is the build spec. If a feat
 | 0:00–0:20 | **The gap.** Millions of grievances filed last year. None of them moved a budget line. | Deck slide only |
 | 0:20–0:50 | **Live voice intake.** You speak a complaint in an Indian language. Structured JSON appears: sector, severity, district, original + English. | P0-1, P0-4, P0-5 |
 | 0:50–1:10 | **Live photo intake.** Photograph a broken thing. Vision returns asset type, condition flags, severity — *and the district, from EXIF, exactly.* One line of narration: *"a voice note is a claim; a photo is evidence."* | P0-1, P0-4, P0-6, P0-8 |
-| 1:10–1:45 | **Zoom out.** 3,000 signals on a district choropleth. *"Here's what's wrong with this map."* Every hotspot is a well-connected district. | P0-7, P0-11 |
-| 1:45–2:30 | **The turn.** Flip to equity-adjusted. New districts light up. *"These have the worst deficit and have never filed a single request. Silence isn't satisfaction."* | P0-9, P0-10, quadrant view |
+| 1:10–1:45 | **Zoom out.** A national synthetic corpus on a 641-district choropleth. *"Here's what's wrong with this map."* Every hotspot is a well-connected district. | P0-7, P0-11 |
+| 1:45–2:30 | **The turn.** Flip to equity-adjusted. New districts light up. *"These have the worst measured deficit and a fraction of the requests their deprivation predicts. Silence isn't satisfaction."* | P0-9, P0-10, quadrant view |
 | 2:30–3:10 | **The dossier.** Click a Silent Need district → generated dossier with the evidence photo strip. Citations to signal clusters, images, and dataset rows. Cost band. Named scheme. | P0-12, P0-13 |
 | 3:10–3:35 | **Country flip.** `CIVOS-IN` → `CIVOS-ZA`. Same code, different adapter, real data, new language. | P1-2 (or P0-14 + adapter guide as fallback) |
 | 3:35–4:00 | **Close.** Loop 3 before/after image pair, DPGA compliance, repo, adapter spec. | P1-5, P1-7 |
+
+> **Two narration lines were corrected on 18 Aug 2026, against the data rather than for style.**
+>
+> The turn used to say Silent Need districts *"have never filed a single request."*
+> That is false: of the 154 Silent Need district-sectors in Water & Sanitation, **none
+> has zero signals** and the median has **128**. A judge who clicks one sees that
+> number. The replacement — *"a fraction of the requests their deprivation predicts"* —
+> is both true and checkable on screen, which is the stronger claim anyway.
+>
+> The zoom-out used to say *"3,000 signals"*. The generated corpus is 2,537 signals, but
+> the fixture the console renders models warehouse output at national scale, so the
+> district counts on screen total far more than 3,000. Naming no number avoids a
+> contradiction a viewer could catch by reading the rail.
 
 **Film as you build.** Screen-record each feature the day it lands. Day 9 then becomes editing, not filming — the difference between a finished video and a rushed one. For the 0:50 photo beat, shoot the real footage on your phone the day the widget works, not on submission day.
 

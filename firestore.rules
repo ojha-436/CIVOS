@@ -1,0 +1,38 @@
+rules_version = '2';
+
+/* CIVOS Firestore security rules.
+ *
+ * This file is the ONLY thing actually protecting profile data. The route guard
+ * in console/components/RequireAuth.tsx controls the UI; it does not control the
+ * database, and anyone can call Firestore directly with the public web config.
+ * So the rule is written to be restrictive by default and to fail closed.
+ *
+ * Deployed with scripts/deploy_firestore_rules.py.
+ */
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /* A profile belongs to exactly one account and is readable and writable by
+       nobody else — not even another signed-in user. `uid` in the path must equal
+       the caller's own uid. */
+    match /profiles/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow create, update: if request.auth != null
+                            && request.auth.uid == uid
+                            && request.resource.data.keys().hasOnly([
+                                 'fullName', 'role', 'organisation',
+                                 'state', 'district', 'phone', 'updatedAt'
+                               ]);
+      /* Deletion is not offered in the UI, so it is not permitted here either.
+         A rule broader than the product needs is an attack surface for free. */
+      allow delete: if false;
+    }
+
+    /* Everything else is denied. Citizen signals deliberately do NOT live in
+       Firestore: SPEC §11 keeps them in the warehouse with k-anonymity applied
+       inside it, so no client can route around the suppression. */
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

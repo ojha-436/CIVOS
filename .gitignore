@@ -6,6 +6,7 @@ uv.lock
 
 node_modules/
 .next/
+*.tsbuildinfo
 out/
 
 .env

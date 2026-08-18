@@ -172,11 +172,14 @@ npm install
 npm run dev          # http://localhost:3000
 ```
 
-| Route | What it is |
-|---|---|
-| **`/`** | **Landing** — what CIVOS is, the participation-bias argument, the three loops, and the Telegram channel |
-| **`/console`** | **Policymaker console** — 641 real districts, quadrant choropleth, live weight sliders, drilldown dossier |
-| **`/report`** | **Citizen intake** — microphone, camera and text in one widget, mobile-first |
+| Route | What it is | Account |
+|---|---|---|
+| **`/`** | **Landing** — what CIVOS is, the participation-bias argument, the three loops, and the Telegram channel | public |
+| **`/login`** | **Sign in / sign up** — email + password, or Google SSO | — |
+| **`/profile`** | **Profile** — role, organisation, jurisdiction. Every field optional | signed in |
+| **`/console`** | **Policymaker console** — 641 real districts, quadrant choropleth, live weight sliders, drilldown dossier | **required** |
+| **`/report`** | **Citizen intake** — microphone, camera and text in one widget, mobile-first | **required** |
+| **Telegram** `@Civos_in_bot` | Same intake, voice · text · photo | **none** |
 
 <table>
 <tr>
@@ -661,6 +664,7 @@ intelligence layer lands, one fetch URL changes and nothing else does.
 | [docs/IMAGE-ATTRIBUTION.md](docs/IMAGE-ATTRIBUTION.md) | Per-image attribution for all 150 evidence photographs |
 | [docs/BOUNDARY-ATTRIBUTION.md](docs/BOUNDARY-ATTRIBUTION.md) | Boundary source, licence, and why GADM was replaced |
 | [docs/ROADS-INDICATOR.md](docs/ROADS-INDICATOR.md) | The roads indicator, its caveat, and the six sources rejected before it |
+| [docs/AUTH.md](docs/AUTH.md) | What is gated, the cost of gating it, and what actually protects the data |
 | [docs/FONT-ATTRIBUTION.md](docs/FONT-ATTRIBUTION.md) | Why the typefaces are vendored, and their OFL licensing |
 | [docs/GATE0-RESULT.md](docs/GATE0-RESULT.md) | Measured BigQuery capability, with the exact SQL and errors |
 | [docs/LANGUAGE-COVERAGE.md](docs/LANGUAGE-COVERAGE.md) | Measured language coverage, with provenance per tier |

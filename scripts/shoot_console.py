@@ -42,14 +42,48 @@ def main(
         except Exception:
             browser = pw.chromium.launch()
 
+        # ONE shared context, not a page per browser. /console and /report became
+        # gated on 18 Aug 2026, and a Firebase session lives in IndexedDB scoped to
+        # the context — a fresh page per frame would land on the login screen every
+        # time and the console frames would silently capture the wrong page.
+        ctx = browser.new_context(device_scale_factor=2)
+
+        def sign_in() -> None:
+            """Create a throwaway account so the gated frames can be captured.
+
+            Nothing is seeded and nothing persists past the run. A real reviewer
+            signs in as themselves; this exists only so the screenshot job is not
+            blocked by the gate it is meant to photograph.
+            """
+            import time as _t
+
+            page = ctx.new_page()
+            page.set_viewport_size({"width": 1280, "height": 900})
+            page.goto(f"{base}/login", wait_until="domcontentloaded")
+            page.wait_for_timeout(2600)
+            page.click("text=Sign up")
+            page.wait_for_timeout(700)
+            page.fill("#fullName", "Screenshot Session")
+            page.fill("#email", f"civos-shoot-{int(_t.time())}@example.com")
+            page.fill("#password", "civos-shoot-pw-2026")
+            page.click("button.auth-submit")
+            page.wait_for_timeout(8000)
+            if page.locator(".auth-tabs").count():
+                failures.append("could not sign in — gated frames would be wrong")
+            page.close()
+
         def shoot(name: str, path: str, w: int, h: int, prepare=None) -> None:
             if only and only != name:
                 return
-            page = browser.new_page(viewport={"width": w, "height": h}, device_scale_factor=2)
+            page = ctx.new_page()
+            page.set_viewport_size({"width": w, "height": h})
             errors: list[str] = []
             page.on("pageerror", lambda e: errors.append(str(e)))
-            page.goto(f"{base}{path}", wait_until="networkidle")
-            page.wait_for_timeout(1400)
+            # domcontentloaded, not networkidle: the Firebase SDK holds a
+            # long-lived connection open, so networkidle never fires and every
+            # goto() times out after 30s.
+            page.goto(f"{base}{path}", wait_until="domcontentloaded")
+            page.wait_for_timeout(4200)
             if prepare:
                 prepare(page)
             page.wait_for_timeout(900)
@@ -58,6 +92,11 @@ def main(
                 failures.append(f"{name}: js errors {errors[:2]}")
             console.print(f"  [green]shot[/green] {name}.png")
             page.close()
+
+        # The login screen is itself an artefact worth having in the deck.
+        shoot("login", "/login", 1280, 900, None)
+
+        sign_in()
 
         # -- console, raw demand -------------------------------------------
         def check_map(page):
@@ -142,6 +181,15 @@ def main(
                 failures.append("intake result did not render")
 
         shoot("intake-result", "/report", 430, 932, intake_result)
+
+        def profile(page):
+            if page.locator("#organisation").count() == 0:
+                failures.append("profile form did not render")
+            page.fill("#organisation", "Ministry of Jal Shakti")
+            page.select_option("#role", "District officer")
+            page.wait_for_timeout(500)
+
+        shoot("profile", "/profile", 1280, 900, profile)
 
         browser.close()
 

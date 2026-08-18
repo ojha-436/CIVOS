@@ -8,6 +8,8 @@ import { DEFAULT_WEIGHTS, WEIGHT_META, priority, formatCompact, rampColour } fro
 import { QUADRANTS, type Dataset, type QuadrantKey, type Weights } from '@/lib/types';
 import Drilldown from '@/components/Drilldown';
 import ThemeToggle from '@/components/ThemeToggle';
+import RequireAuth from '@/components/RequireAuth';
+import AccountMenu from '@/components/AccountMenu';
 import { useTheme, MAP_GROUND, QUADRANT_HEX_BY_THEME } from '@/lib/theme';
 import type { MapDatum } from '@/components/ChoroplethMap';
 
@@ -24,7 +26,7 @@ const QKEYS: QuadrantKey[] = ['act_now', 'silent_need', 'expectation_gap', 'stab
    the light set is re-picked rather than inverted, because #f3c14b on paper
    measures ~1.6:1 and Silent Need is the one mark that must never be faint. */
 
-export default function Console() {
+function ConsoleInner() {
   const [ds, setDs] = useState<Dataset | null>(null);
   const [mapReady, setMapReady] = useState(false);
   const theme = useTheme();
@@ -161,6 +163,7 @@ export default function Console() {
           Citizen-signal infrastructure prioritisation · 641 districts · 5 sectors
         </div>
         <div className="masthead-right">
+          <AccountMenu />
           <ThemeToggle />
           {/* The clickable wordmark is the convention, but an explicit control
               removes any doubt — the console is a deep page and there was no
@@ -482,5 +485,19 @@ export default function Console() {
         </aside>
       </div>
     </div>
+  );
+}
+
+
+/* Gated. The console shows district-level funding priorities, which a real
+   deployment would not leave open — and the citizen intake is gated too, by
+   product decision on 18 Aug 2026. The Telegram channel remains open to any
+   citizen with no CIVOS account, which is what keeps the accessibility argument
+   standing; see lib/auth.tsx. */
+export default function Console() {
+  return (
+    <RequireAuth>
+      <ConsoleInner />
+    </RequireAuth>
   );
 }

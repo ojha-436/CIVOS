@@ -95,6 +95,9 @@ export default function Landing() {
 
           <div className="lp-nav-right">
             <ThemeToggle />
+            <Link href="/login" className="lp-btn sm">
+              Sign in
+            </Link>
             <Link href="/report" className="lp-btn sm">
               Report a need
             </Link>
@@ -127,7 +130,7 @@ export default function Landing() {
             <p className="lp-hero-sub rise d3">
               CIVOS is a <strong>civic operating system</strong>. Citizens report what their
               area needs by <strong>speaking, typing or photographing it</strong> — in any
-              language, with no app to install. CIVOS merges the duplicates into distinct
+              language, with no app to install and, on Telegram, no account at all. CIVOS merges the duplicates into distinct
               needs, checks them against official deprivation data, corrects for the fact
               that the poorest districts complain the least, and emits a costed project
               dossier tied to a real government funding scheme.
@@ -389,9 +392,9 @@ export default function Landing() {
                 <h3>Voice</h3>
                 <p className="buys">Buys access</p>
                 <p>
-                  No literacy, no form, no knowing which department owns the problem. This
-                  is the only channel that reaches the exact citizens the system is most at
-                  risk of missing. Audio is transcribed and deleted immediately.
+                  No literacy, no form, no knowing which department owns the problem. On
+                  Telegram it needs no account either, which is what keeps this channel
+                  reachable by the citizens the system is most at risk of missing. Audio is transcribed and deleted immediately.
                 </p>
               </article>
 
@@ -464,9 +467,10 @@ export default function Landing() {
                   <div className="lp-tg-step">
                     <span className="sn">01</span>
                     <span className="sb">
-                      <b>Open the bot</b> — no CIVOS app to install, no account to create
-                      with us, no form. Telegram over WhatsApp because it needs no Meta
-                      business verification.
+                      <b>Open the bot</b> — no app to install, <b>no CIVOS account</b>, no form.
+                      This is the only channel with no sign-in: the web console and the web
+                      intake form both require one. Telegram over WhatsApp because it needs
+                      no Meta business verification.
                     </span>
                   </div>
                   <div className="lp-tg-step">
@@ -517,8 +521,8 @@ export default function Landing() {
                       <span className="lp-tg-qr-k">Scan to report</span>
                       <span className="lp-tg-qr-h mono">@{TELEGRAM_HANDLE}</span>
                       <p>
-                        Point a phone camera at this and the bot opens — the same intake the
-                        console reads from.
+                        Point a phone camera at this and the bot opens — the same intake the console
+                        reads from, and the one route into CIVOS that needs no account.
                       </p>
                       <a
                         className="lp-btn solid"

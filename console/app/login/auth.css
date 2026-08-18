@@ -1,0 +1,341 @@
+/* ============================================================================
+   Sign in / sign up / profile — "the credential card"
+   ----------------------------------------------------------------------------
+   Same Instrument language as the console: ink ground, hairline rules, mono
+   labels, Instrument Serif for the one large line. Gold is NOT used for chrome
+   here — it still means Silent Need everywhere else in this product, and spending
+   it on a submit button would break the one rule the design keeps absolutely.
+   ========================================================================== */
+
+.auth {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  background:
+    radial-gradient(120% 80% at 50% -10%, #131a24 0%, var(--ink-900) 58%);
+}
+
+:root[data-theme='light'] .auth {
+  background: radial-gradient(120% 80% at 50% -10%, #fffdf7 0%, var(--ink-900) 58%);
+}
+
+.auth-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.auth-head .wordmark b {
+  font-size: 22px;
+}
+
+.auth-head-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.auth-main {
+  display: grid;
+  place-items: center;
+  padding: 28px 20px 56px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 424px;
+  border: 1px solid var(--rule);
+  background: var(--ink-800);
+  padding: 30px 28px 26px;
+}
+
+:root[data-theme='light'] .auth-card {
+  box-shadow: 0 14px 40px rgba(22, 32, 43, 0.09);
+}
+
+.auth-card h1 {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  font-size: 33px;
+  line-height: 1.06;
+  letter-spacing: -0.018em;
+  margin: 0 0 8px;
+}
+
+.auth-sub {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--paper-3);
+  margin: 0 0 22px;
+}
+
+/* -- mode switch ----------------------------------------------------------- */
+
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--rule-strong);
+  background: var(--ink-900);
+  position: relative;
+  margin-bottom: 22px;
+  height: 40px;
+  overflow: hidden;
+}
+
+.auth-tabs::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 2px;
+  width: calc(50% - 3px);
+  background: var(--paper);
+  transition: transform 0.4s var(--ease-out);
+}
+
+.auth-tabs[data-mode='signup']::before {
+  transform: translateX(calc(100% + 2px));
+}
+
+.auth-tabs button {
+  position: relative;
+  z-index: 2;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+  transition: color 0.3s var(--ease);
+}
+
+.auth-tabs[data-mode='signin'] button:first-child,
+.auth-tabs[data-mode='signup'] button:last-child {
+  color: var(--ink-900);
+}
+
+/* -- fields ---------------------------------------------------------------- */
+
+.field {
+  margin-bottom: 15px;
+}
+
+.field label {
+  display: block;
+  font-family: var(--font-mono), monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--paper-4);
+  margin-bottom: 6px;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  border: 1px solid var(--rule-strong);
+  background: var(--ink-900);
+  color: var(--paper);
+  font-family: inherit;
+  font-size: 14px;
+  padding: 10px 12px;
+  transition: border-color 0.16s var(--ease);
+}
+
+.field input:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--paper-3);
+}
+
+.field input::placeholder {
+  color: var(--paper-4);
+}
+
+.field-hint {
+  font-size: 10.5px;
+  color: var(--paper-4);
+  margin-top: 5px;
+  line-height: 1.45;
+}
+
+/* -- actions --------------------------------------------------------------- */
+
+.auth-submit {
+  width: 100%;
+  border: 1px solid var(--paper);
+  background: var(--paper);
+  color: var(--ink-900);
+  font-family: var(--font-mono), monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 12px;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: filter 0.16s var(--ease), transform 0.14s var(--ease);
+}
+
+.auth-submit:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.auth-submit:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.auth-submit:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.auth-or {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0 16px;
+  font-family: var(--font-mono), monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--paper-4);
+}
+
+.auth-or::before,
+.auth-or::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--rule);
+}
+
+.auth-sso {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px solid var(--rule-strong);
+  background: none;
+  color: var(--paper);
+  font-family: inherit;
+  font-size: 13.5px;
+  padding: 11px;
+  cursor: pointer;
+  transition: background 0.16s var(--ease), border-color 0.16s var(--ease);
+}
+
+.auth-sso:hover:not(:disabled) {
+  background: var(--ink-700);
+  border-color: var(--paper-4);
+}
+
+.auth-sso:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.auth-alt {
+  margin-top: 18px;
+  padding-top: 15px;
+  border-top: 1px solid var(--rule);
+  font-size: 11.5px;
+  color: var(--paper-4);
+  line-height: 1.6;
+}
+
+.auth-alt a,
+.auth-link {
+  color: var(--paper-2);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  font: inherit;
+  padding: 0;
+}
+
+.auth-alt a:hover,
+.auth-link:hover {
+  color: var(--paper);
+}
+
+/* -- messages -------------------------------------------------------------- */
+
+.auth-msg {
+  border-left: 2px solid var(--alarm);
+  background: var(--q-act-dim);
+  padding: 10px 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--paper-2);
+  margin-bottom: 16px;
+}
+
+.auth-msg.ok {
+  border-left-color: var(--q-gap);
+  background: var(--q-gap-dim);
+}
+
+/* ==========================================================================
+   Profile
+   ========================================================================== */
+
+.profile-card {
+  max-width: 620px;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 16px;
+}
+
+@media (max-width: 560px) {
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.profile-id {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--rule);
+  background: var(--ink-700);
+  padding: 12px 14px;
+  margin-bottom: 22px;
+}
+
+.profile-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--ink-900);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 19px;
+  flex: none;
+}
+
+.profile-id .em {
+  font-size: 12.5px;
+  color: var(--paper-2);
+  word-break: break-all;
+}
+
+.profile-id .meta {
+  font-family: var(--font-mono), monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--paper-4);
+  margin-top: 2px;
+}
