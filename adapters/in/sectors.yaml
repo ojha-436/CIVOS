@@ -29,10 +29,27 @@ sectors:
     short: Roads
     sdg: [9, 11]
     indicator:
-      primary: pct_habitations_unconnected
-      label: Rural habitations without all-weather road connectivity
-      source: PMGSY / district statistics
-      year: 2023
+      # VILLAGES, not habitations. PMGSY counts habitations (a village may hold
+      # several); the Census Village Directory counts villages. The available open
+      # source is the Census, so the label names the unit actually measured —
+      # calling these habitations would misdescribe the data by a factor nobody
+      # could audit.
+      primary: pct_villages_no_pucca_road
+      label: Villages without a black-topped (pucca) road
+      source: Census 2011 Village Directory (MHA / ORGI)
+      year: 2011
+      # Disclosed because it is real and it matters. All ten Village Directory road
+      # columns were screened for state-level coding artefacts; this one is the
+      # cleanest, but coding still varies between states. Kerala reports 0.0% in
+      # all 14 districts, which is credible. Jharkhand's 1.7% median is not, for a
+      # state where PMGSY runs priority programmes, and Ballia and Mau in Uttar
+      # Pradesh both sit at 100%. Cross-state comparison on this sector is weaker
+      # than on the four NFHS-5 sectors, and the interface says so.
+      caveat: >
+        Census enumerators recorded this field inconsistently between states.
+        Within-state comparison is sound; cross-state comparison is weaker than for
+        the NFHS-5 sectors. Jharkhand in particular reads as better connected than
+        is plausible. See docs/ROADS-INDICATOR.md.
     schemes: [pmgsy, amrut]
     asset_types: [road_surface, culvert, bridge, bus_stop, footpath]
 

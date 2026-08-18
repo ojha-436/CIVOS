@@ -1818,3 +1818,28 @@ a.wordmark:focus-visible {
     grid-template-columns: 1fr 1fr;
   }
 }
+
+/* ==========================================================================
+   Sector-level caveat in the calibration strip
+   --------------------------------------------------------------------------
+   Only Roads & Transport carries one. It sits in the strip rather than in a
+   tooltip because the strip is the surface this product already uses for
+   permanent disclosure — a limitation that can be scrolled past or dismissed is
+   not disclosed, it is filed.
+   ========================================================================== */
+
+.strip-item.caveat {
+  max-width: 46ch;
+  color: var(--paper-4);
+}
+
+.strip-item.caveat b {
+  color: var(--q-silent);
+  font-weight: 500;
+}
+
+.strip-item.caveat span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

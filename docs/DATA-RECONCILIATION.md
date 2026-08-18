@@ -1,6 +1,6 @@
 # Deficit layer — provenance and reconciliation
 
-Built 2026-08-18 05:55 UTC. Regenerate with `uv run python scripts/build_deficit_layer.py`.
+Built 2026-08-18 06:04 UTC. Regenerate with `uv run python scripts/build_deficit_layer.py`.
 
 ## Source
 
@@ -73,7 +73,6 @@ Data Not Available (Jammu & Kashmir), East Jaintia Hills (Meghalaya), North Garo
 | Health Facilities | Births not delivered in a health facility | ✅ real, NFHS-5 2021 |
 | Education | Females age 6+ who never attended school | ✅ real, NFHS-5 2021 |
 
-**roads_transport** has no NFHS-5 equivalent — road connectivity is not a health-survey indicator. It needs PMGSY habitation-connectivity data, which is not loaded. The sector is left visibly empty rather than filled with a proxy: plan.md's rule is that two real sectors beat five mangled ones.
 
 ## Deficit direction
 

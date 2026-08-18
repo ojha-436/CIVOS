@@ -1,11 +1,25 @@
-# Roads & Transport — why the sector is empty
+# Roads & Transport — the indicator, and the six sources rejected first
 
-**Investigated 17 Aug 2026. Conclusion: the indicator CIVOS wants does not exist in
-any open dataset that could be found, and deriving it ourselves would be worse than
-leaving the gap.**
+**Status as of 18 Aug 2026: LOADED, with a disclosed limitation.**
 
-Recorded because a disclosed gap with a reason behind it is evidence of judgement,
-whereas an undisclosed one is just a hole.
+Indicator: **villages without a black-topped (pucca) road**, Census 2011 Village
+Directory (Ministry of Home Affairs / Office of the Registrar General), **617
+districts**, national median **27.7%**.
+
+This document is kept in full — including everything that was rejected — because
+the rejections are the reasoning. Six sources were checked and two candidate
+indicators were discarded on evidence before this one was accepted, and the
+accepted one ships with a caveat on screen rather than a clean claim.
+
+**The limitation, stated first.** Census enumerators recorded this field
+inconsistently between states. Within-state comparison is sound. Cross-state
+comparison is weaker than for the four NFHS-5 sectors: Kerala reports 0.0% across
+all 14 districts, which is credible for a state with near-universal paved access,
+but **Jharkhand's 1.7% median is not credible** for a state where PMGSY runs
+priority programmes, and Ballia and Mau in Uttar Pradesh both sit at 100%. That
+caveat is carried in `adapters/in/sectors.yaml`, shown permanently in the console's
+calibration strip whenever the sector is active, and stated in every dossier that
+cites the sector.
 
 ## What the sector asks for
 

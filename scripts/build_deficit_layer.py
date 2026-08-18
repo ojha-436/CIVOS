@@ -445,7 +445,7 @@ def main(
 
         # -- Roads & Transport, from a different source -------------------------
         # NFHS is a health survey and carries no road indicator (all 105 scanned,
-        # zero matches — see docs/ROADS-SECTOR-GAP.md). The roads deficit comes
+        # zero matches — see docs/ROADS-INDICATOR.md). The roads deficit comes
         # from the Census 2011 Village Directory instead, built separately by
         # scripts/build_roads_layer.py because it is 631 district CSVs rather than
         # one extraction. Appended here so every sector lands in one table with its
@@ -461,7 +461,7 @@ def main(
         # CIVOS ranks districts nationally against per-sector medians, so consuming
         # this would drive the ranking with a state-level enumeration artefact —
         # the exact "measurement bias distorts funding" failure the product exists
-        # to correct. See docs/ROADS-SECTOR-GAP.md for the full evidence.
+        # to correct. See docs/ROADS-INDICATOR.md for the full evidence.
         #
         # The layer is kept, and the flag is kept, because the finding is worth
         # more than the file: if a comparably-coded column or source turns up, this
@@ -491,7 +491,7 @@ def main(
             console.print(
                 "\n[yellow]Roads & Transport layer present but NOT loaded[/yellow] — the Census "
                 "all-weather-road field is not comparably coded across states. Pass --with-roads "
-                "to override; see docs/ROADS-SECTOR-GAP.md."
+                "to override; see docs/ROADS-INDICATOR.md."
             )
 
     # -- participation capacity ---------------------------------------------

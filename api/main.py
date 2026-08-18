@@ -280,12 +280,21 @@ async def dossier_endpoint(request: dict):
         population_affected = request.get("population_affected", 0)
         evidence_strength = request.get("evidence_strength", 0.0)
         source = request.get("source", "NFHS-5 2019-21")
+        # Sector-level limitation, if the sector has one. Only Roads & Transport
+        # does: its Census field is coded inconsistently between states.
+        sector_caveat = (request.get("sector_caveat") or "").strip()
 
         quote_text = "\n".join([
             f'[Q{i+1}] ({q.get("lang", "")}) "{q.get("original", "")}" → "{q.get("english", "")}"'
             for i, q in enumerate(quotes)
         ])
         asset_text = ", ".join([f'{a.get("type","").replace("_"," ")} ({a.get("flag","")})' for a in assets])
+
+        caveat_line = (
+            f"- DEFICIT CAVEAT — you MUST state this in the caveats section: {sector_caveat}"
+            if sector_caveat
+            else "- Deficit caveat: none"
+        )
 
         bundle_prompt = f"""You are generating a project dossier for a government policymaker in India.
 Generate ONLY from the evidence bundle below — do NOT invent claims, statistics, or quotes.
@@ -298,6 +307,7 @@ EVIDENCE BUNDLE:
 - Priority score: {priority_score:.1f}/100
 - Citizen signals: {signals} (from {needs} distinct needs, in {languages} language(s), {images} with photos)
 - Official deficit: {deficit:.1f}% ({source})
+{caveat_line}
 - Population affected (est.): {population_affected:,}  [DERIVED FROM A PLACEHOLDER DISTRICT POPULATION — NOT A CENSUS COUNT]
 - 90-day demand trend: {forecast_direction}
 - Evidence strength (share of needs with photos): {evidence_strength:.1f}%
@@ -317,6 +327,8 @@ Generate 3-4 paragraphs:
    - the evidence photographs are real and openly licensed
    - the population-affected figure derives from a placeholder district
      population, not a census count
+   - if a DEFICIT CAVEAT is given above, state it plainly here, and do not
+     describe that sector's deficit as being as reliable as it would be without it
 
 If you cite the population-affected figure anywhere above, attach that caveat to
 it there too. A dossier is attached to funding requests and audited; a number

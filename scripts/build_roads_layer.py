@@ -2,7 +2,7 @@
 
 Closes the one sector that had no real indicator. Four of five sectors come from
 NFHS-5; road connectivity has no health-survey equivalent, so it needed its own
-source. `docs/ROADS-SECTOR-GAP.md` records the six sources checked before this one
+source. `docs/ROADS-INDICATOR.md` records the six sources checked before this one
 and the two that were rejected on principle.
 
 Source
@@ -25,12 +25,37 @@ CC BY-NC-SA, and an NC layer would break DPGA indicator 2 and restrict what a
 ministry could do with the output. Going to the authoritative source keeps the
 licence clean.
 
-The indicator
--------------
-Column **"All Weather Road (Status A(1)/NA(2))"** per village: 1 = available,
-2 = not available, blank = not recorded.
+The indicator, and the one that was rejected
+--------------------------------------------
+Column **"Black Topped (pucca) Road (Status A(1)/NA(2))"** per village:
+1 = available, 2 = not available, blank = not recorded.
 
     deficit_pct = 100 × villages with status 2 / villages with a recorded status
+
+**"All Weather Road" was tested first and rejected.** All ten road columns were
+captured for 628 districts and screened for state-level coding artefacts — a state
+where every district lands within 1 percentage point of the others, which is a
+coding convention rather than a physical fact. Results:
+
+    National Highway            median 93.9%   0 flat states
+    State Highway               median 84.1%   0
+    Other District Road         median 44.0%   0
+    Black Topped (pucca) Road   median 27.5%   1  (Kerala)   <- chosen
+    All Weather Road            median 25.2%   3  (Kerala, Haryana, Andhra Pradesh)
+    Footpath                    median  0.0%  13
+
+Highway presence is not a connectivity measure — most villages legitimately have no
+highway on them. Pucca-road presence is the standard proxy and shows real internal
+spread in almost every state (Assam 60.8–99.6, Uttar Pradesh 7.1–100.0, Bihar
+2.6–77.8, Jammu & Kashmir 15.4–87.7).
+
+**Known limitation, disclosed rather than hidden.** Coding is still not perfectly
+comparable across states. Kerala reports 0.0% in all 14 districts, which is
+credible — it has near-universal paved access. **Jharkhand's median of 1.7% is
+not** credible for a state where PMGSY runs priority programmes, and Ballia and Mau
+in Uttar Pradesh both sit at 100%. The caveat travels with the data: it is written
+into the indicator label, surfaced in the console, and stated in every dossier that
+cites the sector.
 
 A straight aggregation of an official categorical field — the same operation as
 "% households without electricity" from NFHS-5. No spatial analysis, no buffers, no
@@ -77,7 +102,15 @@ UA = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
     "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
 )
-ROAD_COL = "All Weather Road"        # matched by prefix; full name carries a suffix
+# All road columns are captured so the choice of indicator can be revisited without
+# re-downloading 628 files (~760 MB from a slow government host).
+ROAD_COLS = (
+    "National Highway", "State Highway", "Major District Road", "Other District Road",
+    "Black Topped (pucca) Road", "Gravel (kuchha) Roads", "Water Bounded Macadam",
+    "All Weather Road", "Navigable Waterways", "Footpath",
+)
+DEFAULT_COL = "Black Topped (pucca) Road"
+COLUMN_CACHE = "road_columns.json"
 
 console = Console()
 app = typer.Typer(add_completion=False)
@@ -174,128 +207,134 @@ def list_resources() -> list[dict]:
 
 @app.command()
 def main(
-    keep_raw: bool = typer.Option(False, "--keep-raw", help="Cache the CSVs (~760 MB)"),
+    column: str = typer.Option(DEFAULT_COL, "--column", help="Which road column to use"),
+    refresh: bool = typer.Option(False, "--refresh", help="Re-download and rebuild the column cache"),
     limit: int = typer.Option(0, "--limit", help="Only process N districts (smoke test)"),
 ) -> None:
     console.rule("[bold]Roads & Transport — Census 2011 Village Directory[/bold]")
 
-    try:
-        import pandas as pd
-    except ImportError:
-        raise SystemExit(
-            "pandas missing. Run: uv run --with pandas python scripts/build_roads_layer.py"
-        ) from None
+    cache_path = RAW / COLUMN_CACHE
 
-    resources = list_resources()
-    if limit:
-        resources = resources[:limit]
-    csvs = [r for r in resources if r["url"] and str(r["url"]).lower().endswith(".csv")]
-    console.print(f"  resources: [bold]{len(resources)}[/bold] · CSV: {len(csvs)}")
+    # -- stage 1: per-district value counts for EVERY road column -----------
+    # Cached, because rebuilding it means 628 sequential downloads from
+    # censusindia.gov.in. Changing the chosen indicator must not cost that again.
+    if cache_path.exists() and not refresh:
+        console.print(f"  using cached column counts {cache_path.relative_to(REPO)}")
+        counts = json.loads(cache_path.read_text())
+    else:
+        try:
+            import pandas as pd
+        except ImportError:
+            raise SystemExit(
+                "pandas missing. Run: uv run --with pandas python scripts/build_roads_layer.py"
+            ) from None
 
-    RAW.mkdir(parents=True, exist_ok=True)
-    per_district: dict[int, dict] = {}
-    failures: list[str] = []
+        resources = list_resources()
+        if limit:
+            resources = resources[:limit]
+        csvs = [r for r in resources if r["url"] and str(r["url"]).lower().endswith(".csv")]
+        console.print(f"  downloading [bold]{len(csvs)}[/bold] district CSVs (~760 MB, slow host)")
 
-    with Progress(
-        TextColumn("[progress.description]{task.description}"),
-        BarColumn(), TextColumn("{task.completed}/{task.total}"), TimeElapsedColumn(),
-        console=console,
-    ) as prog:
-        t = prog.add_task("districts", total=len(csvs))
-        for res in csvs:
-            url = res["url"]
-            name = url.rsplit("/", 1)[-1]
-            cached = RAW / name
-            try:
-                if cached.exists():
-                    blob = cached.read_bytes()
-                else:
+        counts, failures = {}, []
+        with Progress(
+            TextColumn("[progress.description]{task.description}"),
+            BarColumn(), TextColumn("{task.completed}/{task.total}"), TimeElapsedColumn(),
+            console=console,
+        ) as prog:
+            t = prog.add_task("districts", total=len(csvs))
+            for res in csvs:
+                url = res["url"]; fname = url.rsplit("/", 1)[-1]
+                try:
                     blob = _get_census(url)
-                    if keep_raw:
-                        cached.write_bytes(blob)
-
-                df = pd.read_csv(io.BytesIO(blob), low_memory=False)
-                road_cols = [c for c in df.columns if c.startswith(ROAD_COL)]
-                if not road_cols:
-                    failures.append(f"{name}: no '{ROAD_COL}' column")
-                    prog.advance(t)
-                    continue
-                col = road_cols[0]
-
-                # "'327" → 327. The leading apostrophe is Excel text-guarding.
-                codes = (
-                    df["District Code"].astype(str).str.replace("'", "", regex=False).str.strip()
-                )
-                vals = pd.to_numeric(df[col], errors="coerce")
-
-                for code, grp in vals.groupby(codes):
-                    try:
-                        ci = int(code)
-                    except ValueError:
-                        continue
-                    recorded = int(grp.isin([1, 2]).sum())
-                    unconnected = int((grp == 2).sum())
-                    d = per_district.setdefault(
-                        ci, {"villages": 0, "recorded": 0, "unconnected": 0}
+                    # These files are latin-1, not UTF-8. 19 of them fail to decode
+                    # as UTF-8 and were silently dropped before this was found.
+                    df = pd.read_csv(io.BytesIO(blob), low_memory=False, encoding="latin-1")
+                    codes = (
+                        df["District Code"].astype(str)
+                        .str.replace("'", "", regex=False).str.strip()
                     )
-                    d["villages"] += int(len(grp))
-                    d["recorded"] += recorded
-                    d["unconnected"] += unconnected
-            except Exception as exc:  # noqa: BLE001
-                failures.append(f"{name}: {type(exc).__name__} {str(exc)[:80]}")
-            prog.advance(t)
+                    cc = codes.mode()[0]
+                    rec = {"file": fname, "villages": int(len(df)), "cols": {}}
+                    for k in ROAD_COLS:
+                        m = [c for c in df.columns if c.startswith(k)]
+                        if not m:
+                            continue
+                        v = pd.to_numeric(df[m[0]], errors="coerce")
+                        rec["cols"][k] = {
+                            str(kk): int(vv) for kk, vv in v.value_counts(dropna=False).items()
+                        }
+                    counts[cc] = rec
+                except Exception as exc:  # noqa: BLE001
+                    failures.append(f"{fname}: {type(exc).__name__} {str(exc)[:70]}")
+                prog.advance(t)
 
-    console.print(f"  district codes aggregated: [bold]{len(per_district)}[/bold]")
-    if failures:
-        console.print(f"  [yellow]failures: {len(failures)}[/yellow]")
-        for f in failures[:8]:
-            console.print(f"    {f}")
+        RAW.mkdir(parents=True, exist_ok=True)
+        cache_path.write_text(json.dumps(counts))
+        console.print(f"  cached → {cache_path.relative_to(REPO)}")
+        if failures:
+            console.print(f"  [yellow]{len(failures)} file(s) failed[/yellow]")
+            for f in failures[:6]:
+                console.print(f"    {f}")
 
-    # -- join onto our districts by all-India census code -------------------
+    console.print(f"  districts in cache: [bold]{len(counts)}[/bold]")
+
+    if column not in ROAD_COLS:
+        raise SystemExit(f"--column must be one of {ROAD_COLS}")
+    console.print(f"  indicator column: [bold]{column}[/bold]")
+
+    # -- stage 2: derive the deficit ---------------------------------------
     gj = json.loads((REPO / "console" / "public" / "data" / "districts.geojson").read_text())
-    by_census: dict[int, dict] = {}
-    for f in gj["features"]:
-        p = f["properties"]
-        if p.get("censuscode") is not None and not p.get("placeholder"):
-            by_census[int(p["censuscode"])] = p
+    by_census = {
+        int(f["properties"]["censuscode"]): f["properties"]
+        for f in gj["features"]
+        if f["properties"].get("censuscode") is not None and not f["properties"].get("placeholder")
+    }
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    written = 0
+    written, thin = 0, 0
     with OUT.open("w", newline="", encoding="utf-8") as fh:
         w = csv.writer(fh)
         w.writerow([
             "admin_unit_code", "censuscode", "villages_total", "villages_recorded",
-            "villages_without_all_weather_road", "deficit_pct", "recorded_pct",
+            "villages_without", "deficit_pct", "recorded_pct",
             "indicator_key", "indicator_label", "source", "year",
         ])
-        for ci, d in sorted(per_district.items()):
+        for cc, rec in sorted(counts.items(), key=lambda x: int(x[0])):
+            ci = int(cc)
             prop = by_census.get(ci)
-            if not prop or d["recorded"] == 0:
+            cols = rec["cols"].get(column)
+            if not prop or not cols:
                 continue
-            deficit = 100.0 * d["unconnected"] / d["recorded"]
-            recorded_pct = 100.0 * d["recorded"] / max(d["villages"], 1)
+            ones = cols.get("1.0", 0) + cols.get("1", 0)
+            twos = cols.get("2.0", 0) + cols.get("2", 0)
+            recorded = ones + twos
+            # A district with almost no recorded statuses cannot support a
+            # percentage. Excluded and counted, rather than published on a
+            # denominator of six villages.
+            if recorded < 30:
+                thin += 1
+                continue
             w.writerow([
-                prop["code"], ci, d["villages"], d["recorded"], d["unconnected"],
-                round(deficit, 1), round(recorded_pct, 1),
-                "pct_villages_no_all_weather_road",
-                "Villages without all-weather road access",
+                prop["code"], ci, rec["villages"], recorded, twos,
+                round(100.0 * twos / recorded, 1),
+                round(100.0 * recorded / max(rec["villages"], 1), 1),
+                "pct_villages_no_pucca_road",
+                "Villages without a black-topped (pucca) road",
                 "Census 2011 Village Directory", 2011,
             ])
             written += 1
 
-    unmatched = [c for c in per_district if c not in by_census]
     console.print(f"\n  wrote {OUT.relative_to(REPO)} ([bold]{written}[/bold] districts)")
-    console.print(f"  census codes with no boundary match: {len(unmatched)}")
-    if written:
-        vals = []
-        for row in csv.DictReader(OUT.open()):
-            vals.append(float(row["deficit_pct"]))
-        vals.sort()
+    if thin:
+        console.print(f"  [yellow]excluded {thin} district(s)[/yellow] with fewer than 30 recorded villages")
+
+    vals = sorted(float(r["deficit_pct"]) for r in csv.DictReader(OUT.open()))
+    if vals:
         console.print(
-            f"  deficit range {vals[0]:.1f}% – {vals[-1]:.1f}% · median {vals[len(vals)//2]:.1f}%"
+            f"  deficit {vals[0]:.1f}% – {vals[-1]:.1f}% · median {vals[len(vals)//2]:.1f}%"
         )
     console.print(
-        "\n[bold]Next:[/bold] uv run python scripts/build_deficit_layer.py  then  "
+        "\n[bold]Next:[/bold] uv run python scripts/build_deficit_layer.py --with-roads  then  "
         "uv run python scripts/generate_console_fixtures.py "
         "--geojson console/public/data/districts.geojson"
     )

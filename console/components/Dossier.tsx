@@ -119,6 +119,9 @@ export default function Dossier({ ds, district, row, sectorKey, weights, adjuste
       forecast_direction: forecastDir,
       evidence_strength: row.evidence,
       source: `${sector.source} ${sector.year}`,
+      // Sector-level limitation, forwarded so the model states it rather than
+      // presenting the deficit as being as solid as the NFHS-5 sectors.
+      sector_caveat: sector.caveat || null,
       quotes: quotes.map((qt) => ({ lang: qt?.lang, original: qt?.original, english: qt?.english })),
       assets: row.assets,
       scheme_name: scheme.name,
@@ -185,6 +188,25 @@ export default function Dossier({ ds, district, row, sectorKey, weights, adjuste
             <span className="dot synth" style={{ display: 'inline-block', width: 7, height: 7, borderRadius: '50%', background: '#f59e0b', marginRight: 5 }} />
             <strong>Citizen signals: synthetic</strong> — generated from real NFHS-5 deficits, grounding is deliberate
           </div>
+
+          {/* Sector-level limitation, shown in FULL here rather than truncated as
+              it is in the calibration strip. This is the artefact that gets
+              exported and attached to a funding note, so the caveat has to be
+              readable in it — a limitation only reachable by hovering a 30px band
+              is not disclosed to whoever reads the printout. */}
+          {sector.caveat && (
+            <div
+              className="dos-banner"
+              style={{ borderTop: '1px solid var(--rule)', color: 'var(--paper-3)' }}
+            >
+              <span
+                className="dot synth"
+                style={{ display: 'inline-block', width: 7, height: 7, borderRadius: '50%', background: 'var(--q-silent)', marginRight: 5 }}
+              />
+              <strong style={{ color: 'var(--q-silent)' }}>{sector.label} — deficit caveat</strong>{' '}
+              — {sector.caveat}
+            </div>
+          )}
 
           <div className="dos-body">
             {/* Left column */}

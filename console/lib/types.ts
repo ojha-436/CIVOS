@@ -70,6 +70,10 @@ export interface Sector {
   indicator: string;
   source: string;
   year: number;
+  /** Sector-level limitation, shown permanently in the console and carried into
+   *  every dossier citing this sector. Only Roads & Transport has one: its Census
+   *  field is coded inconsistently between states. */
+  caveat?: string | null;
   schemes: Scheme[];
 }
 

@@ -513,6 +513,12 @@ def main(
                 "indicator": s["indicator"]["label"],
                 "source": s["indicator"]["source"],
                 "year": s["indicator"]["year"],
+                # A sector-level limitation travels to the console and into every
+                # dossier that cites the sector. Roads is the only sector carrying
+                # one: its Census field is coded inconsistently between states.
+                # Disclosure that reaches the screen is worth more than disclosure
+                # that only reaches a YAML file.
+                "caveat": " ".join(s["indicator"].get("caveat", "").split()) or None,
                 "schemes": [
                     {
                         "name": schemes[k]["name"],

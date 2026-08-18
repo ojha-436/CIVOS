@@ -1,613 +1,618 @@
-admin_unit_code,censuscode,villages_total,villages_recorded,villages_without_all_weather_road,deficit_pct,recorded_pct,indicator_key,indicator_label,source,year
-IN-JK-kupwara,1,362,351,0,0.0,97.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JK-badgam,2,474,459,0,0.0,96.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JK-leh-ladakh,3,112,111,0,0.0,99.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JK-kargil,4,127,125,0,0.0,98.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JK-punch,5,178,170,0,0.0,95.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JK-rajouri,6,385,374,0,0.0,97.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JK-kathua,7,512,496,299,60.3,96.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JK-baramula,8,518,505,0,0.0,97.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JK-bandipore,9,122,116,0,0.0,95.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JK-srinagar,10,11,11,0,0.0,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JK-ganderbal,11,115,111,0,0.0,96.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JK-pulwama,12,329,319,0,0.0,97.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JK-shupiyan,13,229,226,0,0.0,98.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JK-anantnag,14,342,332,0,0.0,97.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JK-kulgam,15,231,225,0,0.0,97.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JK-doda,16,406,401,342,85.3,98.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JK-ramban,17,129,127,0,0.0,98.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JK-kishtwar,18,157,154,152,98.7,98.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JK-udhampur,19,331,323,219,67.8,97.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JK-reasi,20,255,253,0,0.0,99.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JK-jammu,21,852,780,141,18.1,91.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JK-samba,22,376,345,0,0.0,91.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HP-chamba,23,1591,1110,643,57.9,69.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HP-kangra,24,3869,3617,1084,30.0,93.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HP-lahul-spiti,25,521,280,210,75.0,53.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HP-kullu,26,326,314,129,41.1,96.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HP-mandi,27,3338,2850,1444,50.7,85.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HP-hamirpur,28,1725,1671,438,26.2,96.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HP-una,29,848,790,51,6.5,93.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HP-bilaspur,30,1061,953,200,21.0,89.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HP-solan,31,2544,2383,791,33.2,93.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HP-sirmaur,32,976,968,400,41.3,99.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HP-shimla,33,3231,2705,1256,46.4,83.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HP-kinnaur,34,660,241,144,59.8,36.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-PB-gurdaspur,35,1595,1515,328,21.7,95.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-PB-kapurthala,36,688,612,80,13.1,89.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-PB-jalandhar,37,941,922,0,0.0,98.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-PB-hoshiarpur,38,1416,1385,353,25.5,97.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-PB-shahid-bhagat-singh-nagar,39,468,458,0,0.0,97.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-PB-fatehgarh-sahib,40,446,442,69,15.6,99.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-PB-moga,42,325,319,109,34.2,98.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-PB-firozpur,43,1000,955,0,0.0,95.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-PB-muktsar,44,234,233,98,42.1,99.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-PB-faridkot,45,171,163,100,61.3,95.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-PB-bathinda,46,281,279,193,69.2,99.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-PB-mansa,47,240,238,192,80.7,99.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-PB-patiala,48,912,895,304,34.0,98.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-PB-amritsar,49,739,703,174,24.8,95.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-PB-tarn-taran,50,489,479,140,29.2,98.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-PB-rupnagar,51,611,591,74,12.5,96.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-PB-sahibzada-ajit-singh-nagar,52,419,403,83,20.6,96.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-PB-sangrur,53,571,564,0,0.0,98.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-PB-barnala,54,128,127,71,55.9,99.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-CH-chandigarh,55,5,5,0,0.0,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UT-uttarkashi,56,707,694,481,69.3,98.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UT-chamoli,57,1246,1170,850,72.6,93.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UT-rudraprayag,58,688,653,410,62.8,94.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UT-tehri-garhwal,59,1862,1774,1212,68.3,95.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UT-dehradun,60,748,731,312,42.7,97.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UT-garhwal,61,3473,3142,2369,75.4,90.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UT-pithoragarh,62,1675,1572,1217,77.4,93.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UT-bageshwar,63,947,874,673,77.0,92.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UT-almora,64,2289,2184,1709,78.3,95.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UT-champawat,65,717,662,505,76.3,92.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UT-nainital,66,1141,1097,392,35.7,96.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UT-udham-singh-nagar,67,688,674,74,11.0,98.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UT-hardwar,68,612,518,81,15.6,84.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HR-panchkula,69,219,206,0,0.0,94.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HR-ambala,70,470,461,0,0.0,98.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HR-yamunanagar,71,636,611,0,0.0,96.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HR-kurukshetra,72,415,407,0,0.0,98.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HR-kaithal,73,269,267,0,0.0,99.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HR-karnal,74,434,417,0,0.0,96.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HR-panipat,75,186,176,0,0.0,94.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HR-sonipat,76,332,319,0,0.0,96.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HR-jind,77,306,302,0,0.0,98.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HR-fatehabad,78,245,245,0,0.0,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HR-sirsa,79,330,327,0,0.0,99.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HR-hisar,80,269,268,0,0.0,99.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HR-bhiwani,81,444,442,0,0.0,99.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HR-rohtak,82,143,136,0,0.0,95.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HR-jhajjar,83,260,247,0,0.0,95.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HR-mahendragarh,84,370,369,0,0.0,99.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HR-rewari,85,403,389,0,0.0,96.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HR-gurgaon,86,242,229,0,0.0,94.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HR-mewat,87,439,412,0,0.0,93.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HR-faridabad,88,149,144,0,0.0,96.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-HR-palwal,89,280,268,0,0.0,95.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-DL-north-west,90,52,48,0,0.0,92.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-DL-north,91,4,2,0,0.0,50.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-DL-north-east,92,9,8,0,0.0,88.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-DL-east,93,1,1,0,0.0,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-DL-west,96,2,2,0,0.0,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-DL-south-west,97,41,39,0,0.0,95.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-DL-south,98,3,3,0,0.0,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-ganganagar,99,3018,2855,2662,93.2,94.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-hanumangarh,100,1907,1831,1539,84.1,96.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-bikaner,101,919,857,513,59.9,93.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-churu,102,899,873,489,56.0,97.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-jhunjhunun,103,927,926,528,57.0,99.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-alwar,104,2054,2021,1340,66.3,98.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-bharatpur,105,1524,1432,940,65.6,94.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-dhaulpur,106,819,801,609,76.0,97.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-karauli,107,888,851,566,66.5,95.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-sawai-madhopur,108,814,758,531,70.1,93.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-dausa,109,1109,1079,774,71.7,97.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-jaipur,110,2180,2126,1486,69.9,97.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-sikar,111,1167,1162,657,56.5,99.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-nagaur,112,1589,1575,933,59.2,99.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-jodhpur,113,1838,1836,1341,73.0,99.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-jaisalmer,114,799,756,668,88.4,94.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-barmer,115,2460,2452,2095,85.4,99.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-jalor,116,801,791,372,47.0,98.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-sirohi,117,477,470,272,57.9,98.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-pali,118,1030,1017,670,65.9,98.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-ajmer,119,1111,1099,764,69.5,98.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-tonk,120,1183,1116,923,82.7,94.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-bundi,121,873,867,728,84.0,99.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-bhilwara,122,1834,1790,1452,81.1,97.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-rajsamand,123,1050,1037,854,82.4,98.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-dungarpur,124,976,972,674,69.3,99.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-banswara,125,1513,1485,1148,77.3,98.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-chittaurgarh,126,1730,1581,1400,88.6,91.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-kota,127,874,805,693,86.1,92.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-baran,128,1221,1114,977,87.7,91.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-jhalawar,129,1606,1488,1329,89.3,92.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-udaipur,130,2479,2471,2002,81.0,99.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-RJ-pratapgarh,131,1003,970,826,85.2,96.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-saharanpur,132,1572,1243,359,28.9,79.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-muzaffarnagar,133,1019,880,58,6.6,86.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-bijnor,134,2984,2186,424,19.4,73.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-moradabad,135,1793,1550,211,13.6,86.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-rampur,136,1163,1108,199,18.0,95.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-jyotiba-phule-nagar,137,1123,959,193,20.1,85.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-meerut,138,663,604,65,10.8,91.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-baghpat,139,315,290,21,7.2,92.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-ghaziabad,140,547,511,33,6.5,93.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-gautam-buddha-nagar,141,320,304,47,15.5,95.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-bulandshahr,142,1242,1174,90,7.7,94.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-aligarh,143,1199,1170,114,9.7,97.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-mahamaya-nagar,144,669,655,114,17.4,97.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-mathura,145,874,730,149,20.4,83.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-agra,146,929,892,105,11.8,96.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-firozabad,147,807,790,60,7.6,97.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-mainpuri,148,851,794,127,16.0,93.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-budaun,149,2061,1785,223,12.5,86.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-bareilly,150,2051,1855,375,20.2,90.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-pilibhit,151,1435,1295,298,23.0,90.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-shahjahanpur,152,2328,2088,448,21.5,89.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-kheri,153,1794,1706,238,14.0,95.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-sitapur,154,2348,2317,335,14.5,98.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-hardoi,155,2070,1907,675,35.4,92.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-unnao,156,1795,1688,558,33.1,94.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-lucknow,157,807,803,291,36.2,99.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-rae-bareli,158,1773,1727,631,36.5,97.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-farrukhabad,159,1005,813,283,34.8,80.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-kannauj,160,752,679,163,24.0,90.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-etawah,161,692,659,268,40.7,95.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-auraiya,162,839,769,331,43.0,91.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-kanpur-dehat,163,1029,953,342,35.9,92.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-kanpur-nagar,164,1003,857,311,36.3,85.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-jalaun,165,1151,904,361,39.9,78.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-jhansi,166,816,728,285,39.1,89.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-lalitpur,167,752,670,212,31.6,89.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-hamirpur,168,627,480,177,36.9,76.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-mahoba,169,521,408,206,50.5,78.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-banda,170,694,641,173,27.0,92.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-chitrakoot,171,656,562,222,39.5,85.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-fatehpur,172,1515,1262,482,38.2,83.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-pratapgarh,173,2217,2099,641,30.5,94.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-kaushambi,174,868,706,244,34.6,81.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-allahabad,175,3053,2736,1155,42.2,89.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-bara-banki,176,1839,1791,824,46.0,97.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-faizabad,177,1264,1190,239,20.1,94.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-ambedkar-nagar,178,1750,1636,416,25.4,93.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-sultanpur,179,2527,2494,687,27.5,98.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-bahraich,180,1390,1333,544,40.8,95.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-shrawasti,181,541,508,334,65.7,93.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-balrampur,182,1015,995,206,20.7,98.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-gonda,183,1817,1812,513,28.3,99.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-siddharth-nagar,184,2505,2336,2303,98.6,93.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-basti,185,3348,3159,2484,78.6,94.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-sant-kabir-nagar,186,1726,1563,507,32.4,90.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-maharajganj,187,1262,1208,238,19.7,95.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-gorakhpur,188,3319,2937,741,25.2,88.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-kushinagar,189,1639,1579,382,24.2,96.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-deoria,190,2162,2019,401,19.9,93.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-azamgarh,191,4101,3800,993,26.1,92.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-mau,192,1610,1499,1496,99.8,93.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-ballia,193,2361,1843,1843,100.0,78.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-jaunpur,194,3381,3287,875,26.6,97.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-ghazipur,195,3367,2723,990,36.4,80.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-chandauli,196,1629,1425,794,55.7,87.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-varanasi,197,1295,1257,339,27.0,97.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-sant-ravi-das-nagar-bhadohi,198,1217,1087,406,37.4,89.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-mirzapur,199,1961,1745,489,28.0,89.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-sonbhadra,200,1429,1391,320,23.0,97.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-etah,201,882,853,346,40.6,96.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-UP-kansiram-nagar,202,715,650,136,20.9,90.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-purba-champaran,204,1293,1252,211,16.9,96.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-sheohar,205,203,191,19,9.9,94.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-sitamarhi,206,834,808,199,24.6,96.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-madhubani,207,1110,1040,310,29.8,93.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-supaul,208,551,526,196,37.3,95.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-araria,209,742,716,163,22.8,96.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-kishanganj,210,771,732,124,16.9,94.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-purnia,211,1273,1113,318,28.6,87.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-katihar,212,1540,1306,490,37.5,84.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-madhepura,213,439,380,38,10.0,86.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-saharsa,214,468,445,97,21.8,95.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-darbhanga,215,1247,1069,332,31.1,85.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-muzaffarpur,216,1786,1719,398,23.2,96.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-gopalganj,217,1534,1395,358,25.7,90.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-siwan,218,1530,1435,301,21.0,93.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-saran-chhapra,219,1764,1570,270,17.2,89.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-vaishali,220,1569,1422,279,19.6,90.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-samastipur,221,1246,1129,217,19.2,90.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-begusarai,222,226,150,34,22.7,66.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-khagaria,223,301,245,52,21.2,81.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-bhagalpur,224,1515,966,372,38.5,63.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-banka,225,2111,1702,1325,77.8,80.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-munger,226,858,534,163,30.5,62.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-lakhisarai,227,472,362,96,26.5,76.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-sheikhpura,228,314,261,90,34.5,83.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-nalanda,229,1055,1003,274,27.3,95.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-bhojpur,231,1217,997,254,25.5,81.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-buxar,232,1133,835,286,34.3,73.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-kaimur-bhabua,233,1695,1337,535,40.0,78.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-rohtas,234,2072,1717,342,19.9,82.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-nawada,237,1084,955,429,44.9,88.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-jamui,238,1503,1324,496,37.5,88.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-jehanabad,239,584,541,171,31.6,92.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-BR-arwal,240,316,299,108,36.1,94.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-SK-north,241,55,52,9,17.3,94.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-SK-west,242,125,119,23,19.3,95.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-SK-south,243,148,140,8,5.7,94.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-SK-east,244,123,114,19,16.7,92.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AR-tawang,245,235,218,212,97.2,92.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AR-west-kameng,246,283,260,163,62.7,91.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AR-papum-pare,248,485,455,374,82.2,93.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AR-upper-subansiri,249,553,543,516,95.0,98.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AR-west-siang,250,461,444,395,89.0,96.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AR-east-siang,251,151,150,134,89.3,99.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AR-upper-siang,252,112,98,93,94.9,87.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AR-changlang,253,362,347,262,75.5,95.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AR-tirap,254,190,189,67,35.4,99.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AR-lower-subansiri,255,578,536,224,41.8,92.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AR-kurung-kumey,256,736,700,700,100.0,95.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AR-dibang-valley,257,142,134,134,100.0,94.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AR-lower-dibang-valley,258,314,264,222,84.1,84.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AR-lohit,259,300,286,54,18.9,95.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AR-anjaw,260,305,278,263,94.6,91.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-NL-mon,261,131,131,83,63.4,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-NL-mokokchung,262,108,107,60,56.1,99.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-NL-zunheboto,263,191,191,110,57.6,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-NL-wokha,264,153,151,85,56.3,98.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-NL-dimapur,265,222,219,14,6.4,98.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-NL-phek,266,117,117,52,44.4,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-NL-tuensang,267,144,138,95,68.8,95.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-NL-longleng,268,49,49,30,61.2,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-NL-kohima,270,105,105,27,25.7,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-NL-peren,271,112,102,66,64.7,91.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MN-senapati,272,686,669,62,9.3,97.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MN-tamenglong,273,175,174,134,77.0,99.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MN-churachandpur,274,600,595,395,66.4,99.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MN-bishnupur,275,49,48,1,2.1,98.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MN-thoubal,276,103,87,0,0.0,84.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MN-imphal-west,277,123,107,3,2.8,87.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MN-imphal-east,278,195,191,114,59.7,97.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MN-chandel,280,437,430,340,79.1,98.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MZ-mamit,281,123,86,69,80.2,69.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MZ-kolasib,282,49,34,25,73.5,69.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MZ-aizawl,283,104,94,52,55.3,90.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MZ-champhai,284,90,83,46,55.4,92.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MZ-serchhip,285,40,35,22,62.9,87.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TR-west-tripura,289,287,281,0,0.0,97.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TR-south-tripura,290,270,268,0,0.0,99.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TR-dhalai,291,152,148,0,0.0,97.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TR-north-tripura,292,166,166,0,0.0,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-ML-west-garo-hills,293,1663,1577,984,62.4,94.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-ML-east-garo-hills,294,1110,1058,559,52.8,95.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-ML-south-garo-hills,295,804,731,516,70.6,90.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-ML-west-khasi-hills,296,1115,1093,937,85.7,98.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-ML-ri-bhoi,297,635,579,510,88.1,91.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-ML-east-khasi-hills,298,975,923,626,67.8,94.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-ML-jaintia-hills,299,537,498,364,73.1,92.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AS-kokrajhar,300,1068,1053,370,35.1,98.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AS-dhubri,301,1091,1052,207,19.7,96.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AS-goalpara,302,829,779,197,25.3,94.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AS-barpeta,303,835,825,152,18.4,98.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AS-marigaon,304,632,598,151,25.3,94.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AS-nagaon,305,1412,1361,245,18.0,96.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AS-sonitpur,306,1876,1798,545,30.3,95.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AS-lakhimpur,307,1184,1146,391,34.1,96.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AS-dhemaji,308,1319,1264,361,28.6,95.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AS-tinsukia,309,1168,1136,460,40.5,97.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AS-dibrugarh,310,1348,1318,667,50.6,97.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AS-sivasagar,311,875,862,147,17.1,98.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AS-jorhat,312,848,763,225,29.5,90.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AS-golaghat,313,1125,1032,253,24.5,91.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AS-karbi-anglong,314,2921,2712,1917,70.7,92.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AS-dima-hasao,315,695,676,555,82.1,97.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AS-cachar,316,1040,998,303,30.4,96.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AS-karimganj,317,936,915,264,28.9,97.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AS-hailakandi,318,331,330,48,14.5,99.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AS-bongaigaon,319,563,535,113,21.1,95.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AS-chirang,320,508,501,247,49.3,98.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AS-kamrup,321,1068,1037,268,25.8,97.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AS-kamrup-metropolitan,322,216,204,109,53.4,94.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AS-nalbari,323,456,455,65,14.3,99.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AS-baksa,324,690,679,155,22.8,98.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AS-darrang,325,561,552,89,16.1,98.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AS-udalguri,326,714,705,219,31.1,98.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-WB-darjiling,327,688,634,306,48.3,92.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-WB-jalpaiguri,328,733,725,287,39.6,98.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-WB-koch-bihar,329,1194,1141,432,37.9,95.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-WB-uttar-dinajpur,330,1494,1480,662,44.7,99.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-WB-dakshin-dinajpur,331,1631,1603,777,48.5,98.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-WB-maldah,332,1772,1662,991,59.6,93.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-WB-murshidabad,333,2167,1946,798,41.0,89.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-WB-birbhum,334,2458,2283,959,42.0,92.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-WB-barddhaman,335,2502,2459,667,27.1,98.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-WB-nadia,336,1308,1267,410,32.4,96.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-WB-north-24-parganas,337,1528,1522,519,34.1,99.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-WB-hugli,338,1866,1853,871,47.0,99.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-WB-bankura,339,3823,3715,1665,44.8,97.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-WB-puruliya,340,2667,2565,1374,53.6,96.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-WB-haora,341,650,647,253,39.1,99.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-WB-south-24-parganas,343,2044,2014,902,44.8,98.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-WB-pashchim-medinipur,344,8695,8092,4260,52.6,93.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-WB-purba-medinipur,345,2998,2962,1232,41.6,98.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JH-garhwa,346,888,844,247,29.3,95.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JH-chatra,347,1471,1377,515,37.4,93.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JH-kodarma,348,699,577,213,36.9,82.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JH-giridih,349,2749,2558,838,32.8,93.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JH-deoghar,350,2662,2322,296,12.7,87.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JH-godda,351,2302,1680,981,58.4,73.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JH-pakur,353,1247,1117,534,47.8,89.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JH-dhanbad,354,1159,1032,363,35.2,89.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JH-bokaro,355,635,611,210,34.4,96.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JH-lohardaga,356,353,352,97,27.6,99.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JH-purbi-singhbhum,357,1748,1609,446,27.7,92.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JH-palamu,358,1870,1711,649,37.9,91.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JH-latehar,359,769,749,247,33.0,97.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JH-hazaribagh,360,1308,1193,337,28.2,91.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JH-ramgarh,361,315,305,65,21.3,96.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JH-dumka,362,2925,2688,1298,48.3,91.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JH-jamtara,363,1161,1082,489,45.2,93.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JH-ranchi,364,1311,1296,307,23.7,98.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JH-khunti,365,756,754,207,27.5,99.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JH-gumla,366,946,942,352,37.4,99.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JH-simdega,367,450,449,114,25.4,99.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JH-pashchimi-singhbhum,368,1673,1642,418,25.5,98.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-JH-saraikela-kharsawan,369,1184,1146,350,30.5,96.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-bargarh,370,1206,1179,378,32.1,97.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-jharsuguda,371,351,347,47,13.5,98.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-sambalpur,372,1313,1229,409,33.3,93.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-debagarh,373,878,718,278,38.7,81.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-sundargarh,374,1762,1713,479,28.0,97.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-kendujhar,375,2123,2064,974,47.2,97.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-mayurbhanj,376,3950,3751,835,22.3,95.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-baleshwar,377,2932,2635,1264,48.0,89.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-bhadrak,378,1312,1250,200,16.0,95.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-kendrapara,379,1547,1415,438,31.0,91.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-jagatsinghapur,380,1292,1223,481,39.3,94.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-cuttack,381,1952,1856,503,27.1,95.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-jajapur,382,1783,1598,502,31.4,89.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-dhenkanal,383,1208,1081,294,27.2,89.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-anugul,384,1871,1654,436,26.4,88.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-nayagarh,385,1692,1541,564,36.6,91.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-khordha,386,1534,1356,509,37.5,88.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-puri,387,1707,1600,603,37.7,93.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-ganjam,388,3195,2783,1256,45.1,87.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-gajapati,389,1612,1499,973,64.9,93.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-kandhamal,390,2587,2417,1008,41.7,93.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-bauda,391,1187,1117,420,37.6,94.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-subarnapur,392,962,856,271,31.7,89.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-balangir,393,1783,1751,586,33.5,98.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-nuapada,394,668,656,161,24.5,98.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-kalahandi,395,2253,2116,1148,54.3,93.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-rayagada,396,2665,2468,1468,59.5,92.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-nabarangapur,397,891,868,262,30.2,97.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-koraput,398,2042,1941,933,48.1,95.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-OR-malkangiri,399,1055,995,674,67.7,94.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-CT-koriya,400,636,623,117,18.8,98.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-CT-surguja,401,1750,1746,253,14.5,99.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-CT-jashpur,402,755,754,201,26.7,99.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-CT-raigarh,403,1466,1426,164,11.5,97.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-CT-korba,404,719,707,214,30.3,98.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-CT-janjgir-champa,405,892,881,110,12.5,98.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-CT-bilaspur,406,1599,1566,291,18.6,97.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-CT-kabeerdham,407,1006,957,315,32.9,95.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-CT-rajnandgaon,408,1653,1600,323,20.2,96.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-CT-durg,409,1773,1761,313,17.8,99.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-CT-raipur,410,2149,2094,582,27.8,97.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-CT-mahasamund,411,1145,1112,219,19.7,97.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-CT-dhamtari,412,649,619,61,9.9,95.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-CT-uttar-bastar-kanker,413,1070,1063,351,33.0,99.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-CT-bastar,414,1150,1128,249,22.1,98.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-CT-narayanpur,415,200,191,127,66.5,95.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-CT-dakshin-bastar-dantewada,416,608,590,291,49.3,97.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-CT-bijapur,417,694,565,455,80.5,81.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-sheopur,418,582,516,164,31.8,88.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-morena,419,815,775,209,27.0,95.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-bhind,420,937,890,272,30.6,95.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-gwalior,421,655,618,140,22.7,94.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-datia,422,631,586,231,39.4,92.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-shivpuri,423,1417,1305,424,32.5,92.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-tikamgarh,424,963,878,236,26.9,91.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-chhatarpur,425,1187,1085,325,30.0,91.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-sagar,427,2075,1901,758,39.9,91.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-damoh,428,1210,1176,464,39.5,97.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-satna,429,1984,1799,438,24.3,90.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-rewa,430,2719,2408,858,35.6,88.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-umaria,431,653,594,154,25.9,91.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-neemuch,432,798,675,286,42.4,84.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-mandsaur,433,933,893,236,26.4,95.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-ratlam,434,1069,1053,373,35.4,98.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-ujjain,435,1101,1095,413,37.7,99.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-shajapur,436,1107,1071,439,41.0,96.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-dewas,437,1114,1057,437,41.3,94.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-dhar,438,1535,1477,294,19.9,96.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-indore,439,629,614,182,29.6,97.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-west-nimar,440,1417,1194,400,33.5,84.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-barwani,441,716,696,198,28.4,97.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-rajgarh,442,1728,1677,968,57.7,97.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-vidisha,443,1614,1536,707,46.0,95.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-bhopal,444,519,501,165,32.9,96.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-sehore,445,1072,1031,426,41.3,96.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-betul,447,1399,1344,405,30.1,96.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-harda,448,567,511,222,43.4,90.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-hoshangabad,449,961,921,314,34.1,95.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-katni,450,947,905,223,24.6,95.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-jabalpur,451,1424,1377,329,23.9,96.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-narsimhapur,452,1067,1035,353,34.1,97.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-dindori,453,924,901,198,22.0,97.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-mandla,454,1221,1203,252,20.9,98.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-chhindwara,455,1965,1906,645,33.8,97.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-seoni,456,1587,1579,402,25.5,99.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-balaghat,457,1384,1272,199,15.6,91.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-guna,458,1338,1264,737,58.3,94.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-ashoknagar,459,899,818,393,48.0,91.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-shahdol,460,844,814,150,18.4,96.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-anuppur,461,571,562,75,13.3,98.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-sidhi,462,1055,1025,213,20.8,97.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-singrauli,463,744,727,100,13.8,97.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-jhabua,464,813,783,174,22.2,96.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-alirajpur,465,543,538,112,20.8,99.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-east-nimar,466,711,711,175,24.6,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MP-burhanpur,467,263,261,70,26.8,99.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GJ-kachchh,468,924,877,117,13.3,94.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GJ-banas-kantha,469,1237,1233,123,10.0,99.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GJ-patan,470,517,517,41,7.9,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GJ-mahesana,471,606,597,94,15.7,98.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GJ-sabar-kantha,472,1376,1364,218,16.0,99.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GJ-gandhinagar,473,252,252,23,9.1,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GJ-ahmadabad,474,512,506,25,4.9,98.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GJ-surendranagar,475,651,647,132,20.4,99.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GJ-rajkot,476,835,833,77,9.2,99.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GJ-jamnagar,477,714,697,245,35.2,97.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GJ-porbandar,478,182,179,36,20.1,98.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GJ-junagadh,479,1029,901,168,18.6,87.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GJ-amreli,480,616,614,46,7.5,99.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GJ-bhavnagar,481,793,783,195,24.9,98.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GJ-anand,482,347,347,45,13.0,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GJ-kheda,483,618,615,27,4.4,99.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GJ-panch-mahals,484,1210,1198,241,20.1,99.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GJ-dohad,485,692,691,99,14.3,99.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GJ-vadodara,486,1537,1533,265,17.3,99.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GJ-narmada,487,609,558,32,5.7,91.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GJ-bharuch,488,653,647,47,7.3,99.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GJ-the-dangs,489,308,308,24,7.8,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GJ-navsari,490,372,372,36,9.7,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GJ-valsad,491,434,433,44,10.2,99.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GJ-surat,492,713,690,128,18.6,96.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GJ-tapi,493,488,451,14,3.1,92.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-DH-diu,494,4,4,0,0.0,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-DH-daman,495,15,15,0,0.0,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-DH-dadra-nagar-haveli,496,65,65,1,1.5,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-nandurbar,497,943,930,49,5.3,98.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-dhule,498,678,674,45,6.7,99.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-jalgaon,499,1513,1487,161,10.8,98.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-buldana,500,1444,1300,143,11.0,90.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-akola,501,986,864,63,7.3,87.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-washim,502,789,698,36,5.2,88.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-amravati,503,1997,1637,109,6.7,82.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-wardha,504,1376,973,28,2.9,70.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-nagpur,505,1859,1617,52,3.2,87.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-bhandara,506,864,771,18,2.3,89.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-gondiya,507,942,883,10,1.1,93.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-garhchiroli,508,1675,1509,197,13.1,90.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-chandrapur,509,1792,1463,53,3.6,81.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-yavatmal,510,2137,1853,121,6.5,86.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-nanded,511,1603,1541,160,10.4,96.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-hingoli,512,711,675,29,4.3,94.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-parbhani,513,843,830,3,0.4,98.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-jalna,514,967,958,16,1.7,99.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-aurangabad,515,1356,1314,57,4.3,96.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-nashik,516,1922,1919,28,1.5,99.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-thane,517,1721,1704,44,2.6,99.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-pune,521,1877,1852,60,3.2,98.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-ahmadnagar,522,1584,1581,27,1.7,99.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-bid,523,1368,1357,34,2.5,99.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-latur,524,948,928,15,1.6,97.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-osmanabad,525,733,728,15,2.1,99.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-solapur,526,1154,1143,2,0.2,99.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-satara,527,1745,1719,69,4.0,98.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-ratnagiri,528,1537,1531,15,1.0,99.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-sindhudurg,529,748,740,13,1.8,98.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-kolhapur,530,1216,1195,43,3.6,98.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-MH-sangli,531,728,725,0,0.0,99.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AP-adilabad,532,1725,1590,0,0.0,92.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AP-nizamabad,533,912,847,0,0.0,92.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AP-karimnagar,534,1079,1037,0,0.0,96.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AP-rangareddy,537,870,817,0,0.0,93.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AP-nalgonda,539,1135,1107,0,0.0,97.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AP-warangal,540,1049,961,0,0.0,91.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AP-srikakulam,542,1802,1701,0,0.0,94.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AP-vizianagaram,543,1520,1452,0,0.0,95.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AP-visakhapatnam,544,3265,3072,0,0.0,94.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AP-east-godavari,545,1374,1312,0,0.0,95.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AP-west-godavari,546,881,842,0,0.0,95.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AP-krishna,547,968,934,0,0.0,96.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AP-guntur,548,712,691,0,0.0,97.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AP-prakasam,549,1081,985,0,0.0,91.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AP-y-s-r,551,919,830,0,0.0,90.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AP-kurnool,552,898,870,0,0.0,96.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AP-anantapur,553,949,921,0,0.0,97.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AP-chittoor,554,1493,1455,0,0.0,97.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-belgaum,555,1275,1263,0,0.0,99.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-bagalkot,556,624,613,0,0.0,98.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-bijapur,557,692,679,63,9.3,98.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-bidar,558,620,595,180,30.3,96.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-raichur,559,884,815,14,1.7,92.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-koppal,560,629,595,14,2.4,94.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-gadag,561,337,322,15,4.7,95.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-dharwad,562,379,361,21,5.8,95.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-uttara-kannada,563,1289,1243,113,9.1,96.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-haveri,564,703,696,0,0.0,99.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-bellary,565,552,522,86,16.5,94.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-chitradurga,566,1063,948,0,0.0,89.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-davanagere,567,923,800,216,27.0,86.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-shimoga,568,1530,1444,0,0.0,94.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-udupi,569,233,233,0,0.0,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-chikmagalur,570,1117,1022,4,0.4,91.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-tumkur,571,2715,2582,0,0.0,95.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-bangalore,572,588,562,58,10.3,95.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-mandya,573,1477,1368,25,1.8,92.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-hassan,574,2574,2418,0,0.0,93.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-dakshina-kannada,575,331,331,17,5.1,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-kodagu,576,296,291,3,1.0,98.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-mysore,577,1336,1199,344,28.7,89.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-chamrajnagar,578,509,428,0,0.0,84.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-gulbarga,579,918,871,159,18.3,94.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-yadgir,580,513,487,21,4.3,94.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-kolar,581,1797,1608,33,2.1,89.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-chikkaballapura,582,1513,1324,203,15.3,87.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-bangalore-rural,583,1051,957,205,21.4,91.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KA-ramanagara,584,872,820,51,6.2,94.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GA-north-goa,585,194,188,75,39.9,96.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-GA-south-goa,586,140,132,48,36.4,94.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-LD-lakshadweep,587,21,6,2,33.3,28.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KL-kasaragod,588,93,93,0,0.0,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KL-kannur,589,56,56,0,0.0,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KL-wayanad,590,48,48,0,0.0,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KL-kozhikode,591,51,51,0,0.0,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KL-malappuram,592,83,83,0,0.0,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KL-palakkad,593,131,131,0,0.0,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KL-thrissur,594,98,98,0,0.0,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KL-ernakulam,595,61,61,0,0.0,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KL-idukki,596,64,64,0,0.0,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KL-kottayam,597,80,80,0,0.0,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KL-alappuzha,598,52,51,0,0.0,98.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KL-pathanamthitta,599,64,64,0,0.0,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KL-kollam,600,69,69,0,0.0,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-KL-thiruvananthapuram,601,68,68,0,0.0,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-thiruvallur,602,617,582,7,1.2,94.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-kancheepuram,604,1019,962,23,2.4,94.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-vellore,605,858,763,14,1.8,88.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-tiruvannamalai,606,1095,1039,7,0.7,94.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-viluppuram,607,1486,1431,7,0.5,96.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-salem,608,585,517,14,2.7,88.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-namakkal,609,389,362,1,0.3,93.1,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-erode,610,306,287,2,0.7,93.8,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-the-nilgiris,611,40,40,0,0.0,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-dindigul,612,362,330,7,2.1,91.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-karur,613,170,169,0,0.0,99.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-tiruchirappalli,614,471,431,3,0.7,91.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-perambalur,615,159,147,2,1.4,92.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-ariyalur,616,213,189,0,0.0,88.7,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-cuddalore,617,828,799,16,2.0,96.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-nagappattinam,618,491,486,6,1.2,99.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-thiruvarur,619,547,538,4,0.7,98.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-thanjavur,620,805,789,9,1.1,98.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-pudukkottai,621,750,732,26,3.6,97.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-sivaganga,622,515,508,4,0.8,98.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-madurai,623,570,526,5,1.0,92.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-theni,624,98,80,2,2.5,81.6,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-virudunagar,625,570,475,18,3.8,83.3,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-ramanathapuram,626,393,383,0,0.0,97.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-thoothukkudi,627,439,432,5,1.2,98.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-tirunelveli,628,465,430,3,0.7,92.5,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-kanniyakumari,629,63,56,5,8.9,88.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-dharmapuri,630,486,448,0,0.0,92.2,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-krishnagiri,631,655,602,2,0.3,91.9,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-coimbatore,632,237,219,6,2.7,92.4,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-TN-tiruppur,633,297,297,8,2.7,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-PY-puducherry,635,62,62,0,0.0,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-PY-karaikal,637,28,28,0,0.0,100.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AN-nicobar,638,200,90,56,62.2,45.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AN-north-middle-andaman,639,227,193,120,62.2,85.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
-IN-AN-south-andaman,640,128,105,34,32.4,82.0,pct_villages_no_all_weather_road,Villages without all-weather road access,Census 2011 Village Directory,2011
+admin_unit_code,censuscode,villages_total,villages_recorded,villages_without,deficit_pct,recorded_pct,indicator_key,indicator_label,source,year
+IN-JK-kupwara,1,362,351,152,43.3,97.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JK-badgam,2,474,451,198,43.9,95.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JK-leh-ladakh,3,112,111,45,40.5,99.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JK-kargil,4,127,125,83,66.4,98.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JK-punch,5,178,170,31,18.2,95.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JK-rajouri,6,385,374,171,45.7,97.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JK-kathua,7,512,496,257,51.8,96.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JK-baramula,8,518,505,254,50.3,97.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JK-bandipore,9,122,116,73,62.9,95.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JK-ganderbal,11,115,111,31,27.9,96.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JK-pulwama,12,329,319,111,34.8,97.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JK-shupiyan,13,229,225,101,44.9,98.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JK-anantnag,14,342,334,67,20.1,97.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JK-kulgam,15,231,226,84,37.2,97.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JK-doda,16,406,402,337,83.8,99.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JK-ramban,17,129,126,93,73.8,97.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JK-kishtwar,18,157,154,135,87.7,98.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JK-udhampur,19,331,324,173,53.4,97.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JK-reasi,20,255,252,171,67.9,98.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JK-jammu,21,852,780,141,18.1,91.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JK-samba,22,376,345,53,15.4,91.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HP-chamba,23,1591,1110,627,56.5,69.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HP-kangra,24,3869,3617,1077,29.8,93.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HP-lahul-spiti,25,521,280,143,51.1,53.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HP-kullu,26,326,314,127,40.4,96.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HP-mandi,27,3338,2850,1603,56.2,85.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HP-hamirpur,28,1725,1671,356,21.3,96.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HP-una,29,848,790,103,13.0,93.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HP-bilaspur,30,1061,953,236,24.8,89.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HP-solan,31,2544,2383,1183,49.6,93.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HP-sirmaur,32,976,968,614,63.4,99.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HP-shimla,33,3231,2705,1763,65.2,83.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HP-kinnaur,34,660,241,145,60.2,36.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-PB-gurdaspur,35,1595,1515,177,11.7,95.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-PB-kapurthala,36,688,612,57,9.3,89.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-PB-jalandhar,37,941,922,0,0.0,98.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-PB-hoshiarpur,38,1416,1385,107,7.7,97.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-PB-shahid-bhagat-singh-nagar,39,468,458,0,0.0,97.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-PB-fatehgarh-sahib,40,446,442,25,5.7,99.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-PB-ludhiana,41,907,885,42,4.7,97.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-PB-moga,42,325,319,44,13.8,98.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-PB-firozpur,43,1000,955,0,0.0,95.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-PB-muktsar,44,234,233,16,6.9,99.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-PB-faridkot,45,171,163,11,6.7,95.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-PB-bathinda,46,281,279,27,9.7,99.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-PB-mansa,47,240,238,10,4.2,99.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-PB-patiala,48,912,895,148,16.5,98.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-PB-amritsar,49,739,703,66,9.4,95.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-PB-tarn-taran,50,489,479,51,10.6,98.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-PB-rupnagar,51,611,591,7,1.2,96.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-PB-sahibzada-ajit-singh-nagar,52,419,403,0,0.0,96.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-PB-sangrur,53,571,564,46,8.2,98.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-PB-barnala,54,128,127,53,41.7,99.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UT-uttarkashi,56,707,694,489,70.5,98.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UT-chamoli,57,1246,1170,933,79.7,93.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UT-rudraprayag,58,688,653,485,74.3,94.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UT-tehri-garhwal,59,1862,1774,1224,69.0,95.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UT-dehradun,60,748,731,393,53.8,97.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UT-garhwal,61,3473,3142,2418,77.0,90.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UT-pithoragarh,62,1675,1572,1299,82.6,93.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UT-bageshwar,63,947,874,681,77.9,92.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UT-almora,64,2289,2184,1689,77.3,95.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UT-champawat,65,717,662,493,74.5,92.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UT-nainital,66,1141,1097,375,34.2,96.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UT-udham-singh-nagar,67,688,674,106,15.7,98.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UT-hardwar,68,612,518,73,14.1,84.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HR-panchkula,69,219,206,4,1.9,94.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HR-ambala,70,470,461,11,2.4,98.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HR-yamunanagar,71,636,611,21,3.4,96.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HR-kurukshetra,72,415,407,18,4.4,98.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HR-kaithal,73,269,267,1,0.4,99.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HR-karnal,74,434,417,16,3.8,96.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HR-panipat,75,186,176,11,6.2,94.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HR-sonipat,76,332,319,12,3.8,96.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HR-jind,77,306,302,0,0.0,98.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HR-fatehabad,78,245,245,35,14.3,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HR-sirsa,79,330,327,4,1.2,99.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HR-hisar,80,269,268,3,1.1,99.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HR-bhiwani,81,444,442,1,0.2,99.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HR-rohtak,82,143,136,1,0.7,95.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HR-jhajjar,83,260,247,23,9.3,95.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HR-mahendragarh,84,370,369,10,2.7,99.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HR-rewari,85,403,389,2,0.5,96.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HR-gurgaon,86,242,229,3,1.3,94.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HR-mewat,87,439,412,7,1.7,93.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HR-faridabad,88,149,144,8,5.6,96.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-HR-palwal,89,280,268,1,0.4,95.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-DL-north-west,90,52,48,0,0.0,92.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-DL-south-west,97,41,39,0,0.0,95.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-ganganagar,99,3018,2855,2637,92.4,94.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-hanumangarh,100,1907,1831,1561,85.3,96.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-bikaner,101,919,857,551,64.3,93.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-churu,102,899,873,552,63.2,97.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-jhunjhunun,103,927,926,579,62.5,99.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-alwar,104,2054,2021,1440,71.3,98.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-bharatpur,105,1524,1432,1011,70.6,94.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-dhaulpur,106,819,801,635,79.3,97.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-karauli,107,888,851,604,71.0,95.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-sawai-madhopur,108,814,758,549,72.4,93.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-dausa,109,1109,1079,823,76.3,97.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-jaipur,110,2180,2126,1574,74.0,97.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-sikar,111,1167,1162,744,64.0,99.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-nagaur,112,1589,1575,1046,66.4,99.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-jodhpur,113,1838,1836,1419,77.3,99.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-jaisalmer,114,799,756,648,85.7,94.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-barmer,115,2460,2452,2103,85.8,99.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-jalor,116,801,791,437,55.2,98.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-sirohi,117,477,470,296,63.0,98.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-pali,118,1030,1017,692,68.0,98.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-ajmer,119,1111,1099,800,72.8,98.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-tonk,120,1183,1116,907,81.3,94.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-bundi,121,873,867,711,82.0,99.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-bhilwara,122,1834,1790,1437,80.3,97.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-rajsamand,123,1050,1037,849,81.9,98.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-dungarpur,124,976,972,702,72.2,99.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-banswara,125,1513,1485,1172,78.9,98.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-chittaurgarh,126,1730,1581,1351,85.5,91.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-kota,127,874,805,676,84.0,92.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-baran,128,1221,1114,938,84.2,91.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-jhalawar,129,1606,1488,1275,85.7,92.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-udaipur,130,2479,2471,2008,81.3,99.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-RJ-pratapgarh,131,1003,970,829,85.5,96.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-saharanpur,132,1572,1243,1035,83.3,79.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-muzaffarnagar,133,1019,880,120,13.6,86.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-bijnor,134,2984,2186,771,35.3,73.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-moradabad,135,1793,1550,466,30.1,86.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-rampur,136,1163,1108,306,27.6,95.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-jyotiba-phule-nagar,137,1123,959,260,27.1,85.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-meerut,138,663,604,95,15.7,91.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-baghpat,139,315,290,41,14.1,92.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-ghaziabad,140,547,511,103,20.2,93.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-gautam-buddha-nagar,141,320,304,69,22.7,95.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-bulandshahr,142,1242,1174,223,19.0,94.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-aligarh,143,1199,1170,160,13.7,97.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-mahamaya-nagar,144,669,655,106,16.2,97.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-mathura,145,874,730,147,20.1,83.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-agra,146,929,892,102,11.4,96.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-firozabad,147,807,790,56,7.1,97.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-mainpuri,148,851,817,89,10.9,96.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-budaun,149,2061,1785,509,28.5,86.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-bareilly,150,2051,1855,892,48.1,90.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-pilibhit,151,1435,1295,657,50.7,90.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-shahjahanpur,152,2328,2088,850,40.7,89.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-kheri,153,1794,1706,579,33.9,95.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-sitapur,154,2348,2317,763,32.9,98.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-hardoi,155,2070,1907,732,38.4,92.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-unnao,156,1795,1687,575,34.1,94.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-lucknow,157,807,803,116,14.4,99.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-rae-bareli,158,1773,1732,558,32.2,97.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-farrukhabad,159,1005,839,227,27.1,83.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-kannauj,160,752,679,144,21.2,90.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-etawah,161,692,678,132,19.5,98.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-auraiya,162,839,769,200,26.0,91.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-kanpur-dehat,163,1029,950,221,23.3,92.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-kanpur-nagar,164,1003,884,152,17.2,88.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-jalaun,165,1151,912,343,37.6,79.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-jhansi,166,816,736,300,40.8,90.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-lalitpur,167,752,677,215,31.8,90.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-hamirpur,168,627,486,241,49.6,77.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-mahoba,169,521,417,164,39.3,80.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-banda,170,694,650,178,27.4,93.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-chitrakoot,171,656,562,198,35.2,85.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-fatehpur,172,1515,1319,296,22.4,87.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-pratapgarh,173,2217,2157,305,14.1,97.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-kaushambi,174,868,719,90,12.5,82.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-allahabad,175,3053,2754,726,26.4,90.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-bara-banki,176,1839,1801,491,27.3,97.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-faizabad,177,1264,1227,192,15.6,97.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-ambedkar-nagar,178,1750,1636,415,25.4,93.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-sultanpur,179,2527,2491,490,19.7,98.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-bahraich,180,1390,1340,382,28.5,96.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-shrawasti,181,541,508,288,56.7,93.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-balrampur,182,1015,996,280,28.1,98.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-gonda,183,1817,1812,470,25.9,99.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-siddharth-nagar,184,2505,2336,2301,98.5,93.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-sant-kabir-nagar,186,1726,1563,544,34.8,90.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-maharajganj,187,1262,1208,259,21.4,95.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-gorakhpur,188,3319,2937,728,24.8,88.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-kushinagar,189,1639,1579,338,21.4,96.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-deoria,190,2162,2019,497,24.6,93.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-azamgarh,191,4101,3800,1026,27.0,92.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-mau,192,1610,1499,1496,99.8,93.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-ballia,193,2361,1843,1843,100.0,78.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-jaunpur,194,3381,3287,695,21.1,97.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-ghazipur,195,3367,2731,993,36.4,81.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-chandauli,196,1629,1425,683,47.9,87.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-varanasi,197,1295,1257,297,23.6,97.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-sant-ravi-das-nagar-bhadohi,198,1217,1087,349,32.1,89.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-mirzapur,199,1961,1745,417,23.9,89.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-sonbhadra,200,1429,1391,316,22.7,97.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-etah,201,882,853,234,27.4,96.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-UP-kansiram-nagar,202,715,650,134,20.6,90.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-pashchim-champaran,203,1483,1365,363,26.6,92.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-purba-champaran,204,1293,1252,204,16.3,96.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-sheohar,205,203,191,5,2.6,94.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-sitamarhi,206,834,808,342,42.3,96.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-madhubani,207,1110,1040,451,43.4,93.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-supaul,208,551,526,206,39.2,95.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-araria,209,742,716,301,42.0,96.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-kishanganj,210,771,732,140,19.1,94.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-purnia,211,1273,1113,458,41.2,87.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-katihar,212,1540,1306,680,52.1,84.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-madhepura,213,439,380,87,22.9,86.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-saharsa,214,468,445,149,33.5,95.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-darbhanga,215,1247,1069,281,26.3,85.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-muzaffarpur,216,1786,1719,338,19.7,96.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-gopalganj,217,1534,1395,614,44.0,90.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-siwan,218,1530,1435,404,28.2,93.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-saran-chhapra,219,1764,1570,275,17.5,89.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-vaishali,220,1569,1422,468,32.9,90.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-samastipur,221,1246,1129,164,14.5,90.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-begusarai,222,226,150,52,34.7,66.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-khagaria,223,301,245,57,23.3,81.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-bhagalpur,224,1515,966,328,34.0,63.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-banka,225,2111,1702,1325,77.8,80.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-munger,226,858,534,105,19.7,62.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-lakhisarai,227,472,362,131,36.2,76.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-sheikhpura,228,314,261,55,21.1,83.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-nalanda,229,1055,1003,196,19.5,95.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-patna,230,1388,1264,429,33.9,91.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-bhojpur,231,1217,997,293,29.4,81.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-buxar,232,1133,835,335,40.1,73.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-kaimur-bhabua,233,1695,1337,626,46.8,78.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-rohtas,234,2072,1717,725,42.2,82.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-aurangabad,235,1847,1742,874,50.2,94.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-gaya,236,2886,2682,1256,46.8,92.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-nawada,237,1084,955,294,30.8,88.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-jamui,238,1503,1324,663,50.1,88.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-jehanabad,239,584,541,66,12.2,92.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-BR-arwal,240,316,299,131,43.8,94.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-SK-north,241,55,52,11,21.2,94.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-SK-west,242,125,119,30,25.2,95.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-SK-south,243,148,140,15,10.7,94.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-SK-east,244,123,114,25,21.9,92.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AR-tawang,245,235,218,146,67.0,92.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AR-west-kameng,246,283,260,198,76.2,91.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AR-east-kameng,247,382,356,335,94.1,93.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AR-papum-pare,248,485,455,369,81.1,93.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AR-upper-subansiri,249,553,543,497,91.5,98.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AR-west-siang,250,461,444,366,82.4,96.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AR-east-siang,251,151,150,103,68.7,99.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AR-upper-siang,252,112,98,86,87.8,87.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AR-changlang,253,362,347,226,65.1,95.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AR-tirap,254,190,189,126,66.7,99.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AR-lower-subansiri,255,578,536,405,75.6,92.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AR-kurung-kumey,256,736,700,692,98.9,95.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AR-dibang-valley,257,142,134,22,16.4,94.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AR-lower-dibang-valley,258,314,264,150,56.8,84.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AR-lohit,259,300,286,160,55.9,95.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AR-anjaw,260,305,278,234,84.2,91.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-NL-mon,261,131,131,92,70.2,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-NL-mokokchung,262,108,107,49,45.8,99.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-NL-zunheboto,263,191,191,158,82.7,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-NL-wokha,264,153,151,126,83.4,98.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-NL-dimapur,265,222,219,153,69.9,98.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-NL-phek,266,117,117,70,59.8,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-NL-tuensang,267,144,138,124,89.9,95.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-NL-longleng,268,49,49,36,73.5,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-NL-kiphire,269,96,90,83,92.2,93.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-NL-kohima,270,105,105,54,51.4,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-NL-peren,271,112,102,92,90.2,91.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MN-senapati,272,686,669,543,81.2,97.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MN-tamenglong,273,175,174,147,84.5,99.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MN-churachandpur,274,600,596,473,79.4,99.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MN-bishnupur,275,49,48,9,18.8,98.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MN-thoubal,276,103,87,0,0.0,84.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MN-imphal-west,277,123,107,3,2.8,87.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MN-imphal-east,278,195,191,55,28.8,97.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MN-ukhrul,279,213,213,136,63.8,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MN-chandel,280,437,430,365,84.9,98.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MZ-mamit,281,123,86,45,52.3,69.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MZ-kolasib,282,49,34,21,61.8,69.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MZ-aizawl,283,104,94,45,47.9,90.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MZ-champhai,284,90,83,49,59.0,92.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MZ-serchhip,285,40,35,24,68.6,87.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MZ-lunglei,286,195,161,109,67.7,82.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MZ-lawangtlai,287,168,159,120,75.5,94.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MZ-saiha,288,61,52,39,75.0,85.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TR-west-tripura,289,287,281,1,0.4,97.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TR-south-tripura,290,270,268,61,22.8,99.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TR-dhalai,291,152,148,61,41.2,97.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TR-north-tripura,292,166,166,41,24.7,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-ML-west-garo-hills,293,1663,1577,855,54.2,94.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-ML-east-garo-hills,294,1110,1058,507,47.9,95.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-ML-south-garo-hills,295,804,731,520,71.1,90.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-ML-west-khasi-hills,296,1115,1093,784,71.7,98.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-ML-ri-bhoi,297,635,579,386,66.7,91.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-ML-east-khasi-hills,298,975,923,478,51.8,94.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-ML-jaintia-hills,299,537,498,265,53.2,92.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AS-dhubri,301,1091,1052,741,70.4,96.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AS-goalpara,302,829,779,629,80.7,94.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AS-barpeta,303,835,825,512,62.1,98.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AS-marigaon,304,632,598,406,67.9,94.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AS-nagaon,305,1412,1361,828,60.8,96.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AS-sonitpur,306,1876,1798,1546,86.0,95.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AS-lakhimpur,307,1184,1146,1046,91.3,96.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AS-dhemaji,308,1319,1264,1226,97.0,95.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AS-tinsukia,309,1168,1136,987,86.9,97.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AS-dibrugarh,310,1348,1318,1175,89.2,97.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AS-sivasagar,311,875,862,660,76.6,98.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AS-jorhat,312,848,763,589,77.2,90.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AS-golaghat,313,1125,1032,838,81.2,91.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AS-karbi-anglong,314,2921,2712,2674,98.6,92.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AS-dima-hasao,315,695,676,673,99.6,97.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AS-cachar,316,1040,998,708,70.9,96.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AS-karimganj,317,936,915,719,78.6,97.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AS-hailakandi,318,331,330,207,62.7,99.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AS-bongaigaon,319,563,535,425,79.4,95.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AS-chirang,320,508,501,445,88.8,98.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AS-kamrup,321,1068,1037,727,70.1,97.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AS-kamrup-metropolitan,322,216,204,167,81.9,94.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AS-nalbari,323,456,455,307,67.5,99.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AS-baksa,324,690,679,519,76.4,98.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AS-darrang,325,561,552,354,64.1,98.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AS-udalguri,326,714,705,615,87.2,98.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-WB-darjiling,327,688,634,236,37.2,92.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-WB-jalpaiguri,328,733,725,330,45.5,98.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-WB-koch-bihar,329,1194,1141,580,50.8,95.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-WB-uttar-dinajpur,330,1494,1480,838,56.6,99.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-WB-dakshin-dinajpur,331,1631,1603,880,54.9,98.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-WB-maldah,332,1772,1662,1052,63.3,93.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-WB-murshidabad,333,2167,1946,1159,59.6,89.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-WB-birbhum,334,2458,2284,1492,65.3,92.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-WB-barddhaman,335,2502,2459,1213,49.3,98.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-WB-nadia,336,1308,1267,527,41.6,96.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-WB-north-24-parganas,337,1528,1522,656,43.1,99.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-WB-hugli,338,1866,1853,1092,58.9,99.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-WB-bankura,339,3823,3716,2657,71.5,97.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-WB-puruliya,340,2667,2565,1808,70.5,96.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-WB-haora,341,650,647,330,51.0,99.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-WB-south-24-parganas,343,2044,2014,1217,60.4,98.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-WB-pashchim-medinipur,344,8695,8094,6592,81.4,93.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-WB-purba-medinipur,345,2998,2962,2260,76.3,98.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JH-garhwa,346,888,844,9,1.1,95.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JH-chatra,347,1471,1377,31,2.3,93.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JH-kodarma,348,699,577,14,2.4,82.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JH-deoghar,350,2662,2322,164,7.1,87.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JH-godda,351,2302,1680,379,22.6,73.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JH-sahibganj,352,1813,1343,292,21.7,74.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JH-pakur,353,1247,1119,57,5.1,89.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JH-dhanbad,354,1159,1032,6,0.6,89.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JH-bokaro,355,635,611,3,0.5,96.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JH-lohardaga,356,353,352,0,0.0,99.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JH-purbi-singhbhum,357,1748,1609,27,1.7,92.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JH-palamu,358,1870,1711,43,2.5,91.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JH-latehar,359,769,749,5,0.7,97.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JH-hazaribagh,360,1308,1193,25,2.1,91.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JH-ramgarh,361,315,305,0,0.0,96.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JH-dumka,362,2925,2688,68,2.5,91.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JH-jamtara,363,1161,1082,12,1.1,93.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JH-ranchi,364,1311,1296,217,16.7,98.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JH-khunti,365,756,754,1,0.1,99.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JH-gumla,366,946,942,0,0.0,99.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JH-simdega,367,450,449,25,5.6,99.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JH-pashchimi-singhbhum,368,1673,1642,4,0.2,98.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-JH-saraikela-kharsawan,369,1184,1146,8,0.7,96.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-bargarh,370,1206,1179,521,44.2,97.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-jharsuguda,371,351,347,101,29.1,98.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-sambalpur,372,1313,1229,54,4.4,93.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-debagarh,373,878,718,245,34.1,81.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-sundargarh,374,1762,1713,651,38.0,97.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-kendujhar,375,2123,2064,488,23.6,97.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-mayurbhanj,376,3950,3751,1290,34.4,95.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-baleshwar,377,2932,2635,902,34.2,89.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-bhadrak,378,1312,1250,256,20.5,95.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-kendrapara,379,1547,1415,302,21.3,91.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-jagatsinghapur,380,1292,1223,172,14.1,94.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-cuttack,381,1952,1856,474,25.5,95.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-jajapur,382,1783,1598,375,23.5,89.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-dhenkanal,383,1208,1081,370,34.2,89.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-anugul,384,1871,1654,784,47.4,88.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-nayagarh,385,1692,1541,606,39.3,91.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-khordha,386,1534,1356,467,34.4,88.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-puri,387,1707,1600,261,16.3,93.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-ganjam,388,3195,2783,1033,37.1,87.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-gajapati,389,1612,1499,935,62.4,93.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-kandhamal,390,2587,2417,1640,67.9,93.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-bauda,391,1187,1117,428,38.3,94.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-subarnapur,392,962,856,449,52.5,89.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-balangir,393,1783,1751,684,39.1,98.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-nuapada,394,668,656,194,29.6,98.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-kalahandi,395,2253,2116,986,46.6,93.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-rayagada,396,2665,2468,1337,54.2,92.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-nabarangapur,397,891,868,301,34.7,97.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-koraput,398,2042,1941,1157,59.6,95.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-OR-malkangiri,399,1055,995,704,70.8,94.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-CT-koriya,400,636,623,231,37.1,98.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-CT-surguja,401,1750,1746,642,36.8,99.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-CT-jashpur,402,755,754,343,45.5,99.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-CT-raigarh,403,1466,1426,462,32.4,97.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-CT-korba,404,719,707,261,36.9,98.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-CT-janjgir-champa,405,892,881,258,29.3,98.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-CT-bilaspur,406,1599,1566,565,36.1,97.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-CT-kabeerdham,407,1006,957,431,45.0,95.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-CT-rajnandgaon,408,1653,1600,490,30.6,96.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-CT-durg,409,1773,1761,376,21.4,99.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-CT-raipur,410,2149,2094,759,36.2,97.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-CT-mahasamund,411,1145,1112,372,33.5,97.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-CT-dhamtari,412,649,619,141,22.8,95.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-CT-uttar-bastar-kanker,413,1070,1063,484,45.5,99.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-CT-bastar,414,1150,1128,381,33.8,98.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-CT-narayanpur,415,200,191,140,73.3,95.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-CT-dakshin-bastar-dantewada,416,608,590,387,65.6,97.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-CT-bijapur,417,694,565,521,92.2,81.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-sheopur,418,582,516,116,22.5,88.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-morena,419,815,775,188,24.3,95.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-bhind,420,937,890,346,38.9,95.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-gwalior,421,655,618,213,34.5,94.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-datia,422,631,586,327,55.8,92.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-shivpuri,423,1417,1305,649,49.7,92.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-tikamgarh,424,963,878,322,36.7,91.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-chhatarpur,425,1187,1085,584,53.8,91.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-panna,426,1011,947,527,55.6,93.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-sagar,427,2075,1901,1040,54.7,91.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-damoh,428,1210,1176,636,54.1,97.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-satna,429,1984,1799,890,49.5,90.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-rewa,430,2719,2408,1377,57.2,88.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-umaria,431,653,594,349,58.8,91.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-neemuch,432,798,675,298,44.1,84.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-mandsaur,433,933,893,302,33.8,95.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-ratlam,434,1069,1053,509,48.3,98.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-ujjain,435,1101,1095,643,58.7,99.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-shajapur,436,1107,1071,557,52.0,96.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-dewas,437,1114,1057,533,50.4,94.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-dhar,438,1535,1477,504,34.1,96.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-indore,439,629,614,217,35.3,97.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-west-nimar,440,1417,1194,566,47.4,84.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-barwani,441,716,696,276,39.7,97.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-rajgarh,442,1728,1677,1170,69.8,97.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-vidisha,443,1614,1536,865,56.3,95.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-bhopal,444,519,501,194,38.7,96.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-sehore,445,1072,1031,504,48.9,96.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-raisen,446,1485,1424,859,60.3,95.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-betul,447,1399,1344,513,38.2,96.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-harda,448,567,511,279,54.6,90.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-hoshangabad,449,961,921,452,49.1,95.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-katni,450,947,905,378,41.8,95.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-jabalpur,451,1424,1377,603,43.8,96.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-narsimhapur,452,1067,1035,608,58.7,97.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-dindori,453,924,901,407,45.2,97.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-mandla,454,1221,1203,529,44.0,98.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-chhindwara,455,1965,1906,1004,52.7,97.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-seoni,456,1587,1579,700,44.3,99.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-balaghat,457,1384,1272,479,37.7,91.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-guna,458,1338,1264,674,53.3,94.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-ashoknagar,459,899,818,499,61.0,91.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-shahdol,460,844,814,281,34.5,96.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-anuppur,461,571,562,125,22.2,98.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-sidhi,462,1055,1025,474,46.2,97.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-singrauli,463,744,727,202,27.8,97.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-jhabua,464,813,783,245,31.3,96.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-alirajpur,465,543,538,142,26.4,99.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-east-nimar,466,711,711,206,29.0,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MP-burhanpur,467,263,261,86,33.0,99.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GJ-kachchh,468,924,877,47,5.4,94.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GJ-banas-kantha,469,1237,1233,36,2.9,99.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GJ-patan,470,517,517,0,0.0,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GJ-mahesana,471,606,597,6,1.0,98.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GJ-sabar-kantha,472,1376,1364,41,3.0,99.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GJ-gandhinagar,473,252,252,0,0.0,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GJ-ahmadabad,474,512,506,8,1.6,98.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GJ-surendranagar,475,651,647,31,4.8,99.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GJ-rajkot,476,835,833,29,3.5,99.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GJ-jamnagar,477,714,697,57,8.2,97.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GJ-porbandar,478,182,179,21,11.7,98.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GJ-junagadh,479,1029,901,54,6.0,87.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GJ-amreli,480,616,614,50,8.1,99.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GJ-bhavnagar,481,793,783,22,2.8,98.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GJ-anand,482,347,347,2,0.6,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GJ-kheda,483,618,615,5,0.8,99.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GJ-panch-mahals,484,1210,1198,65,5.4,99.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GJ-dohad,485,692,691,12,1.7,99.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GJ-vadodara,486,1537,1533,175,11.4,99.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GJ-narmada,487,609,558,36,6.5,91.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GJ-bharuch,488,653,647,6,0.9,99.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GJ-the-dangs,489,308,308,15,4.9,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GJ-navsari,490,372,372,0,0.0,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GJ-valsad,491,434,433,30,6.9,99.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GJ-surat,492,713,690,27,3.9,96.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GJ-tapi,493,488,451,3,0.7,92.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-DH-dadra-nagar-haveli,496,65,65,2,3.1,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-nandurbar,497,943,930,166,17.8,98.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-dhule,498,678,674,106,15.7,99.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-jalgaon,499,1513,1487,340,22.9,98.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-buldana,500,1444,1300,326,25.1,90.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-akola,501,986,864,191,22.1,87.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-washim,502,789,698,114,16.3,88.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-amravati,503,1997,1637,339,20.7,82.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-wardha,504,1376,973,154,15.8,70.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-nagpur,505,1859,1617,257,15.9,87.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-bhandara,506,864,771,124,16.1,89.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-gondiya,507,942,883,105,11.9,93.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-garhchiroli,508,1675,1509,664,44.0,90.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-chandrapur,509,1792,1463,398,27.2,81.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-yavatmal,510,2137,1853,402,21.7,86.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-nanded,511,1603,1541,437,28.4,96.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-hingoli,512,711,675,56,8.3,94.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-parbhani,513,843,830,16,1.9,98.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-jalna,514,967,958,60,6.3,99.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-aurangabad,515,1356,1314,133,10.1,96.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-nashik,516,1922,1919,80,4.2,99.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-thane,517,1721,1704,99,5.8,99.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-raigarh,520,1909,1860,145,7.8,97.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-pune,521,1877,1852,141,7.6,98.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-ahmadnagar,522,1584,1581,152,9.6,99.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-bid,523,1368,1357,120,8.8,99.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-latur,524,948,928,47,5.1,97.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-osmanabad,525,733,728,54,7.4,99.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-solapur,526,1154,1143,48,4.2,99.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-satara,527,1745,1719,140,8.1,98.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-ratnagiri,528,1537,1531,31,2.0,99.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-sindhudurg,529,748,740,22,3.0,98.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-kolhapur,530,1216,1195,96,8.0,98.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-MH-sangli,531,728,725,26,3.6,99.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AP-adilabad,532,1725,1590,441,27.7,92.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AP-nizamabad,533,912,847,77,9.1,92.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AP-karimnagar,534,1079,1037,64,6.2,96.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AP-medak,535,1231,1201,82,6.8,97.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AP-rangareddy,537,870,817,103,12.6,93.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AP-mahbubnagar,538,1537,1465,97,6.6,95.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AP-nalgonda,539,1135,1107,72,6.5,97.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AP-warangal,540,1049,961,107,11.1,91.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AP-khammam,541,1223,1103,334,30.3,90.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AP-srikakulam,542,1802,1701,493,29.0,94.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AP-vizianagaram,543,1520,1452,485,33.4,95.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AP-visakhapatnam,544,3265,3072,2148,69.9,94.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AP-east-godavari,545,1374,1312,454,34.6,95.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AP-west-godavari,546,881,842,91,10.8,95.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AP-krishna,547,968,934,82,8.8,96.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AP-guntur,548,712,691,19,2.7,97.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AP-prakasam,549,1081,985,116,11.8,91.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AP-sri-potti-sriramulu-nellore,550,1177,1093,230,21.0,92.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AP-y-s-r,551,919,830,142,17.1,90.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AP-kurnool,552,898,870,44,5.1,96.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AP-anantapur,553,949,921,80,8.7,97.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AP-chittoor,554,1493,1455,244,16.8,97.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-belgaum,555,1275,1263,17,1.3,99.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-bagalkot,556,624,613,16,2.6,98.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-bijapur,557,692,679,78,11.5,98.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-bidar,558,620,595,18,3.0,96.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-raichur,559,884,815,131,16.1,92.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-koppal,560,629,595,78,13.1,94.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-gadag,561,337,322,16,5.0,95.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-dharwad,562,379,361,22,6.1,95.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-uttara-kannada,563,1289,1243,213,17.1,96.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-haveri,564,703,696,5,0.7,99.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-bellary,565,552,522,13,2.5,94.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-chitradurga,566,1063,948,149,15.7,89.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-davanagere,567,923,800,100,12.5,86.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-shimoga,568,1530,1444,243,16.8,94.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-udupi,569,233,233,0,0.0,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-chikmagalur,570,1117,1022,92,9.0,91.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-tumkur,571,2715,2582,484,18.7,95.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-bangalore,572,588,562,65,11.6,95.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-mandya,573,1477,1368,57,4.2,92.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-hassan,574,2574,2418,414,17.1,93.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-dakshina-kannada,575,331,331,0,0.0,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-kodagu,576,296,291,0,0.0,98.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-mysore,577,1336,1199,95,7.9,89.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-chamrajnagar,578,509,428,29,6.8,84.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-gulbarga,579,918,871,43,4.9,94.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-yadgir,580,513,487,21,4.3,94.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-kolar,581,1797,1608,126,7.8,89.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-chikkaballapura,582,1513,1324,238,18.0,87.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-bangalore-rural,583,1051,957,144,15.0,91.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KA-ramanagara,584,872,820,53,6.5,94.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GA-north-goa,585,194,188,4,2.1,96.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-GA-south-goa,586,140,132,7,5.3,94.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KL-kasaragod,588,93,93,0,0.0,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KL-kannur,589,56,56,0,0.0,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KL-wayanad,590,48,48,0,0.0,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KL-kozhikode,591,51,51,0,0.0,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KL-malappuram,592,83,83,0,0.0,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KL-palakkad,593,131,131,0,0.0,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KL-thrissur,594,98,98,0,0.0,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KL-ernakulam,595,61,61,0,0.0,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KL-idukki,596,64,64,0,0.0,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KL-kottayam,597,80,80,0,0.0,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KL-alappuzha,598,52,51,0,0.0,98.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KL-pathanamthitta,599,64,64,0,0.0,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KL-kollam,600,69,69,0,0.0,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-KL-thiruvananthapuram,601,68,68,0,0.0,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-thiruvallur,602,617,582,24,4.1,94.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-kancheepuram,604,1019,962,66,6.9,94.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-vellore,605,858,763,23,3.0,88.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-tiruvannamalai,606,1095,1039,29,2.8,94.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-viluppuram,607,1486,1431,79,5.5,96.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-salem,608,585,517,36,7.0,88.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-namakkal,609,389,362,15,4.1,93.1,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-erode,610,306,287,5,1.7,93.8,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-the-nilgiris,611,40,40,3,7.5,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-dindigul,612,362,330,9,2.7,91.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-karur,613,170,169,1,0.6,99.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-tiruchirappalli,614,471,431,5,1.2,91.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-perambalur,615,159,147,2,1.4,92.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-ariyalur,616,213,189,2,1.1,88.7,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-cuddalore,617,828,799,36,4.5,96.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-nagappattinam,618,491,486,13,2.7,99.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-thiruvarur,619,547,538,15,2.8,98.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-thanjavur,620,805,789,16,2.0,98.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-pudukkottai,621,750,732,69,9.4,97.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-sivaganga,622,515,508,10,2.0,98.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-madurai,623,570,526,9,1.7,92.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-theni,624,98,80,3,3.8,81.6,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-virudunagar,625,570,475,37,7.8,83.3,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-ramanathapuram,626,393,383,0,0.0,97.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-thoothukkudi,627,439,432,19,4.4,98.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-tirunelveli,628,465,430,5,1.2,92.5,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-kanniyakumari,629,63,56,6,10.7,88.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-dharmapuri,630,486,448,0,0.0,92.2,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-krishnagiri,631,655,602,27,4.5,91.9,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-coimbatore,632,237,219,6,2.7,92.4,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-TN-tiruppur,633,297,297,9,3.0,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-PY-puducherry,635,62,62,0,0.0,100.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AN-nicobar,638,200,90,57,63.3,45.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AN-north-middle-andaman,639,227,193,96,49.7,85.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011
+IN-AN-south-andaman,640,128,105,14,13.3,82.0,pct_villages_no_pucca_road,Villages without a black-topped (pucca) road,Census 2011 Village Directory,2011

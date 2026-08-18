@@ -32,7 +32,15 @@ def main(
     failures: list[str] = []
 
     with sync_playwright() as pw:
-        browser = pw.chromium.launch()
+        # channel="chrome" uses the locally installed Google Chrome instead of
+        # Playwright's bundled build. The bundled chromium goes missing whenever
+        # the playwright package is upgraded without re-running `playwright
+        # install`, which made this script fail for a reason unrelated to the app
+        # it is meant to be smoke-testing. Falls back if Chrome is absent.
+        try:
+            browser = pw.chromium.launch(channel="chrome")
+        except Exception:
+            browser = pw.chromium.launch()
 
         def shoot(name: str, path: str, w: int, h: int, prepare=None) -> None:
             if only and only != name:
@@ -91,6 +99,20 @@ def main(
                 failures.append("drilldown drawer did not open")
 
         shoot("console-dossier", "/console", 1680, 1000, drill)
+
+        # -- roads sector, showing its caveat in the calibration strip -------
+        # Replaces console-roads-nodata.png, which documented a gap that closed on
+        # 18 Aug 2026. The frame now exists to show the opposite: the sector is
+        # loaded AND its state-coding limitation is disclosed on screen.
+        def roads(page):
+            page.click("text=Roads & Transport")
+            page.wait_for_timeout(1800)
+            if page.locator(".strip-item.caveat").count() == 0:
+                failures.append("roads caveat missing from the calibration strip")
+            if page.locator(".rank-item").count() < 10:
+                failures.append("roads ranking did not populate")
+
+        shoot("console-roads-caveat", "/console", 1680, 1000, roads)
 
         # -- landing page ---------------------------------------------------
         # New in the 17 Aug revision: "/" is the landing page and the console

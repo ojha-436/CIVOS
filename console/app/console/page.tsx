@@ -143,6 +143,7 @@ export default function Console() {
     );
   }
 
+  const activeSector = ds.sectors.find((s) => s.key === sector);
   const silentTop = visibleRank.filter((r) => r.row.quadrant === 'silent_need').length;
   const coverage = {
     districts: new Set(ds.rows.filter((r) => r.has_deficit).map((r) => r.code)).size,
@@ -199,6 +200,14 @@ export default function Console() {
             <b>No data</b> — {quadCounts.no_data} district-sectors this view, excluded from ranking
           </span>
         </div>
+        {activeSector?.caveat && (
+          <div className="strip-item caveat" title={activeSector.caveat}>
+            <span className="dot synth" />
+            <span>
+              <b>{activeSector.short} caveat</b> — {activeSector.caveat}
+            </span>
+          </div>
+        )}
         <div className="strip-note">Fixture generated {ds.meta.generated_at}</div>
       </div>
 
