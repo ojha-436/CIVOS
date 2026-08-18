@@ -1,6 +1,6 @@
 # District boundary attribution
 
-Built 2026-08-17 10:29 UTC. Regenerate with `uv run --with pyshp python scripts/build_boundaries.py`.
+Built 2026-08-18 05:09 UTC. Regenerate with `uv run --with pyshp python scripts/build_boundaries.py`.
 
 ## Source
 
@@ -19,7 +19,7 @@ rendering, and writes `console/public/data/districts.geojson`.
 |---|---|
 | Districts | 641 |
 | Simplification | `4%` retained vertices, topology preserved |
-| Rendered size | 823 KB |
+| Rendered size | 833 KB |
 | Coordinate precision | 4 decimal places (~11 m) |
 
 ## Why this source, and what it replaced

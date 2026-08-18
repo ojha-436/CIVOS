@@ -115,7 +115,7 @@ def main(
     stem = fetch_parts()
     r = shapefile.Reader(str(stem))
     fields = [f[0] for f in r.fields[1:]]
-    for required in ("DISTRICT", "ST_NM", "ST_CEN_CD", "DT_CEN_CD"):
+    for required in ("DISTRICT", "ST_NM", "ST_CEN_CD", "DT_CEN_CD", "censuscode"):
         if required not in fields:
             raise SystemExit(f"upstream shapefile is missing field {required!r}; fields={fields}")
 
@@ -129,6 +129,11 @@ def main(
         name = str(rec[idx["DISTRICT"]]).strip()
         st_cd = int(rec[idx["ST_CEN_CD"]])
         dt_cd = int(rec[idx["DT_CEN_CD"]])
+        # All-India Census 2011 district code (1..640). Distinct from DT_CEN_CD,
+        # which is the within-state ordinal. This is the key the Census Village
+        # Directory CSVs use as "District Code", so carrying it makes the roads
+        # layer an exact integer join instead of a name match.
+        census_cd = int(rec[idx["censuscode"]]) if "censuscode" in idx else None
 
         # The upstream shapefile carries a SENTINEL polygon for the area where
         # census enumeration did not happen: DISTRICT = "Data Not Available" with
@@ -162,6 +167,7 @@ def main(
                     "state": state,
                     "st_cen_cd": st_cd,
                     "dt_cen_cd": dt_cd,
+                    **({"censuscode": census_cd} if census_cd is not None else {}),
                     **({"placeholder": True} if placeholder else {}),
                 },
                 "geometry": shp.__geo_interface__,

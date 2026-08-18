@@ -1,6 +1,6 @@
 # Deficit layer — provenance and reconciliation
 
-Built 2026-08-17 10:29 UTC. Regenerate with `uv run python scripts/build_deficit_layer.py`.
+Built 2026-08-18 05:55 UTC. Regenerate with `uv run python scripts/build_deficit_layer.py`.
 
 ## Source
 

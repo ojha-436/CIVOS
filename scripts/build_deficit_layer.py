@@ -345,6 +345,11 @@ def reconcile(nfhs: dict, geo_districts: list[dict]) -> tuple[dict, list, list]:
 
 def main(
     load_bigquery: bool = typer.Option(False, "--load-bigquery", help="Also load to BigQuery"),
+    with_roads: bool = typer.Option(
+        False, "--with-roads",
+        help="Load data/fact_roads_deficit.csv. OFF by default — the Census "
+             "all-weather-road field is not comparably coded across states.",
+    ),
     project: str = typer.Option("civos-in", "--project"),
     location: str = typer.Option("asia-south1", "--location"),
     dataset: str = typer.Option("civos", "--dataset"),
@@ -438,6 +443,57 @@ def main(
                 ])
                 n_facts += 1
 
+        # -- Roads & Transport, from a different source -------------------------
+        # NFHS is a health survey and carries no road indicator (all 105 scanned,
+        # zero matches — see docs/ROADS-SECTOR-GAP.md). The roads deficit comes
+        # from the Census 2011 Village Directory instead, built separately by
+        # scripts/build_roads_layer.py because it is 631 district CSVs rather than
+        # one extraction. Appended here so every sector lands in one table with its
+        # own source and year attached, rather than the console having to know that
+        # one sector arrives by a different route.
+        # QUARANTINED, and deliberately opt-in rather than "load it if the file is
+        # there". Measured 18 Aug 2026: the Census "All Weather Road" status field
+        # is not coded comparably across states — Kerala (14/14 districts), Haryana
+        # (21/21) and Andhra Pradesh (18/18) all report EXACTLY 0.0% of villages
+        # without an all-weather road, while Rajasthan's median is 73%. Two
+        # enumerators applied Status A(1)/NA(2) in opposite directions.
+        #
+        # CIVOS ranks districts nationally against per-sector medians, so consuming
+        # this would drive the ranking with a state-level enumeration artefact —
+        # the exact "measurement bias distorts funding" failure the product exists
+        # to correct. See docs/ROADS-SECTOR-GAP.md for the full evidence.
+        #
+        # The layer is kept, and the flag is kept, because the finding is worth
+        # more than the file: if a comparably-coded column or source turns up, this
+        # becomes a one-flag change.
+        roads_path = OUT / "fact_roads_deficit.csv"
+        n_roads = 0
+        if with_roads and roads_path.exists():
+            for r in csv.DictReader(roads_path.open()):
+                if r["admin_unit_code"] not in matched:
+                    # A district with no NFHS row is excluded everywhere else; it
+                    # would be inconsistent to score it on roads alone.
+                    continue
+                w.writerow([
+                    r["admin_unit_code"], "roads_transport", r["indicator_key"],
+                    r["indicator_label"],
+                    round(100.0 - float(r["deficit_pct"]), 1),   # coverage
+                    round(float(r["deficit_pct"]), 1),           # deprivation
+                    r["source"], r["year"],
+                ])
+                n_roads += 1
+                n_facts += 1
+            console.print(
+                f"\n[bold]Roads & Transport[/bold] — Census 2011 Village Directory: "
+                f"[bold]{n_roads}[/bold] districts"
+            )
+        elif roads_path.exists():
+            console.print(
+                "\n[yellow]Roads & Transport layer present but NOT loaded[/yellow] — the Census "
+                "all-weather-road field is not comparably coded across states. Pass --with-roads "
+                "to override; see docs/ROADS-SECTOR-GAP.md."
+            )
+
     # -- participation capacity ---------------------------------------------
     # Replaces the sha256 connectivity term. Two real NFHS-5 values per district,
     # min-max normalised to [0,1] so the composite is comparable across districts
@@ -492,6 +548,9 @@ def main(
     console.print(f"  wrote data/fact_participation_capacity.csv ({n_cap} rows)")
 
     covered_sectors = sorted({sector_of[k] for k in INDICATORS})
+    if n_roads:
+        # roads_transport is real too now, just from a different source
+        covered_sectors = sorted(set(covered_sectors) | {"roads_transport"})
     missing = [s["key"] for s in sectors if s["key"] not in covered_sectors]
 
     # -- reconciliation report ---------------------------------------------

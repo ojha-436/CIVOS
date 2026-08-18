@@ -139,6 +139,62 @@ would be worse than leaving the sector grey.
 The underlying figures are Government of India census statistics and are openly
 licensed *at source*. It is only this particular republication that is restricted.
 
+### 7. The Census indicator was LOADED, tested, and rejected on evidence
+
+The catalogue turned out to need no API key at all. data.gov.in's own front end
+calls a public backend — `/backend/dmspublic/v1/resources?filters[catalog_reference]=534901`
+— which enumerates all **631** district resources, and each record's `datafile_url`
+points straight at `censusindia.gov.in`. So the full Village Directory was
+downloaded and aggregated: **612 of 641 districts**, joined by exact all-India
+census district code (`censuscode`, now carried in the boundary properties).
+
+The aggregation is correct. Darjiling: 306 villages without an all-weather road out
+of 634 with a recorded status = **48.3%**, matching a hand-check of the raw file.
+
+**And the indicator still cannot be used.** The `All Weather Road (Status A(1)/NA(2))`
+field is not coded comparably across states:
+
+| State | Districts | Median deficit |
+|---|---|---|
+| Kerala | 14 | **all exactly 0.0%** |
+| Haryana | 21 | **all exactly 0.0%** |
+| Andhra Pradesh | 18 | **all exactly 0.0%** |
+| Delhi · Tripura · Puducherry · Chandigarh · Daman & Diu | 13 | all exactly 0.0% |
+| Rajasthan | 33 | **73.0%** (minimum 47.0%) |
+| Uttarakhand | 13 | 69.3% |
+
+At village level, the same split:
+
+| District | status 1 (has road) | status 2 (none) |
+|---|---|---|
+| Mau, Uttar Pradesh | **3** | **1,496** |
+| Kupwara, Jammu & Kashmir | **351** | **0** |
+| Darjiling, West Bengal | 328 | 306 |
+
+Kerala does have good rural connectivity — but *exactly zero* villages lacking an
+all-weather road across all fourteen of its districts, and Haryana 21 of 21, and
+Andhra Pradesh 18 of 18, is an **enumeration convention**, not a physical fact. Two
+enumerators applied `A(1)/NA(2)` in opposite directions.
+
+CIVOS ranks districts **nationally** against per-sector medians. Loading this would
+score every Kerala, Haryana, Andhra Pradesh and Delhi district as having perfect
+roads and every Rajasthan district as catastrophic — a state-level artefact driving
+a national funding ranking. That is the same failure mode as §3, and the same
+failure mode the entire product exists to correct.
+
+**What was kept.** `scripts/build_roads_layer.py` and
+`data/fact_roads_deficit.csv` remain in the repository, because the finding is worth
+more than the file. Consumption is gated behind an explicit `--with-roads` flag on
+`scripts/build_deficit_layer.py`, **off by default**, so the sector cannot quietly
+acquire a bad indicator. If a comparably-coded column or source appears, this
+becomes a one-flag change.
+
+Two incidental fixes came out of it: the district CSVs are **latin-1**, not UTF-8
+(19 files failed to decode before this was found), and `censusindia.gov.in` serves
+an **incomplete certificate chain** that Python rejects even with `certifi`, so the
+downloader shells out to `curl` — which keeps verification ON rather than disabling
+it.
+
 ## Why it was not derived anyway
 
 The connectivity figure *could* be approximated: buffer every road that is not
