@@ -70,6 +70,69 @@ documents this explicitly.
 Contrast with `TELEGRAM_BOT_TOKEN` and `TELEGRAM_WEBHOOK_SECRET`, which are real
 credentials and live only in `.env` (gitignored) and in GitHub Actions secrets.
 
+### GitHub flagged it, and the flag was reasonable
+
+On 18 Aug 2026 GitHub secret scanning opened *Google API Key #1* against
+`console/lib/firebase.ts`. The alert is a pattern match on `AIza…`: a server key,
+a Maps key and a Firebase web key are indistinguishable to a regex, so all three
+are flagged, and `Validity: Unknown` means GitHub could not verify what this one
+does.
+
+**"Public by design" is only true if the key is actually restricted**, so that
+was checked rather than assumed. It was already API-restricted to Firebase
+services, and — this is the part that mattered — `aiplatform` and
+`generativelanguage` **are** enabled on `civos-in` for the dossier generator. An
+unrestricted key would have let anyone bill Gemini calls to the project. A direct
+call confirmed the restriction holds:
+
+```
+GET generativelanguage.../models?key=…   ->  403 PERMISSION_DENIED
+```
+
+Two gaps were real and are now closed:
+
+- **HTTP referrer restriction** — the key is limited to the two Cloud Run hosts,
+  the two Firebase hosts, and localhost. Probed after the change:
+
+  | Caller | Result |
+  |---|---|
+  | no referrer (an attacker's `curl` default) | `403 Requests from referer <empty> are blocked.` |
+  | `https://evil.example.com/` | `403 … are blocked.` |
+  | the real Cloud Run host | allowed |
+
+  Referrer restrictions are a speed bump, not a control — a `Referer` header is
+  trivially forged. They raise the cost of casual abuse; the Firestore rules are
+  what actually protect data.
+
+- **Signup quota** — capped at 200/day. Anyone holding the key can call
+  Identity Toolkit and create accounts; the cap bounds junk-account and quota
+  abuse. 200 is far above any judging panel and far below a spam run. Email
+  enumeration protection is also on.
+
+The alert was closed as **won't fix**, not *revoked* and not *false positive*.
+Revoked would be false — the key is live and must stay live. False positive
+would also be false — it genuinely is a Google API key. Won't fix is the only
+honest classification, and the resolution comment records the reasoning.
+
+Applying the restriction has one operational trap worth writing down. `gcloud
+services api-keys update` **replaces** the entire restrictions block, so passing
+`--allowed-referrers` without re-passing every `--api-target` silently *widens*
+the key to all APIs. Worse, under zsh an unquoted `$VAR` holding 27 flags is not
+word-split, so gcloud accepted the whole string as a single service name and the
+key was left with one bogus target — which blocked `identitytoolkit` and took
+live sign-in down until it was restored. Write the flags out literally:
+
+```bash
+gcloud services api-keys update <KEY_UID> --project=civos-in \
+  --allowed-referrers="https://…/*,http://localhost:3000/*" \
+  --api-target=service=identitytoolkit.googleapis.com \
+  --api-target=service=securetoken.googleapis.com \
+  …one line per service, all 27…
+```
+
+Then re-verify sign-in end to end; API key changes take up to five minutes to
+propagate. Both the restriction and the quota are reversible in one command.
+
 Every value is overridable by `NEXT_PUBLIC_FIREBASE_*` environment variables, so a
 second deployment — a different ministry, a different country instance — points at
 its own project without a code change.
