@@ -3,6 +3,12 @@ name: Deploy to Cloud Run
 on:
   push:
     branches: [main]
+  # Run the gates on pull requests too, not only at merge. Checks that fire for
+  # the first time on the merge commit tell you a change was bad after it has
+  # landed on main, which is the wrong end of the process to learn it. The deploy
+  # job below is guarded so only a push to main can actually ship.
+  pull_request:
+    branches: [main]
   # Lets the deploy be re-run from the Actions tab (or `gh workflow run`) without
   # inventing a dummy commit — needed whenever only a repository *secret* has
   # changed, since editing a secret does not itself trigger anything.
@@ -173,6 +179,10 @@ jobs:
   deploy:
     name: Build & Deploy
     runs-on: ubuntu-latest
+    # Never deploy from a pull request. A PR build must not be able to ship, and
+    # secrets are not exposed to pull_request runs anyway — without this guard the
+    # job would fail confusingly on every PR instead of being skipped.
+    if: github.event_name != 'pull_request'
     # A country literal in core/ falsifies the cross-border claim, which is 20%
     # of the score. A failing security test means the deployed surface is not the
     # reviewed surface. Do not ship past either.
