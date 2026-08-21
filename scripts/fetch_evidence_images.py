@@ -195,7 +195,10 @@ def main(
                 # Short digest suffix: truncating long Commons titles to 70 chars
                 # collided, so five images silently overwrote each other and the
                 # manifest claimed more files than existed on disk.
-                digest = hashlib.sha1(title.encode()).hexdigest()[:6]
+                # usedforsecurity=False: this is a filename disambiguator, not a
+                # security primitive. Saying so silences the scanner honestly
+                # instead of leaving a HIGH finding for a reviewer to re-triage.
+                digest = hashlib.sha1(title.encode(), usedforsecurity=False).hexdigest()[:6]
                 fname = f"{sector}--{stem[:60]}-{digest}.jpg"
                 dest = OUT / fname
 

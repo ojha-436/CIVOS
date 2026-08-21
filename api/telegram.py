@@ -37,6 +37,7 @@ from __future__ import annotations
 import hmac
 import logging
 import os
+import re
 from typing import Any
 
 import httpx
@@ -58,6 +59,16 @@ _TIMEOUT = httpx.Timeout(45.0, connect=10.0)
 
 # Telegram caps a message at 4096 characters.
 _MAX_MSG = 3900
+
+# Telegram's own getFile ceiling is ~20 MB. Enforced here too: an upstream
+# promise is not a local control.
+_MAX_FILE_BYTES = 20 * 1024 * 1024
+
+# Telegram file paths look like "photos/file_42.jpg" or "voice/file_7.oga".
+# Used with fullmatch, so a scheme or a host cannot appear. The lookahead is the
+# load-bearing part: `.` and `/` both have to be legal characters, which on its
+# own would happily admit "../../etc/passwd".
+_SAFE_FILE_PATH = re.compile(r"(?!.*\.\.)[A-Za-z0-9._/-]{1,200}")
 
 
 def _token() -> str:
@@ -147,12 +158,27 @@ async def _send(client: httpx.AsyncClient, chat_id: int, text: str) -> None:
 
 
 async def _download(client: httpx.AsyncClient, file_id: str) -> bytes:
-    """Resolve a file_id to bytes. Held in memory only — never written to disk."""
+    """Resolve a file_id to bytes. Held in memory only — never written to disk.
+
+    `file_path` comes back from Telegram and is interpolated into a URL, so it is
+    constrained rather than trusted: a value containing `..` or a scheme would
+    otherwise redirect the fetch, and "the upstream API is trustworthy" is a
+    weaker guarantee than "this string cannot express anything else".
+
+    Size is capped for the same reason api/guards.py caps HTTP uploads. Telegram
+    tops out around 20 MB per file, but that ceiling is Telegram's promise, not
+    ours, and this instance has 1 GiB.
+    """
     r = await client.get(f"{API_ROOT}/bot{_token()}/getFile", params={"file_id": file_id})
     r.raise_for_status()
-    path = r.json()["result"]["file_path"]
+    path = str(r.json()["result"]["file_path"])
+    if not _SAFE_FILE_PATH.fullmatch(path):
+        raise ValueError("telegram returned an unexpected file_path shape")
+
     f = await client.get(f"{API_ROOT}/file/bot{_token()}/{path}")
     f.raise_for_status()
+    if len(f.content) > _MAX_FILE_BYTES:
+        raise ValueError(f"telegram file exceeds {_MAX_FILE_BYTES} bytes")
     return f.content
 
 
@@ -289,6 +315,11 @@ async def telegram_status():
         out["webhook_url"] = info.get("url") or None
         out["pending_updates"] = info.get("pending_update_count")
         out["last_error"] = info.get("last_error_message")
-    except Exception as exc:
-        out["error"] = str(exc)
+    except Exception:
+        # NOT `str(exc)`. httpx puts the full request URL in its error messages,
+        # and every Bot API URL carries the token in its path — so returning the
+        # exception text here would publish the bot token to any caller, which is
+        # exactly what this endpoint's docstring promises it never does.
+        log.exception("telegram status probe failed")
+        out["error"] = "could not reach the Telegram API"
     return out

@@ -15,6 +15,24 @@ service cloud.firestore {
     /* A profile belongs to exactly one account and is readable and writable by
        nobody else — not even another signed-in user. `uid` in the path must equal
        the caller's own uid. */
+    function sane(d) {
+      /* hasOnly() constrains WHICH keys may be written; it says nothing about
+         what is in them. Without the checks below, an authenticated user could
+         store a megabyte of arbitrary text per field in their own profile — a
+         free write-amplified storage bucket, and a stored-payload vector for
+         any surface that later renders a profile. Firestore's own 1 MiB
+         document ceiling is not an application-level limit.
+
+         Types are asserted too: `is string` fails closed on a map or a list,
+         which is how a client smuggles structure past a key allowlist. */
+      return (!d.keys().hasAny(['fullName'])   || (d.fullName is string      && d.fullName.size() <= 120))
+          && (!d.keys().hasAny(['role'])       || (d.role is string          && d.role.size() <= 60))
+          && (!d.keys().hasAny(['organisation'])|| (d.organisation is string && d.organisation.size() <= 160))
+          && (!d.keys().hasAny(['state'])      || (d.state is string         && d.state.size() <= 80))
+          && (!d.keys().hasAny(['district'])   || (d.district is string      && d.district.size() <= 80))
+          && (!d.keys().hasAny(['phone'])      || (d.phone is string         && d.phone.size() <= 24));
+    }
+
     match /profiles/{uid} {
       allow read: if request.auth != null && request.auth.uid == uid;
       allow create, update: if request.auth != null
@@ -22,7 +40,8 @@ service cloud.firestore {
                             && request.resource.data.keys().hasOnly([
                                  'fullName', 'role', 'organisation',
                                  'state', 'district', 'phone', 'updatedAt'
-                               ]);
+                               ])
+                            && sane(request.resource.data);
       /* Deletion is not offered in the UI, so it is not permitted here either.
          A rule broader than the product needs is an attack surface for free. */
       allow delete: if false;

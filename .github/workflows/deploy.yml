@@ -15,9 +15,168 @@ env:
   CONSOLE_SERVICE: civos-console
 
 jobs:
+  # ── Gate: no country literals in core/ ──────────────────────────────────────
+  # SPEC P0-14 claims a second country is a config directory, not a code change.
+  # This job is the evidence for that claim, so it gates the deploy rather than
+  # trailing it — a check that runs after shipping is theatre.
+  #
+  # It deliberately needs no GCP credentials, which is why it is a separate job
+  # and not a step inside Build & Deploy: a country literal reaching core/ should
+  # fail before anything touches the cloud, and the check earns its own line in
+  # the Actions UI where a reviewer can actually see it went green.
+  lint:
+    name: Country lint (SPEC P0-14)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Only what the linter itself imports, not the whole project. `uv sync`
+      # would pull google-cloud-*, fastapi and pillow to run an AST walk. Floors
+      # mirror pyproject.toml; if the linter grows an import, this fails loudly
+      # with ImportError rather than passing quietly.
+      - name: Install the linter's dependencies
+        run: pip install --quiet "typer>=0.12" "pyyaml>=6.0" "rich>=13.7"
+
+      # Prove the gate can fail before trusting it to pass. Without this, a
+      # linter broken into always returning PASS would show green forever, and
+      # the CI badge would be worth less than no badge at all.
+      - name: Prove the gate can actually fail
+        run: |
+          mkdir -p .lintcheck
+          printf 'COUNTRY = "India"\nSCHEME = "Jal Jeevan Mission"\n' > .lintcheck/violation.py
+          if python scripts/lint_country_literals.py --path .lintcheck; then
+            echo "::error::The country lint PASSED a file containing \"India\" and a named scheme. The gate is broken, so its green result on core/ means nothing."
+            rm -rf .lintcheck
+            exit 1
+          fi
+          rm -rf .lintcheck
+          echo "Negative control OK — the linter rejects a deliberate violation."
+
+      # The real check. The pre-flight count matters: the linter only walks *.py
+      # and reports PASS when it matched nothing, so a moved, renamed or emptied
+      # core/ would otherwise sail through as a green zero-file run. Counting the
+      # inputs ourselves is checked rather than scraped — the linter prints
+      # through rich, which interleaves ANSI codes between the words, so grepping
+      # its prose for "Scanned 0 files" is an assertion that silently stops
+      # matching the day colour output changes.
+      - name: Lint core/ for country literals
+        run: |
+          FILES=$(find core -name '*.py' -type f | wc -l | tr -d ' ')
+          echo "core/ contains $FILES Python file(s)"
+          if [ "$FILES" -eq 0 ]; then
+            echo "::error::Found 0 Python files under core/. It is missing, renamed or empty, so a PASS from the linter would be meaningless."
+            exit 1
+          fi
+          python scripts/lint_country_literals.py
+
+  # ── Gate: the test suite, including the security tests ──────────────────────
+  # Same reasoning as the country lint: a suite that only runs on a laptop is a
+  # suite that stops running. tests/test_security.py asserts the upload caps,
+  # rate limits, prompt-injection control, error opacity and SPEC 11 privacy
+  # invariants — none of which are visible in a code review of a later change.
+  #
+  # Costs nothing to run: Gemini is mocked throughout, so CI cannot spend money.
+  test:
+    name: Tests (incl. security)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --dev
+
+      - name: Run the suite
+        run: uv run pytest -q
+
+  # ── Gate: dependency and static analysis ────────────────────────────────────
+  # Advisory-only for scripts/ (build-time data tooling, not the served surface)
+  # but blocking for api/ and core/, which is what a request actually reaches.
+  security:
+    name: Security scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --dev
+
+      # The lockfile must match pyproject before anything is graded against it.
+      # A stale lockfile means CI audits, and the image installs, a set nobody
+      # chose.
+      - name: Lockfile is in sync with pyproject
+        run: uv lock --check
+
+      # Known CVEs in the SHIPPED dependency set. Exported from the committed
+      # lockfile with --frozen, so this grades exactly what the Dockerfile
+      # installs — the previous form audited a fresh `uv pip freeze`, which is a
+      # resolution that may never have been deployed.
+      # Blocking: shipping a service with a published advisory is not a
+      # judgement call.
+      - name: pip-audit (the locked set)
+        run: |
+          uv export --frozen --no-dev --no-emit-project \
+            --format requirements-txt -o /tmp/locked.txt
+          COUNT=$(grep -cE '^[A-Za-z0-9._-]+==' /tmp/locked.txt || true)
+          test "$COUNT" -gt 0 || { echo "::error::exported 0 packages — the audit would pass vacuously"; exit 1; }
+          echo "auditing $COUNT locked packages"
+          uvx --python 3.12 pip-audit -r /tmp/locked.txt --no-deps --progress-spinner off
+
+      # Blocking on the served surface only. scripts/ legitimately shells out and
+      # opens URLs to build the data layer; failing the deploy on that would
+      # train everyone to ignore the job.
+      - name: bandit (api/ and core/ — blocking)
+        run: uvx --python 3.12 bandit -r api core -ll
+
+      - name: bandit (scripts/ — advisory)
+        continue-on-error: true
+        run: uvx --python 3.12 bandit -r scripts -ll
+
+      # The control that actually stopped a live secret leak: .dockerignore is
+      # what keeps .env out of an image layer built by `COPY . .`.
+      - name: Assert secrets cannot enter the build context
+        run: |
+          grep -qx '\.env' .dockerignore || { echo "::error::.dockerignore does not exclude .env — COPY . . would bake TELEGRAM_BOT_TOKEN into an image layer."; exit 1; }
+          if git ls-files --error-unmatch .env >/dev/null 2>&1; then
+            echo "::error::.env is tracked by git."; exit 1
+          fi
+          echo "Build context and index are clean of .env."
+
   deploy:
     name: Build & Deploy
     runs-on: ubuntu-latest
+    # A country literal in core/ falsifies the cross-border claim, which is 20%
+    # of the score. A failing security test means the deployed surface is not the
+    # reviewed surface. Do not ship past either.
+    needs: [lint, test, security]
     permissions:
       contents: read
 

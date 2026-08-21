@@ -180,7 +180,7 @@ Lock this first. It is not a marketing artefact, it is the build spec. If a feat
 
 | # | Task | Time |
 |---|---|---|
-| 6.1 | ~~Lint check for country literals in `core/`.~~ **Already shipped in Phase 0** as `scripts/lint_country_literals.py` + `config/country_literals.yaml`. Remaining work here is only wiring it into CI. | ~~30 m~~ 10 m |
+| 6.1 | ~~Lint check for country literals in `core/`.~~ **Shipped in Phase 0** as `scripts/lint_country_literals.py` + `config/country_literals.yaml`; ~~remaining work is wiring it into CI~~ **wired 21 Aug 2026** as the `Country lint (SPEC P0-14)` job in `.github/workflows/deploy.yml`, which the deploy job gates on via `needs: lint`. The job runs the linter against a deliberate violation first and fails if that *passes*, so a silently-broken checker cannot show green. | ~~30 m~~ ✅ done |
 | 6.2 | **Second country adapter.** One province, one real indicator, boundary GeoJSON, language list, ~5 real schemes. South Africa (Stats SA municipal service-delivery data — English, cleanest) or Brazil (IBGE — better optics, Portuguese demo). **Tightened to 120 m — first thing to drop.** | 120 m |
 | 6.3 | Country switcher in the console (`CIVOS-IN` / `CIVOS-ZA`). The 3:10 shot. | 45 m |
 | 6.4 | Loop 3 precomputed before/after for one district, **using a real before/after image pair** matched by embedding + admin unit. Labelled as a demonstration. | 60 m |

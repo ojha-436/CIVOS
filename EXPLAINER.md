@@ -117,7 +117,7 @@ Every number in that dossier links back to its source. Nothing is invented by th
 
 Because the country is a **folder**, not code.
 
-`adapters/in/` holds India's districts, languages, data sources and government schemes. Add `adapters/za/` with South Africa's and the exact same system runs on South African data in Zulu. Nothing in the core is rewritten — there's even an automated check that fails the build if anyone hardcodes "India" into the core.
+`adapters/in/` holds India's districts, languages, data sources and government schemes. Add `adapters/za/` with South Africa's and the exact same system runs on South African data in Zulu. Nothing in the core is rewritten — there's even an automated check that fails the build if anyone hardcodes "India" into the core. It runs on every deploy, and it is deliberately tested against a fake violation first, so a broken check cannot pass silently.
 
 In the demo you click a dropdown, switch from `CIVOS-IN` to `CIVOS-ZA`, and the whole thing re-runs on real foreign data. That single click is worth 20% of the score, because "will this work in my country?" is the only question a foreign evaluator actually cares about.
 

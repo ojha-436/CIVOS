@@ -246,6 +246,21 @@ the obvious regex matches nearly every line of Python ever written.
 uv run python scripts/lint_country_literals.py
 ```
 
+It runs as the **`Country lint (SPEC P0-14)`** job in
+[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), and the deploy job
+declares `needs: lint` — so a country literal in `core/` blocks the release rather
+than being noticed later. The gate takes no cloud credentials, which is
+deliberate: it should fail before anything touches GCP.
+
+That job also **proves the gate can fail before trusting it to pass.** It writes a
+throwaway file containing `"India"` and a named scheme, runs the linter over it,
+and fails the build if the linter *accepts* it. A checker quietly broken into
+always returning PASS would otherwise show green forever, and a green badge that
+cannot go red is worth less than no badge at all. It additionally counts the
+Python files under `core/` first, because the linter reports PASS when it matched
+nothing — so a renamed or emptied `core/` cannot sail through as a zero-file
+"pass".
+
 ---
 
 ## What is real, and what is not

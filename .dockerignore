@@ -1,10 +1,54 @@
+# Build context for `gcloud run deploy --source .`. Everything here is excluded
+# from the image AND from the tarball uploaded to Cloud Build, so this file is
+# both a security control and a deploy-time cost control.
+
+# ── Secrets. Never in an image layer. ────────────────────────────────────────
+# The Dockerfile does `COPY . .`, so without this the live TELEGRAM_BOT_TOKEN and
+# TELEGRAM_WEBHOOK_SECRET are baked into a layer that anyone with pull access to
+# Artifact Registry can read. They are already injected at runtime by
+# --set-env-vars in .github/workflows/deploy.yml, so shipping them in the image
+# is pure downside.
+.env
+.env.*
+!.env.example
+*-key.json
+service-account*.json
+*.pem
+*.p12
+
+# ── Version control and local envs ───────────────────────────────────────────
 .git/
+.gitignore
 .venv/
+.uv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+
+# ── Node / Next build output ──────────────────────────────────────────────────
 console/node_modules/
 console/.next/
+*.tsbuildinfo
+
+# ── Large working data the API does not read at runtime ──────────────────────
+# api/geo.py DOES read console/public/data/districts.geojson, so console/public
+# must stay in the context. These do not.
 data/raw/
-__pycache__/
-*.pyc
-.DS_Store
-uv.lock
+data/interim/
+*.gpkg
+*.shp
+*.zip
+
+# ── The launch film. 5.9 GB of PNG frames and MP4s that the API never reads. ─
+# Without this line every deploy uploads them to Cloud Build and bakes them into
+# the image: a slow, expensive build and a needlessly enormous container.
+video/out/
+video/assets/
+
+# ── Docs, screenshots, tests — not needed to serve a request ─────────────────
 docs/screenshots/
+.DS_Store
+.idea/
+.vscode/
+uv.lock
