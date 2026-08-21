@@ -1,0 +1,1018 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>CIVOS — launch film stage</title>
+<!--
+  The animation stage for the CIVOS introduction film.
+
+  This page is a pure function of time. Nothing here uses CSS transitions, CSS
+  animations or requestAnimationFrame: every scene exposes render(t) and sets
+  styles from scratch for that instant. That is what lets the renderer seek to
+  frame 2 471, screenshot it, and get exactly the same pixels every run — and it
+  is why the film can be re-cut just by re-running narrate.py, because scene
+  boundaries come from measured audio in timings.js rather than hand-typed guesses.
+
+  Design language is lifted wholesale from console/app/globals.css ("The
+  Instrument"): ink ground, cream ink-on-paper inverted, hairline rules,
+  calibration ticks, tabular figures, and the rule that Silent Need gold is the
+  only element permitted to glow.
+
+  Open it directly in a browser to scrub with the arrow keys / slider.
+-->
+<script src="timings.js"></script>
+<style>
+  @font-face { font-family: "Instrument Serif"; src: url("../console/app/fonts/InstrumentSerif-Regular.woff2") format("woff2"); font-weight: 400; font-display: block; }
+  @font-face { font-family: "Plex"; src: url("../console/app/fonts/IBMPlexSans-Regular.woff2") format("woff2"); font-weight: 400; font-display: block; }
+  @font-face { font-family: "Plex"; src: url("../console/app/fonts/IBMPlexSans-Medium.woff2") format("woff2"); font-weight: 500; font-display: block; }
+  @font-face { font-family: "Plex"; src: url("../console/app/fonts/IBMPlexSans-SemiBold.woff2") format("woff2"); font-weight: 600; font-display: block; }
+  @font-face { font-family: "PlexMono"; src: url("../console/app/fonts/IBMPlexMono-Regular.woff2") format("woff2"); font-weight: 400; font-display: block; }
+  @font-face { font-family: "PlexMono"; src: url("../console/app/fonts/IBMPlexMono-Medium.woff2") format("woff2"); font-weight: 500; font-display: block; }
+
+  :root {
+    --ink-900:#070a0e; --ink-800:#0b0f15; --ink-700:#10151d; --ink-600:#161d27;
+    --paper:#ece5d8; --paper-2:#b9b3a8; --paper-3:#8b95a3; --paper-4:#707c8e;
+    --rule:rgba(236,229,216,.11); --rule-strong:rgba(236,229,216,.22); --tick:rgba(236,229,216,.30);
+    --q-act:#ff6a45; --q-silent:#f3c14b; --q-gap:#57c4e5; --q-stable:#566273;
+    --gold:#f3c14b;
+  }
+
+  /* Determinism guard: a stray transition would make frame N depend on frame N-1. */
+  *, *::before, *::after { transition: none !important; animation: none !important; box-sizing: border-box; }
+
+  html, body { margin:0; padding:0; background:#000; }
+  body { display:flex; align-items:center; justify-content:center; min-height:100vh; }
+
+  #stage {
+    position:relative; width:1920px; height:1080px; overflow:hidden;
+    background:var(--ink-900); color:var(--paper);
+    font-family:"Plex", system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* Faint off-centre lift, so 1080 lines of flat #070a0e do not band on encode. */
+  #vignette { position:absolute; inset:0; pointer-events:none;
+    background:radial-gradient(120% 90% at 62% 34%, rgba(86,98,115,.13), rgba(7,10,14,0) 62%); }
+  #grain { position:absolute; inset:0; pointer-events:none; opacity:.035;
+    background-image:url("assets/grain.png"); background-size:256px 256px; }
+
+  /* The console's left-margin calibration ticks, carried through the whole film. */
+  #ticks { position:absolute; left:0; top:0; bottom:0; width:34px; pointer-events:none; }
+  #ticks i { position:absolute; left:0; height:1px; background:var(--tick); opacity:.5; }
+
+  #progress { position:absolute; left:0; bottom:0; height:2px; background:var(--gold); opacity:.5; }
+  #chapter { position:absolute; right:46px; bottom:34px; font-family:"PlexMono"; font-size:17px;
+    letter-spacing:.20em; color:var(--paper-4); }
+  #caption { position:absolute; left:260px; right:260px; bottom:74px; text-align:center;
+    font-size:31px; line-height:1.4; color:var(--paper); display:none;
+    text-shadow:0 2px 18px rgba(7,10,14,.95), 0 0 40px rgba(7,10,14,.85); }
+
+  .scene { position:absolute; inset:0; display:none; }
+  .pad { position:absolute; inset:0; padding:84px 120px; }
+
+  .kicker { font-family:"PlexMono"; font-weight:500; font-size:20px; letter-spacing:.26em;
+            text-transform:uppercase; color:var(--paper-4); }
+  .disp { font-family:"Instrument Serif"; font-weight:400; line-height:1.03; letter-spacing:-.005em; }
+  .mono { font-family:"PlexMono"; font-variant-numeric:tabular-nums; }
+  .rule { background:var(--rule); }
+  .glow { box-shadow:0 0 0 1px var(--gold), 0 0 34px rgba(243,193,75,.30), inset 0 0 60px rgba(243,193,75,.055); }
+
+  img.ui { display:block; border:1px solid var(--rule); background:var(--ink-800); }
+</style>
+
+<div id="stage">
+  <div id="vignette"></div>
+  <div id="ticks"></div>
+  <div id="grain"></div>
+  <div id="progress"></div>
+  <div id="chapter" class="mono"></div>
+  <div id="caption"></div>
+</div>
+
+<script>
+// ───────────────────────────────────────────────────────────────── primitives
+const stage = document.getElementById('stage');
+const T = window.TIMINGS;
+const W = 1920, H = 1080;
+
+const cl = x => x < 0 ? 0 : x > 1 ? 1 : x;
+/** Normalised progress of t through the window [a,b]. The workhorse. */
+const sp = (t, a, b) => b <= a ? (t >= b ? 1 : 0) : cl((t - a) / (b - a));
+const lerp = (a, b, x) => a + (b - a) * x;
+const E = {
+  out:  x => 1 - Math.pow(1 - x, 3),
+  out5: x => 1 - Math.pow(1 - x, 5),
+  in:   x => x * x * x,
+  io:   x => x < .5 ? 4*x*x*x : 1 - Math.pow(-2*x + 2, 3) / 2,
+  // Slight overshoot, used only where something should feel placed rather than slid.
+  back: x => { const c = 1.4; const y = x - 1; return 1 + (c + 1) * y*y*y + c * y*y; },
+};
+/** Seeded LCG — scatter fields must be identical on every render pass. */
+let _seed = 20260820;
+const rnd = () => (_seed = (_seed * 1664525 + 1013904223) >>> 0) / 4294967296;
+
+const h = (tag, cls, css, text) => {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (css) Object.assign(e.style, css);
+  if (text != null) e.textContent = text;
+  return e;
+};
+const px = n => n + 'px';
+/** Position/opacity/transform in one call — the only thing render() ever does. */
+const set = (el, o, x, y, s, extra) => {
+  el.style.opacity = o;
+  const t = [];
+  if (x || y) t.push(`translate(${x||0}px,${y||0}px)`);
+  if (s != null && s !== 1) t.push(`scale(${s})`);
+  if (extra) t.push(extra);
+  el.style.transform = t.join(' ');
+};
+const svg = (d, size, sw) =>
+  `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="${sw||1.25}" stroke-linecap="round"
+        stroke-linejoin="round">${d}</svg>`;
+const ICON = {
+  mic: '<rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v4"/><path d="M8.5 22h7"/>',
+  key: '<rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/>',
+  cam: '<path d="M3 8.5A2 2 0 0 1 5 6.5h2.3l1.2-2h7l1.2 2H19a2 2 0 0 1 2 2v8.5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="12.6" r="3.5"/>',
+};
+
+// left-margin calibration ticks
+(() => {
+  const t = document.getElementById('ticks');
+  for (let y = 40; y < H - 20; y += 26) {
+    const major = (y - 40) % 130 === 0;
+    t.appendChild(h('i', null, { top: px(y), width: px(major ? 22 : 11) }));
+  }
+})();
+
+// ─────────────────────────────────────────────────────────────────── registry
+const SC = {};
+/** Every scene gets its own absolutely-positioned root and a render(t,dur). */
+function scene(id, build, opts) {
+  const root = h('div', 'scene');
+  stage.appendChild(root);
+  const render = build(root);
+  SC[id] = Object.assign({ root, render, fin: .5, fout: .42 }, opts || {});
+}
+
+// ══════════════════════════════════════════════════════ 01 · THE SAME MAP
+scene('01-hook', root => {
+  const p = h('div', 'pad'); root.appendChild(p);
+  const k = h('div', 'kicker', { position:'absolute', left:'120px', top:'84px' }, 'The mistake everyone makes');
+  p.appendChild(k);
+
+  // A complaint map: dense where people file, empty where they cannot.
+  const field = h('div', null, { position:'absolute', left:'300px', top:'150px',
+                                 width:'1340px', height:'760px' });
+  p.appendChild(field);
+  const HOT = [[300,190],[560,300],[880,210],[1010,470],[420,560],[720,620]];
+  const dots = [];
+  for (let i = 0; i < 210; i++) {
+    const clustered = i < 150;
+    let x, y;
+    if (clustered) {
+      const c = HOT[(i * 7) % HOT.length];
+      const r = Math.pow(rnd(), .55) * 150;
+      const a = rnd() * Math.PI * 2;
+      x = c[0] + Math.cos(a) * r; y = c[1] + Math.sin(a) * r * .8;
+    } else { x = rnd() * 1290; y = rnd() * 700; }
+    x = Math.max(6, Math.min(1300, x)); y = Math.max(6, Math.min(720, y));
+    const size = clustered ? 7 + rnd() * 7 : 5;
+    const el = h('div', null, {
+      position:'absolute', left:px(x), top:px(y), width:px(size), height:px(size),
+      borderRadius:'50%',
+      background: clustered ? 'var(--q-act)' : 'rgba(236,229,216,.16)',
+    });
+    field.appendChild(el);
+    dots.push({ el, clustered, t0: clustered ? 2.55 + rnd() * 2.35 : .55 + rnd() * 1.4 });
+  }
+
+  const lines = [
+    { s:'A map of complaints',            g:false, t:5.55 },
+    { s:'is a map of who owns a phone.',  g:false, t:6.45 },
+    { s:'It is not a map of need.',       g:true,  t:7.85 },
+  ].map((L, i) => {
+    const el = h('div', 'disp', {
+      position:'absolute', left:'120px', top:px(600 + i * 106), fontSize:'82px',
+      color: L.g ? 'var(--gold)' : 'var(--paper)',
+      textShadow: L.g ? '0 0 40px rgba(243,193,75,.22)' : 'none',
+    }, L.s);
+    p.appendChild(el);
+    return { ...L, el };
+  });
+  const bar = h('div', null, { position:'absolute', left:'120px', top:'922px',
+                               height:'2px', background:'var(--gold)' });
+  p.appendChild(bar);
+
+  return t => {
+    set(k, sp(t, .25, 1.1) * .95, 0, lerp(-8, 0, E.out(sp(t, .25, 1.2))));
+    // Dots recede once the argument arrives — the text has to be the subject.
+    const recede = 1 - .82 * E.io(sp(t, 5.3, 6.4));
+    for (const d of dots) {
+      const a = E.out(sp(t, d.t0, d.t0 + .5));
+      set(d.el, a * (d.clustered ? .93 : .8) * recede, 0, 0, lerp(.2, 1, E.back(a)));
+    }
+    for (const L of lines) {
+      const a = sp(t, L.t, L.t + .85);
+      set(L.el, E.out(a), 0, lerp(26, 0, E.out5(a)));
+    }
+    bar.style.width = px(lerp(0, 604, E.out5(sp(t, 8.35, 9.35))));
+    bar.style.opacity = .9;
+  };
+});
+
+// ══════════════════════════════════════════════════════ 02 · WHAT THAT COSTS
+scene('02-cost', root => {
+  const p = h('div', 'pad'); root.appendChild(p);
+  p.appendChild(h('div', 'kicker', { position:'absolute', left:'120px', top:'84px' },
+                  'What that costs'));
+  const tag = h('div', 'mono', { position:'absolute', right:'120px', top:'86px', fontSize:'17px',
+                                 letterSpacing:'.20em', color:'var(--paper-4)' },
+                'SCHEMATIC · THE SHAPE OF THE PROBLEM');
+  p.appendChild(tag);
+
+  const hdr = y => h('div', 'mono', { position:'absolute', top:px(y), fontSize:'17px',
+                                      letterSpacing:'.22em', color:'var(--paper-4)' });
+  const cVoice = hdr(196); cVoice.style.left = '408px'; cVoice.textContent = 'CITIZEN VOICE';
+  const cDef   = hdr(196); cDef.style.left   = '1058px'; cDef.textContent = 'MEASURED DEFICIT';
+  p.appendChild(cVoice); p.appendChild(cDef);
+
+  // Voice descending, deficit deliberately uncorrelated — that gap is the point.
+  const DATA = [
+    [.97,.31],[.88,.24],[.79,.52],[.71,.19],[.63,.44],[.54,.28],
+    [.46,.61],[.37,.35],[.28,.72],[.19,.88],[.12,.94],[.06,.97],
+  ];
+  const rows = DATA.map(([v, d], i) => {
+    const y = 244 + i * 52;
+    const invisible = i >= 9;
+    const idx = h('div', 'mono', { position:'absolute', left:'120px', top:px(y + 5),
+      fontSize:'19px', color:'var(--paper-4)' }, String(i + 1).padStart(2, '0'));
+    const line = h('div', null, { position:'absolute', left:'120px', top:px(y + 40),
+      width:'1500px', height:'1px', background:'var(--rule)' });
+    const bv = h('div', null, { position:'absolute', left:'408px', top:px(y + 8),
+      height:'13px', background:'var(--paper-4)', borderRadius:'1px' });
+    const bd = h('div', null, { position:'absolute', left:'1058px', top:px(y + 8),
+      height:'13px', borderRadius:'1px',
+      background: invisible ? 'var(--gold)' : 'var(--paper-4)' });
+    const flag = h('div', 'mono', { position:'absolute', top:px(y + 6), fontSize:'16px',
+      letterSpacing:'.20em' });
+    if (invisible) { flag.style.left = '1655px'; flag.style.color = 'var(--gold)'; flag.textContent = 'INVISIBLE'; }
+    else if (i < 4) { flag.style.left = '1655px'; flag.style.color = 'var(--q-act)'; flag.textContent = 'FUNDED'; }
+    [idx, line, bv, bd, flag].forEach(e => p.appendChild(e));
+    return { i, v, d, invisible, idx, line, bv, bd, flag, funded: i < 4 };
+  });
+
+  const caption = h('div', 'disp', { position:'absolute', left:'120px', top:'906px',
+    fontSize:'56px', color:'var(--gold)' }, 'Severe need. No voice. No funding.');
+  p.appendChild(caption);
+
+  return t => {
+    for (const r of rows) {
+      const a = E.out(sp(t, .35 + r.i * .07, .95 + r.i * .07));
+      set(r.idx, a * .85); r.line.style.opacity = a * .9;
+      r.bv.style.width = px(lerp(0, 560, a) * r.v);
+      r.bv.style.opacity = a;
+      r.bd.style.width = px(lerp(0, 560, a) * r.d);
+      // The gold only earns its saturation once we say what it means.
+      r.bd.style.opacity = a * (r.invisible ? lerp(.34, 1, E.out(sp(t, 4.35, 5.3))) : 1);
+      const ft = r.funded ? 3.05 + r.i * .11 : 4.55 + (r.i - 9) * .17;
+      set(r.flag, E.out(sp(t, ft, ft + .5)) * (r.invisible ? 1 : .92));
+      if (!r.invisible && !r.funded) r.flag.style.opacity = 0;
+      // Everything that is not the argument dims away under the closing line.
+      const dim = r.invisible ? 1 : lerp(1, .34, E.io(sp(t, 4.7, 5.9)));
+      [r.idx, r.bv, r.bd].forEach(e => e.style.opacity = e.style.opacity * dim);
+    }
+    set(cVoice, E.out(sp(t, .2, .9)) * .9);
+    set(cDef,   E.out(sp(t, .2, .9)) * .9);
+    set(tag,    E.out(sp(t, .2, 1.1)) * .8);
+    const a = sp(t, 6.2, 7.1);
+    set(caption, E.out(a), 0, lerp(22, 0, E.out5(a)));
+  };
+});
+
+// ══════════════════════════════════════════════════════ 03 · TITLE
+scene('03-title', root => {
+  const p = h('div', 'pad'); root.appendChild(p);
+  const ruleL = h('div', 'rule', { position:'absolute', top:'432px', right:'50%', height:'1px' });
+  const ruleR = h('div', 'rule', { position:'absolute', top:'432px', left:'50%', height:'1px' });
+  p.appendChild(ruleL); p.appendChild(ruleR);
+
+  const wrap = h('div', null, { position:'absolute', left:'0', right:'0', top:'452px',
+    display:'flex', alignItems:'flex-start', justifyContent:'center', gap:'26px' });
+  const word = h('div', 'disp', { fontSize:'196px', letterSpacing:'.02em' }, 'CIVOS');
+  const chip = h('div', 'mono', { marginTop:'54px', padding:'8px 15px 7px', fontSize:'27px',
+    fontWeight:'500', letterSpacing:'.16em', color:'#1b1408', background:'var(--gold)',
+    borderRadius:'3px' }, 'IN');
+  wrap.appendChild(word); wrap.appendChild(chip); p.appendChild(wrap);
+
+  const sub = h('div', 'mono', { position:'absolute', left:'0', right:'0', top:'700px',
+    textAlign:'center', fontSize:'25px', letterSpacing:'.42em', color:'var(--paper-3)' },
+    'CIVIC OPERATING SYSTEM');
+  p.appendChild(sub);
+
+  const line = h('div', 'disp', { position:'absolute', left:'0', right:'0', top:'782px',
+    textAlign:'center', fontSize:'70px', color:'var(--gold)',
+    textShadow:'0 0 46px rgba(243,193,75,.30)' }, 'Silence is the signal.');
+  p.appendChild(line);
+
+  return t => {
+    const r = E.out5(sp(t, .3, 1.7));
+    ruleL.style.width = px(760 * r); ruleR.style.width = px(760 * r);
+    ruleL.style.opacity = ruleR.style.opacity = .9;
+    const a = E.out(sp(t, .55, 1.75));
+    set(wrap, a, 0, lerp(20, 0, a) - 26 * E.io(sp(t, 4.9, 5.9)), lerp(.965, 1, a));
+    chip.style.opacity = E.out(sp(t, 1.35, 2.0));
+    set(sub, E.out(sp(t, 1.6, 2.5)) * .95, 0, lerp(12, 0, E.out(sp(t, 1.6, 2.5))) - 22 * E.io(sp(t, 4.9, 5.9)));
+    const la = sp(t, 4.95, 5.95);
+    set(line, E.out(la), 0, lerp(24, 0, E.out5(la)));
+  };
+}, { fin: .8, fout: .5 });
+
+// ══════════════════════════════════════════════════════ 04 · LISTEN
+scene('04-listen', root => {
+  const p = h('div', 'pad'); root.appendChild(p);
+  p.appendChild(h('div', 'kicker', { position:'absolute', left:'120px', top:'84px' },
+                  '01 · Listen'));
+
+  // Two doors, then the citizen one is the one we walk through.
+  const doors = h('div', null, { position:'absolute', left:'0', right:'0', top:'300px',
+    display:'flex', justifyContent:'center', gap:'150px' });
+  const door = (label, gold) => {
+    const d = h('div', null, { width:'250px', height:'400px', border:'1px solid var(--rule-strong)',
+      borderBottom:'none', borderRadius:'126px 126px 0 0', position:'relative',
+      background:'linear-gradient(180deg, rgba(236,229,216,.035), rgba(236,229,216,0))' });
+    d.appendChild(h('div', 'mono', { position:'absolute', left:'0', right:'0', bottom:'-46px',
+      textAlign:'center', fontSize:'20px', letterSpacing:'.26em',
+      color: gold ? 'var(--gold)' : 'var(--paper-4)' }, label));
+    d.appendChild(h('div', null, { position:'absolute', left:'50%', top:'214px', width:'9px',
+      height:'9px', borderRadius:'50%', background:'var(--paper-4)' }));
+    return d;
+  };
+  const dCit = door('CITIZEN', true), dOff = door('OFFICIAL', false);
+  doors.appendChild(dCit); doors.appendChild(dOff); p.appendChild(doors);
+
+  const CARDS = [
+    { icon:'mic', name:'Speak',      buys:'REACH', copy:'No reading, no writing, no form — and no need to know which department owns the problem.' },
+    { icon:'key', name:'Type',       buys:'SCALE', copy:'Web and Telegram, plus the millions of complaints already sitting in legacy government systems.' },
+    { icon:'cam', name:'Photograph', buys:'PROOF', copy:'A voice note is a claim. A photograph is evidence — and it needs no language at all.' },
+  ].map((c, i) => {
+    const el = h('div', null, { position:'absolute', left:'120px', top:px(268 + i * 198),
+      width:'880px', height:'168px', border:'1px solid var(--rule)', background:'var(--ink-800)',
+      padding:'26px 30px' });
+    const ico = h('div', null, { position:'absolute', left:'30px', top:'28px', width:'46px',
+      height:'46px', color:'var(--paper-2)' });
+    ico.innerHTML = svg(ICON[c.icon], 46, 1.2);
+    const nm = h('div', null, { position:'absolute', left:'98px', top:'30px', fontSize:'38px',
+      fontWeight:'500', letterSpacing:'-.01em' }, c.name);
+    const bs = h('div', 'mono', { position:'absolute', right:'30px', top:'40px', fontSize:'21px',
+      fontWeight:'500', letterSpacing:'.24em', color:'var(--gold)' }, c.buys);
+    const cp = h('div', null, { position:'absolute', left:'98px', top:'88px', width:'700px',
+      fontSize:'23px', lineHeight:'1.42', color:'var(--paper-3)' }, c.copy);
+    [ico, nm, bs, cp].forEach(e => el.appendChild(e));
+    p.appendChild(el);
+    return { ...c, el, ico, nm, bs, cp };
+  });
+
+  const phone = h('img', 'ui', { position:'absolute', right:'120px', top:'250px', width:'318px',
+    borderRadius:'26px' }); phone.src = 'assets/ui/intake-phone.png'; p.appendChild(phone);
+  const pcap = h('div', 'mono', { position:'absolute', right:'120px', top:'946px', width:'318px',
+    textAlign:'center', fontSize:'16px', lineHeight:'1.6', letterSpacing:'.13em',
+    color:'var(--paper-4)' }, 'LIVE INTAKE · MARATHI IN, STRUCTURED OUT');
+  p.appendChild(pcap);
+  const langs = h('div', 'mono', { position:'absolute', left:'120px', top:'866px', fontSize:'20px',
+    lineHeight:'1.75', letterSpacing:'.15em', color:'var(--paper-3)' },
+    'MEASURED, NOT CLAIMED —  196 LANGUAGES TYPED  ·  56 FULL VOICE ROUND-TRIP  ·  IMAGE NEEDS NONE\nWEB  ·  TELEGRAM  ·  ONE GEMINI CALL HANDLES ALL THREE MODALITIES');
+  langs.style.whiteSpace = 'pre-line'; p.appendChild(langs);
+
+  return t => {
+    // 0 – 2.4 the doors; then they hand off to the citizen channels.
+    const dA = E.out(sp(t, .3, 1.5)), gone = E.io(sp(t, 1.95, 2.75));
+    set(doors, dA * (1 - gone), 0, lerp(0, -40, gone), lerp(1, 1.06, gone));
+    dCit.style.borderColor = `rgba(243,193,75,${lerp(.22, .8, E.out(sp(t, 1.0, 1.9)))})`;
+    dOff.style.opacity = lerp(1, .35, E.io(sp(t, 1.0, 1.9)));
+
+    CARDS.forEach((c, i) => {
+      const t0 = 2.6 + i * .34;
+      const a = E.out(sp(t, t0, t0 + .8));
+      // Each channel takes the stage exactly while it is being narrated.
+      const win = [[10.7, 14.6], [14.6, 18.7], [18.7, 21.9]][i];
+      const on = sp(t, win[0], win[0] + .45) * (1 - sp(t, win[1], win[1] + .45));
+      set(c.el, a * lerp(.5, 1, on), lerp(-34, 0, a), 0, lerp(.985, 1, a));
+      c.el.style.borderColor = `rgba(243,193,75,${lerp(0, .55, on)})`;
+      c.el.style.background = on > .04 ? 'rgba(243,193,75,.045)' : 'var(--ink-800)';
+      c.bs.style.opacity = lerp(.42, 1, on);
+      c.nm.style.color = `rgba(236,229,216,${lerp(.62, 1, on)})`;
+      c.cp.style.opacity = lerp(.55, 1, on);
+      c.ico.style.color = on > .04 ? 'var(--gold)' : 'var(--paper-4)';
+    });
+    const ph = E.out(sp(t, 3.3, 4.6));
+    set(phone, ph, lerp(60, 0, E.out5(sp(t, 3.3, 4.9))), 0);
+    set(pcap, E.out(sp(t, 4.6, 5.5)) * .9);
+    set(langs, E.out(sp(t, 8.3, 9.4)) * .95, 0, lerp(14, 0, E.out(sp(t, 8.3, 9.4))));
+  };
+});
+
+// ══════════════════════════════════════════════════════ 05 · DECIDE
+scene('05-decide', root => {
+  const p = h('div', 'pad'); root.appendChild(p);
+  p.appendChild(h('div', 'kicker', { position:'absolute', left:'120px', top:'84px' },
+                  '02 · Decide'));
+
+  const mast = h('img', 'ui', { position:'absolute', left:'120px', top:'166px', width:'1680px',
+    border:'none' }); mast.src = 'assets/ui/console-mast.png'; p.appendChild(mast);
+
+  // The pipeline, drawn as an instrument would draw it: boxes and hairlines.
+  const flow = h('div', null, { position:'absolute', left:'120px', top:'320px',
+    width:'1680px', height:'150px' });
+  p.appendChild(flow);
+  const chip = (x, w, label, sub, gold) => {
+    const c = h('div', null, { position:'absolute', left:px(x), top:'34px', width:px(w),
+      height:'84px', border:`1px solid ${gold ? 'rgba(243,193,75,.5)' : 'var(--rule-strong)'}`,
+      background:'var(--ink-800)' });
+    c.appendChild(h('div', 'mono', { position:'absolute', left:'0', right:'0', top:'23px',
+      textAlign:'center', fontSize:'21px', fontWeight:'500', letterSpacing:'.18em',
+      color: gold ? 'var(--gold)' : 'var(--paper)' }, label));
+    c.appendChild(h('div', 'mono', { position:'absolute', left:'0', right:'0', top:'52px',
+      textAlign:'center', fontSize:'15px', letterSpacing:'.16em', color:'var(--paper-4)' }, sub));
+    flow.appendChild(c); return c;
+  };
+  const cIn  = chip(0,   400, 'VOICE · TEXT · IMAGE', 'ANY LANGUAGE', false);
+  const cGem = chip(500, 400, 'GEMINI', 'ONE CALL · ALL THREE', false);
+  const cBQ  = chip(1000, 400, 'BIGQUERY', 'STRUCTURED SIGNALS', false);
+  const cGov = chip(640, 400, 'NFHS-5 · CENSUS 2011', 'GOVERNMENT OF INDIA', true);
+  const arrows = [[400, 100], [900, 100]].map(([x, w]) => {
+    const a = h('div', null, { position:'absolute', left:px(x + 14), top:'76px',
+      width:px(w - 28), height:'1px', background:'var(--rule-strong)' });
+    flow.appendChild(a);
+    const dot = h('div', null, { position:'absolute', top:'73px', width:'7px', height:'7px',
+      borderRadius:'50%', background:'var(--gold)' });
+    flow.appendChild(dot);
+    return { a, dot, x: x + 14, w: w - 28 };
+  });
+
+  // Dedup: a swarm of reports collapsing into one distinct need.
+  const swarm = h('div', null, { position:'absolute', left:'120px', top:'470px',
+    width:'1680px', height:'470px', overflow:'hidden' });
+  p.appendChild(swarm);
+  const CX = 840, CY = 150;
+  const motes = [];
+  for (let i = 0; i < 300; i++) {
+    const a = rnd() * Math.PI * 2, r = 90 + Math.pow(rnd(), .48) * 640;
+    const el = h('div', null, { position:'absolute', width:'6px', height:'6px', borderRadius:'50%',
+      background:'var(--q-act)' });
+    swarm.appendChild(el);
+    motes.push({ el, x: CX + Math.cos(a) * r, y: CY + Math.sin(a) * r * .34, d: rnd() });
+  }
+  const core = h('div', null, { position:'absolute', left:px(CX - 44), top:px(CY - 44),
+    width:'88px', height:'88px', borderRadius:'50%', border:'1px solid var(--gold)' });
+  swarm.appendChild(core);
+  const num = h('div', 'mono', { position:'absolute', left:'0', right:'0', top:'300px',
+    textAlign:'center', fontSize:'86px', fontWeight:'500', color:'var(--gold)' }, '800');
+  const lab = h('div', 'mono', { position:'absolute', left:'0', right:'0', top:'406px',
+    textAlign:'center', fontSize:'21px', letterSpacing:'.26em', color:'var(--paper-3)' },
+    'REPORTS ABOUT ONE DRY BOREWELL');
+  swarm.appendChild(num); swarm.appendChild(lab);
+
+  const grid = h('div', null, { position:'absolute', left:'660px', top:'396px', width:'600px',
+    height:'420px' });
+  p.appendChild(grid);
+  const gv = h('div', 'rule', { position:'absolute', left:'300px', top:'0', width:'1px' });
+  const gh = h('div', 'rule', { position:'absolute', left:'0', top:'210px', height:'1px' });
+  const gb = h('div', null, { position:'absolute', inset:'0', border:'1px solid var(--rule)' });
+  grid.appendChild(gb); grid.appendChild(gv); grid.appendChild(gh);
+  const gcap = h('div', 'mono', { position:'absolute', left:'0', right:'0', top:'446px',
+    textAlign:'center', fontSize:'21px', letterSpacing:'.26em', color:'var(--paper-3)' },
+    'FOUR BOXES');
+  grid.appendChild(gcap);
+
+  return t => {
+    // masthead: the official's door, opening
+    const mA = E.out(sp(t, .35, 1.6));
+    set(mast, mA * (1 - E.io(sp(t, 4.4, 5.4))), 0, lerp(-26, 0, E.out5(sp(t, .35, 1.8))));
+
+    // Held at 0.28 rather than removed: the collapse needs something above it,
+    // and the pipeline is the context for what is collapsing.
+    const fOut = .72 * E.io(sp(t, 4.6, 5.6)) + .28 * E.io(sp(t, 12.9, 13.9));
+    [cIn, cGem, cBQ].forEach((c, i) => {
+      const a = E.out(sp(t, 2.0 + i * .3, 2.9 + i * .3));
+      set(c, a * (1 - fOut), lerp(-18, 0, a), 0);
+    });
+    arrows.forEach((ar, i) => {
+      const a = E.out(sp(t, 2.5 + i * .3, 3.3 + i * .3));
+      ar.a.style.width = px(ar.w * a); ar.a.style.opacity = a * (1 - fOut);
+      // one travelling dot per arrow, phase-offset so the flow reads as motion
+      const ph = ((t * .85 + i * .5) % 1);
+      ar.dot.style.left = px(ar.x + ar.w * ph);
+      ar.dot.style.opacity = a * (1 - fOut) * Math.sin(ph * Math.PI) * .95;
+    });
+
+    // 4.9 – 11.4 : the collapse
+    const col = E.io(sp(t, 5.6, 9.5));
+    const sA = E.out(sp(t, 4.9, 5.7)), sOut = E.io(sp(t, 12.4, 13.6));
+    for (const m of motes) {
+      const own = cl((col - m.d * .34) / .66);
+      const x = lerp(m.x, CX, E.out(own)), y = lerp(m.y, CY, E.out(own));
+      m.el.style.left = px(x - 3); m.el.style.top = px(y - 3);
+      m.el.style.opacity = sA * (1 - sOut) * lerp(.85, 0, cl((own - .72) / .28));
+      m.el.style.transform = `scale(${lerp(1, .45, own)})`;
+    }
+    const cA = E.out(sp(t, 8.4, 9.7));
+    set(core, cA * (1 - sOut), 0, 0, lerp(1.5, 1, cA));
+    core.style.boxShadow = `0 0 ${lerp(0, 40, cA)}px rgba(243,193,75,.42)`;
+    const n = Math.round(lerp(800, 1, E.out5(sp(t, 5.9, 9.4))));
+    num.textContent = String(n);
+    set(num, sA * (1 - sOut));
+    lab.textContent = n <= 1 ? '1 DISTINCT NEED · NOT EIGHT HUNDRED'
+                             : 'REPORTS ABOUT ONE DRY BOREWELL';
+    set(lab, sA * (1 - sOut) * .95);
+
+    // 10.6 – 13.0 : government data joins
+    const gA = E.out(sp(t, 10.55, 11.6));
+    set(cGov, gA * (1 - E.io(sp(t, 12.9, 13.8))), 0, lerp(-120, -186, E.out5(sp(t, 10.55, 11.9))));
+
+    // 13.0 → : the grid that scene 06 inherits
+    const grA = E.out(sp(t, 13.0, 14.3));
+    set(grid, grA, 0, 0, lerp(.9, 1, grA));
+    const draw = E.out5(sp(t, 13.2, 14.8));
+    gv.style.height = px(420 * draw); gh.style.width = px(600 * draw);
+    set(gcap, E.out(sp(t, 14.4, 15.3)) * .9);
+  };
+});
+
+// ══════════════════════════════════════════════════════ 06 · SILENT NEED
+scene('06-quadrant', root => {
+  const p = h('div', 'pad'); root.appendChild(p);
+  p.appendChild(h('div', 'kicker', { position:'absolute', left:'120px', top:'84px' },
+                  '02 · Decide — the four boxes'));
+
+  // Same orientation as EXPLAINER.md: rows = voice, columns = conditions.
+  const gx = 460, gy = 250, gw = 1000, gh_ = 560;
+  const box = h('div', null, { position:'absolute', left:px(gx), top:px(gy), width:px(gw),
+    height:px(gh_) });
+  p.appendChild(box);
+
+  // Axis labels live in their own layer so they leave with the grid. Parented to
+  // .pad they outlived it and sat under the console screenshot.
+  const heads = h('div', null, { position:'absolute', inset:'0' }); p.appendChild(heads);
+  const colH = (x, s) => h('div', 'mono', { position:'absolute', left:px(x), top:px(gy - 46),
+    width:px(gw / 2), textAlign:'center', fontSize:'19px', letterSpacing:'.22em',
+    color:'var(--paper-4)' }, s);
+  heads.appendChild(colH(gx, 'CONDITIONS OK'));
+  heads.appendChild(colH(gx + gw / 2, 'CONDITIONS BAD'));
+  const rowH = (y, s) => h('div', 'mono', { position:'absolute', left:'0', top:px(y),
+    width:px(gx - 34), textAlign:'right', fontSize:'19px', letterSpacing:'.22em',
+    color:'var(--paper-4)' }, s);
+  heads.appendChild(rowH(gy + gh_ / 4 - 10, 'MANY COMPLAINTS'));
+  heads.appendChild(rowH(gy + gh_ * 3 / 4 - 10, 'FEW COMPLAINTS'));
+
+  const CELLS = [
+    { n:'Expectation Gap', c:'--q-gap',    fill:'rgba(87,196,229,.14)',  k:104, r:0, col:0 },
+    { n:'Act Now',         c:'--q-act',    fill:'rgba(255,106,69,.14)',  k:224, r:0, col:1 },
+    { n:'Stable',          c:'--q-stable', fill:'rgba(86,98,115,.18)',   k:157, r:1, col:0 },
+    { n:'Silent Need',     c:'--q-silent', fill:'rgba(243,193,75,.15)',  k:154, r:1, col:1, hero:true },
+  ].map(C => {
+    const el = h('div', null, { position:'absolute',
+      left:px(C.col * gw / 2 + 6), top:px(C.r * gh_ / 2 + 6),
+      width:px(gw / 2 - 12), height:px(gh_ / 2 - 12),
+      border:`1px solid var(${C.c})`, background:C.fill });
+    const nm = h('div', null, { position:'absolute', left:'26px', top:'24px', fontSize:'34px',
+      fontWeight:'500', color:`var(${C.c})` }, C.n);
+    const kn = h('div', 'mono', { position:'absolute', right:'26px', bottom:'20px',
+      fontSize:'46px', fontWeight:'500', color:`var(${C.c})` }, '0');
+    el.appendChild(nm); el.appendChild(kn);
+    box.appendChild(el);
+    return { ...C, el, nm, kn };
+  });
+  const hero = CELLS[3];
+  const heroLines = ['measured deficit   ▲  severe', 'citizen voice      ▼  near zero']
+    .map((s, i) => {
+      const e = h('div', 'mono', { position:'absolute', left:'26px', top:px(84 + i * 34),
+        fontSize:'21px', color:'var(--gold)', opacity:'0' }, s);
+      hero.el.appendChild(e); return e;
+    });
+
+  // Then: the same idea, in the shipped console.
+  const shot = h('img', 'ui', { position:'absolute', left:'110px', top:'140px', width:'1230px',
+    opacity:'0' }); shot.src = 'assets/ui/console-map.png'; p.appendChild(shot);
+  // The map crop is placed at 0.4776 scale, which puts the console's own
+  // "Silent Need 154" legend row here. Ringing the shipped legend beats drawing
+  // a second copy of it.
+  const ring = h('div', null, { position:'absolute', left:'150px', top:'844px', width:'352px',
+    height:'30px', border:'1px solid var(--gold)', opacity:'0' });
+  p.appendChild(ring);
+
+  const callout = h('div', null, { position:'absolute', left:'1400px', top:'330px', width:'420px',
+    opacity:'0' }); p.appendChild(callout);
+  callout.appendChild(h('div', 'mono', { fontSize:'118px', fontWeight:'500', lineHeight:'1',
+    color:'var(--gold)' }, '154'));
+  callout.appendChild(h('div', 'mono', { marginTop:'10px', fontSize:'22px', letterSpacing:'.24em',
+    color:'var(--gold)' }, 'SILENT NEED'));
+  callout.appendChild(h('div', null, { marginTop:'26px', width:'420px', height:'1px',
+    background:'var(--rule-strong)' }));
+  callout.appendChild(h('div', null, { marginTop:'26px', fontSize:'24px', lineHeight:'1.5',
+    color:'var(--paper-2)' },
+    'District-sectors with severe measured deficit and almost no citizen voice.'));
+  // On-screen provenance. The console labels Real vs Synthetic in its own
+  // masthead; a film that showed the console without carrying that label over
+  // would be quietly less honest than the product it is about.
+  const prov = h('div', 'mono', { marginTop:'34px', fontSize:'16px', lineHeight:'1.9',
+    letterSpacing:'.06em', color:'var(--paper-4)' },
+    'DEFICIT VALUES — REAL (NFHS-5)\nBOUNDARIES — REAL (639/641)\nCITIZEN SIGNALS — SYNTHETIC,\nWITH A DELIBERATE PARTICIPATION BIAS');
+  prov.style.whiteSpace = 'pre-line'; callout.appendChild(prov);
+
+  return t => {
+    const outT = E.io(sp(t, 6.6, 7.7));
+    CELLS.forEach((C, i) => {
+      const a = E.out(sp(t, .15 + i * .16, .85 + i * .16));
+      const focus = C.hero ? E.out(sp(t, 1.5, 2.6)) : 0;
+      const dim = C.hero ? 1 : lerp(1, .26, E.io(sp(t, 1.5, 2.8)));
+      set(C.el, a * dim * (1 - outT), 0, 0, lerp(.94, C.hero ? 1.035 : 1, Math.max(a, focus)));
+      C.el.style.boxShadow = C.hero
+        ? `0 0 ${lerp(0, 52, focus)}px rgba(243,193,75,${lerp(0, .34, focus)})` : 'none';
+      C.el.style.borderWidth = C.hero && focus > .5 ? '2px' : '1px';
+      // Counts land only once the box has been named.
+      const ct = C.hero ? 5.75 : 1.0 + i * .18;
+      C.kn.textContent = String(Math.round(lerp(0, C.k, E.out5(sp(t, ct, ct + 1.25)))));
+      C.kn.style.opacity = C.hero ? E.out(sp(t, 5.6, 6.4)) : .85;
+      if (C.hero) C.nm.style.fontSize = px(lerp(34, 42, E.out(sp(t, 5.6, 6.4))));
+    });
+    heroLines.forEach((e, i) => {
+      const a = sp(t, 3.05 + i * .55, 3.85 + i * .55);
+      set(e, E.out(a) * (1 - outT), lerp(12, 0, E.out(a)));
+    });
+    set(box, 1 - outT, lerp(0, -160, outT), 0, lerp(1, .82, outT));
+    heads.style.opacity = 1 - outT;
+
+    // hand-off to the real product
+    const rA = E.out(sp(t, 7.0, 8.3));
+    set(shot, rA, lerp(-50, 0, E.out5(sp(t, 7.0, 8.6))));
+    set(callout, E.out(sp(t, 7.7, 8.9)), lerp(50, 0, E.out5(sp(t, 7.7, 9.2))));
+    // ring the Silent Need row of the shipped legend
+    const rr = E.out(sp(t, 9.2, 10.1));
+    ring.style.opacity = rr * .95;
+    ring.style.transform = `scale(${lerp(1.10, 1, rr)})`;
+    ring.style.boxShadow = `0 0 ${lerp(0, 26, rr)}px rgba(243,193,75,.32)`;
+  };
+}, { fin: .35 });
+
+// ══════════════════════════════════════════════════════ 07 · THE LINE
+scene('07-honest', root => {
+  const p = h('div', 'pad'); root.appendChild(p);
+  p.appendChild(h('div', 'kicker', { position:'absolute', left:'120px', top:'84px' },
+                  "The line CIVOS does not cross"));
+
+  const l1 = h('div', 'disp', { position:'absolute', left:'120px', top:'250px', fontSize:'104px' },
+    'CIVOS does not fund silence.');
+  const l2 = h('div', null, { position:'absolute', left:'124px', top:'392px', fontSize:'38px',
+    color:'var(--paper-3)' }, 'That would replace one guess with another.');
+  p.appendChild(l1); p.appendChild(l2);
+
+  const card = h('img', 'ui', { position:'absolute', left:'120px', top:'524px', width:'1000px',
+    border:'1px solid rgba(243,193,75,.45)' });
+  card.src = 'assets/ui/dossier-callout.png'; p.appendChild(card);
+  const note = h('div', 'mono', { position:'absolute', left:'1180px', top:'560px', width:'620px',
+    fontSize:'22px', lineHeight:'1.8', letterSpacing:'.09em', color:'var(--paper-3)' },
+    'SHIPPED IN THE CONSOLE.\nIT RECOMMENDS OUTREACH,\nNEVER AUTOMATIC FUNDING.\n\nA MEASUREMENT PROBLEM —\nNOT AN OVERRULED CITIZEN.');
+  note.style.whiteSpace = 'pre-line'; p.appendChild(note);
+
+  return t => {
+    const a1 = sp(t, .2, 1.3);
+    set(l1, E.out(a1), 0, lerp(24, 0, E.out5(a1)));
+    const a2 = sp(t, 2.3, 3.3);
+    set(l2, E.out(a2) * .95, 0, lerp(18, 0, E.out5(a2)));
+    const a3 = sp(t, 4.4, 5.6);
+    set(card, E.out(a3), 0, lerp(26, 0, E.out5(a3)), lerp(.955, 1, E.out(a3)));
+    card.style.boxShadow = `0 0 ${lerp(0, 46, E.out(a3))}px rgba(243,193,75,.22)`;
+    set(note, E.out(sp(t, 5.1, 6.3)) * .9, 0, lerp(14, 0, E.out(sp(t, 5.1, 6.3))));
+  };
+});
+
+// ══════════════════════════════════════════════════════ 08 · THE DOSSIER
+scene('08-dossier', root => {
+  const p = h('div', 'pad'); root.appendChild(p);
+  p.appendChild(h('div', 'kicker', { position:'absolute', left:'120px', top:'84px' },
+                  '03 · The output is a document'));
+
+  // Opening beat: why a dashboard is the wrong artefact.
+  const bgMap = h('img', null, { position:'absolute', left:'430px', top:'250px', width:'1060px',
+    opacity:'0', filter:'saturate(.35)' }); bgMap.src = 'assets/ui/console-map.png';
+  p.appendChild(bgMap);
+  const noDash = h('div', 'disp', { position:'absolute', left:'120px', right:'120px', top:'420px',
+    textAlign:'center', fontSize:'88px', lineHeight:'1.1' },
+    'You cannot attach a heatmap\nto a funding request.');
+  noDash.style.whiteSpace = 'pre-line'; p.appendChild(noDash);
+
+  // Then the dossier itself, one real region at a time.
+  const head = h('img', 'ui', { position:'absolute', left:'120px', top:'180px', width:'1680px',
+    opacity:'0', border:'none' }); head.src = 'assets/ui/dossier-head.png'; p.appendChild(head);
+  const uline = h('div', null, { position:'absolute', left:'112px', top:'196px', width:'3px',
+    background:'var(--gold)', height:'0' }); p.appendChild(uline);
+
+  const STATS = [['59', 'RAW SIGNALS'], ['17', 'DISTINCT NEEDS'], ['6', 'LANGUAGES'],
+                 ['1', 'PHOTOGRAPH']].map(([v, l], i) => {
+    const el = h('div', null, { position:'absolute', left:px(120 + i * 300), top:'330px',
+      width:'260px', opacity:'0' });
+    const n = h('div', 'mono', { fontSize:'68px', fontWeight:'500', color:'var(--paper)' }, '0');
+    const c = h('div', 'mono', { marginTop:'6px', fontSize:'17px', letterSpacing:'.22em',
+      color:'var(--paper-4)' }, l);
+    el.appendChild(n); el.appendChild(c); p.appendChild(el);
+    return { el, n, c, target: +v };
+  });
+
+  const PANELS = [
+    { src:'dossier-signals', w:710,  cap:"CITIZENS' OWN WORDS\nMARATHI · HINDI · BENGALI\nTRANSLATED, NOT TIDIED\n\nEACH ONE RESOLVES TO A\nSIGNAL CLUSTER ID.",   win:[14.4, 18.3] },
+    { src:'dossier-deficit', w:960,  cap:"THE GOVERNMENT'S OWN\nSTATISTIC, CONFIRMING IT\n\n38.1% OF HOUSEHOLDS WITH\nNO IMPROVED WATER SOURCE\n\nNFHS-5, 2019–21 · REAL\nMEASURED VALUE", win:[18.3, 27.2] },
+    { src:'dossier-funding', w:880,  cap:'A ROUTE TO MONEY THAT\nALREADY EXISTS\n\nJAL JEEVAN MISSION\nMINISTRY OF JAL SHAKTI\n\nINDICATIVE BAND FROM\nPUBLISHED UNIT COST', win:[27.2, 30.6] },
+  ].map(P => {
+    const img = h('img', 'ui', { position:'absolute', left:'120px', top:'450px', width:px(P.w),
+      opacity:'0' }); img.src = `assets/ui/${P.src}.png`; p.appendChild(img);
+    const cap = h('div', 'mono', { position:'absolute', left:'1180px', top:'462px', width:'620px',
+      fontSize:'21px', lineHeight:'1.78', letterSpacing:'.09em', color:'var(--paper-3)',
+      opacity:'0' }, P.cap);
+    cap.style.whiteSpace = 'pre-line'; p.appendChild(cap);
+    return { ...P, img, cap };
+  });
+
+  const close = h('div', 'mono', { position:'absolute', left:'120px', right:'120px', top:'962px',
+    textAlign:'center', fontSize:'25px', letterSpacing:'.17em', color:'var(--gold)', opacity:'0' },
+    'EVERY CLAIM RESOLVES TO A SIGNAL CLUSTER, AN IMAGE ID, OR A DATASET ROW');
+  p.appendChild(close);
+
+  return t => {
+    // beat 1
+    const oA = E.out(sp(t, .3, 1.5)), oOut = E.io(sp(t, 5.4, 6.5));
+    set(noDash, oA * (1 - oOut), 0, lerp(22, 0, E.out5(sp(t, .3, 1.7))));
+    set(bgMap, E.out(sp(t, .5, 2.2)) * .13 * (1 - oOut), 0, 0,
+        lerp(1.0, 1.05, sp(t, .5, 6.5)));
+
+    // header, persistent from 6.0
+    const hA = E.out(sp(t, 6.0, 7.2));
+    set(head, hA, 0, lerp(-22, 0, E.out5(sp(t, 6.0, 7.4))));
+    uline.style.height = px(lerp(0, 62, E.out5(sp(t, 8.3, 9.5))));
+    uline.style.opacity = .92;
+
+    // stats
+    STATS.forEach((S, i) => {
+      const t0 = 10.3 + i * .5;
+      const a = E.out(sp(t, t0, t0 + .7));
+      const out = E.io(sp(t, 13.9, 14.9));
+      set(S.el, a * (1 - out * .55), 0, lerp(16, 0, a));
+      S.n.textContent = String(Math.round(lerp(0, S.target, E.out5(sp(t, t0, t0 + 1.15)))));
+      S.n.style.color = i === 1 ? 'var(--gold)' : 'var(--paper)';
+      S.el.style.top = px(lerp(330, 300, out));
+    });
+
+    // one real panel at a time
+    PANELS.forEach(P => {
+      const inA = E.out(sp(t, P.win[0], P.win[0] + .85));
+      const outA = E.io(sp(t, P.win[1], P.win[1] + .6));
+      const a = inA * (1 - outA);
+      set(P.img, a, lerp(64, 0, E.out5(sp(t, P.win[0], P.win[0] + 1.1))) - 60 * outA, 0,
+          lerp(.975, 1, inA));
+      set(P.cap, a * .95, lerp(30, 0, E.out(sp(t, P.win[0] + .3, P.win[0] + 1.3))));
+    });
+
+    set(close, E.out(sp(t, 30.5, 31.6)) * .95, 0, lerp(14, 0, E.out(sp(t, 30.5, 31.6))));
+  };
+}, { fin: .45, fout: .5 });
+
+// ══════════════════════════════════════════════════════ 09 · VERIFY & PORT
+scene('09-verify', root => {
+  const p = h('div', 'pad'); root.appendChild(p);
+  const kick = h('div', 'kicker', { position:'absolute', left:'120px', top:'84px' },
+                 '04 · Verify');
+  p.appendChild(kick);
+  // VERIFY is the loop that runs after money is spent. No post-funding data
+  // exists yet, so the curve is labelled for what it is.
+  const stag = h('div', 'mono', { position:'absolute', right:'120px', top:'86px', fontSize:'17px',
+    letterSpacing:'.20em', color:'var(--paper-4)' }, 'SCHEMATIC · THE LOOP, NOT OBSERVED DATA');
+  p.appendChild(stag);
+
+  // Signals over time, with the funding event marked.
+  const ch = h('div', null, { position:'absolute', left:'260px', top:'250px', width:'1400px',
+    height:'480px' }); p.appendChild(ch);
+  ch.appendChild(h('div', 'rule', { position:'absolute', left:'0', bottom:'0', width:'100%',
+    height:'1px' }));
+  ch.appendChild(h('div', 'rule', { position:'absolute', left:'0', top:'0', width:'1px',
+    height:'100%' }));
+  const SERIES = [.30,.44,.57,.71,.86,1.0,.93,.72,.51,.36,.26,.21,.18];
+  const pts = SERIES.map((v, i) => [i / 12 * 1400, 480 - v * 430]);
+  const NS = 'http://www.w3.org/2000/svg';
+  const s = document.createElementNS(NS, 'svg');
+  s.setAttribute('width', 1400); s.setAttribute('height', 480);
+  s.style.position = 'absolute'; s.style.left = '0'; s.style.top = '0';
+  const path = document.createElementNS(NS, 'path');
+  path.setAttribute('d', 'M ' + pts.map(q => q.map(n => n.toFixed(1)).join(' ')).join(' L '));
+  path.setAttribute('fill', 'none'); path.setAttribute('stroke', '#f3c14b');
+  path.setAttribute('stroke-width', '2.5'); path.setAttribute('stroke-linecap', 'round');
+  s.appendChild(path); ch.appendChild(s);
+  // Progressive draw needs the true arc length; a guessed constant would either
+  // finish early or never finish.
+  let L = 2000;
+  try { L = path.getTotalLength() || 2000; } catch (e) { /* keep fallback */ }
+  path.style.strokeDasharray = L; path.style.strokeDashoffset = L;
+
+  const mark = h('div', null, { position:'absolute', left:px(1400 * 5 / 12), top:'-10px',
+    width:'1px', height:'500px', background:'rgba(236,229,216,.35)' });
+  const mlab = h('div', 'mono', { position:'absolute', left:px(1400 * 5 / 12 + 14), top:'-6px',
+    fontSize:'19px', letterSpacing:'.20em', color:'var(--paper-2)' }, 'FUNDED');
+  ch.appendChild(mark); ch.appendChild(mlab);
+  const axl = h('div', 'mono', { position:'absolute', left:'260px', top:'748px', width:'1400px',
+    fontSize:'17px', letterSpacing:'.18em', color:'var(--paper-4)',
+    display:'flex', justifyContent:'space-between' });
+  axl.appendChild(h('span', null, null, 'MONTH 0'));
+  axl.appendChild(h('span', null, null, 'MONTH 12'));
+  ch.appendChild(axl);
+  const q = h('div', 'disp', { position:'absolute', left:'260px', top:'790px', fontSize:'62px' },
+    'Six months later — do the complaints stop?');
+  p.appendChild(q);
+  const ans = h('div', 'mono', { position:'absolute', right:'260px', top:'292px', fontSize:'21px',
+    letterSpacing:'.20em', color:'var(--paper-3)', textAlign:'right' },
+    'SIGNAL VOLUME\nSAME DISTRICT · SAME SECTOR');
+  ans.style.whiteSpace = 'pre-line'; p.appendChild(ans);
+
+  // Portability: the country is a folder.
+  const tree = h('div', null, { position:'absolute', left:'260px', top:'250px', opacity:'0' });
+  p.appendChild(tree);
+  const ROWS = [
+    ['core/',        'models · interfaces — the contracts every country shares',
+                     'never names a country',                    false],
+    ['adapters/in/', 'sectors.yaml · schemes.yaml · languages.yaml',
+                     '5 sectors · 10 schemes · 22 languages',    false],
+    ['adapters/za/', 'three files — nothing in core/ is rewritten',
+                     'CIVOS-ZA, in Zulu',                        true],
+  ].map(([a, b, c, gold], i) => {
+    const r = h('div', null, { position:'absolute', left:'0', top:px(i * 132), width:'1400px' });
+    r.appendChild(h('div', 'mono', { fontSize:'52px', fontWeight:'500',
+      color: gold ? 'var(--gold)' : 'var(--paper)' }, a));
+    r.appendChild(h('div', null, { marginTop:'8px', fontSize:'27px', color:'var(--paper-3)' }, b));
+    r.appendChild(h('div', 'mono', { position:'absolute', right:'0', top:'14px', fontSize:'19px',
+      letterSpacing:'.20em', color: gold ? 'var(--gold)' : 'var(--paper-4)' }, c.toUpperCase()));
+    r.appendChild(h('div', 'rule', { position:'absolute', left:'0', top:'112px', width:'1400px',
+      height:'1px' }));
+    tree.appendChild(r); return r;
+  });
+  const lint = h('div', 'mono', { position:'absolute', left:'260px', top:'700px', fontSize:'21px',
+    letterSpacing:'.09em', color:'var(--paper-3)', opacity:'0' },
+    'scripts/lint_country_literals.py — core/ is scanned for country literals. It passes.');
+  p.appendChild(lint);
+  const flip = h('div', null, { position:'absolute', left:'260px', top:'800px', display:'flex',
+    alignItems:'center', gap:'26px', opacity:'0' });
+  const mk = (txt, gold) => {
+    const w = h('div', null, { display:'flex', alignItems:'flex-start', gap:'12px' });
+    w.appendChild(h('div', 'disp', { fontSize:'72px' }, 'CIVOS'));
+    w.appendChild(h('div', 'mono', { marginTop:'20px', padding:'5px 11px 4px', fontSize:'17px',
+      fontWeight:'500', letterSpacing:'.16em', color:'#1b1408',
+      background: gold ? 'var(--gold)' : 'var(--paper-3)', borderRadius:'3px' }, txt));
+    return w;
+  };
+  flip.appendChild(mk('IN', false));
+  flip.appendChild(h('div', 'mono', { fontSize:'40px', color:'var(--paper-4)' }, '→'));
+  flip.appendChild(mk('ZA', true));
+  p.appendChild(flip);
+
+  return t => {
+    const cOut = E.io(sp(t, 6.7, 7.7));
+    const dr = E.out5(sp(t, .5, 4.4));
+    path.style.strokeDashoffset = L * (1 - dr);
+    s.style.opacity = 1 - cOut;
+    set(ch, 1 - cOut, 0, lerp(0, -40, cOut));
+    set(mark, E.out(sp(t, 2.2, 3.0)) * (1 - cOut));
+    set(stag, E.out(sp(t, .3, 1.3)) * .8 * (1 - cOut));
+    set(axl, E.out(sp(t, 1.4, 2.4)) * .85);
+    set(mlab, E.out(sp(t, 2.4, 3.2)) * (1 - cOut));
+    const qa = sp(t, 1.0, 2.1);
+    set(q, E.out(qa) * (1 - cOut), 0, lerp(20, 0, E.out5(qa)));
+    set(ans, E.out(sp(t, 4.5, 5.6)) * .9 * (1 - cOut));
+    kick.textContent = t < 7.0 ? '04 · Verify' : '05 · One folder per country';
+
+    const tA = E.out(sp(t, 7.0, 8.0));
+    tree.style.opacity = tA;
+    ROWS.forEach((r, i) => {
+      const a = E.out(sp(t, 7.0 + i * .42, 7.9 + i * .42));
+      set(r, a, lerp(-34, 0, E.out5(sp(t, 7.0 + i * .42, 8.2 + i * .42))));
+    });
+    set(lint, E.out(sp(t, 9.6, 10.7)) * .9);
+    const fa = sp(t, 10.9, 12.0);
+    set(flip, E.out(fa), 0, lerp(18, 0, E.out5(fa)));
+  };
+});
+
+// ══════════════════════════════════════════════════════ 10 · CLOSE
+scene('10-close', root => {
+  const p = h('div', 'pad'); root.appendChild(p);
+  const wrap = h('div', null, { position:'absolute', left:'0', right:'0', top:'320px',
+    display:'flex', alignItems:'flex-start', justifyContent:'center', gap:'26px' });
+  wrap.appendChild(h('div', 'disp', { fontSize:'186px', letterSpacing:'.02em' }, 'CIVOS'));
+  wrap.appendChild(h('div', 'mono', { marginTop:'50px', padding:'8px 15px 7px', fontSize:'26px',
+    fontWeight:'500', letterSpacing:'.16em', color:'#1b1408', background:'var(--gold)',
+    borderRadius:'3px' }, 'IN'));
+  p.appendChild(wrap);
+
+  const line = h('div', 'disp', { position:'absolute', left:'0', right:'0', top:'566px',
+    textAlign:'center', fontSize:'68px', color:'var(--gold)',
+    textShadow:'0 0 46px rgba(243,193,75,.28)' },
+    'Go and ask the districts that never answered.');
+  p.appendChild(line);
+
+  const rule = h('div', 'rule', { position:'absolute', left:'50%', top:'700px', width:'0',
+    height:'1px', transform:'translateX(-50%)' });
+  p.appendChild(rule);
+
+  const meta = h('div', 'mono', { position:'absolute', left:'0', right:'0', top:'744px',
+    textAlign:'center', fontSize:'22px', lineHeight:'2.0', letterSpacing:'.13em',
+    color:'var(--paper-3)' },
+    'civos-console-924096812044.asia-south1.run.app\ngithub.com/ojha-436/CIVOS\n641 DISTRICTS · 5 SECTORS · 196 LANGUAGES MEASURED');
+  meta.style.whiteSpace = 'pre-line'; p.appendChild(meta);
+
+  return t => {
+    const a = E.out(sp(t, .2, 1.5));
+    set(wrap, a, 0, lerp(16, 0, E.out5(sp(t, .2, 1.7))), lerp(.975, 1, a));
+    const la = sp(t, 1.2, 2.4);
+    set(line, E.out(la), 0, lerp(20, 0, E.out5(la)));
+    rule.style.width = px(lerp(0, 900, E.out5(sp(t, 2.3, 3.4))));
+    rule.style.opacity = .9;
+    set(meta, E.out(sp(t, 2.7, 3.9)) * .9);
+  };
+}, { fin: .5, fout: 1.0 });
+
+// ────────────────────────────────────────────────────────────────── captions
+/** Sentence cues per scene, apportioned by character count — the same split
+ *  scripts/video/assemble.py writes into the .srt, so the burnt-in captions and
+ *  the sidecar never disagree. */
+const CUES = (() => {
+  const out = [];
+  for (const sc of T.scenes) {
+    const parts = sc.vo.split(/(?<=[.?!])\s+/).map(x => x.trim()).filter(Boolean);
+    const merged = [];
+    for (const p of parts) {
+      if (merged.length && (p.length < 28 || merged[merged.length - 1].length < 28))
+        merged[merged.length - 1] += ' ' + p;
+      else merged.push(p);
+    }
+    const tot = merged.reduce((a, p) => a + p.length, 0) || 1;
+    let t = sc.start;
+    for (const p of merged) {
+      const d = sc.speech * p.length / tot;
+      out.push({ a: t, b: t + d, s: p });
+      t += d;
+    }
+  }
+  return out;
+})();
+
+// ─────────────────────────────────────────────────────────────────── the seek
+const prog = document.getElementById('progress');
+const chap = document.getElementById('chapter');
+const cap = document.getElementById('caption');
+
+/** The whole film as a pure function of time. Called once per output frame. */
+window.SEEK = function (time) {
+  const t = Math.max(0, Math.min(T.total - 1e-4, time));
+  let cur = T.scenes[0];
+  for (const s of T.scenes) if (t >= s.start) cur = s;
+
+  for (const s of T.scenes) {
+    const o = SC[s.id];
+    if (o) o.root.style.display = (s.id === cur.id) ? 'block' : 'none';
+  }
+  const o = SC[cur.id];
+  if (o) {
+    const local = t - cur.start;
+    // Scene-level dissolve. Against the ink ground this reads as a soft cut.
+    const fade = Math.min(sp(local, 0, o.fin), sp(cur.dur - local, 0, o.fout));
+    o.root.style.opacity = fade;
+    o.render(local, cur.dur);
+  }
+  if (window.__CAPTIONS) {
+    const c = CUES.find(q => t >= q.a && t < q.b);
+    cap.style.display = c ? 'block' : 'none';
+    if (c) {
+      cap.textContent = c.s;
+      // 0.12s ease-in on each cue: a caption that hard-cuts reads as a glitch.
+      cap.style.opacity = sp(t - c.a, 0, .12) * (1 - sp(t, c.b - .1, c.b) * .0);
+    }
+  }
+  prog.style.width = px(W * (t / T.total));
+  chap.textContent = cur.label.toUpperCase();
+  chap.style.opacity = .5;
+  document.documentElement.dataset.t = t.toFixed(3);
+};
+
+// Interactive scrub, for previewing straight from the filesystem.
+if (!window.__RENDERING) {
+  let t = 0;
+  SEEK(0);
+  const bar = h('input', null, { position:'fixed', left:'20px', right:'20px', bottom:'8px',
+    width:'calc(100% - 40px)', zIndex:'99' });
+  bar.type = 'range'; bar.min = 0; bar.max = T.total; bar.step = 1 / T.fps; bar.value = 0;
+  bar.oninput = () => SEEK(t = +bar.value);
+  document.body.appendChild(bar);
+  addEventListener('keydown', e => {
+    const d = e.shiftKey ? 1 : 1 / T.fps;
+    if (e.key === 'ArrowRight') t = Math.min(T.total, t + d);
+    else if (e.key === 'ArrowLeft') t = Math.max(0, t - d);
+    else return;
+    bar.value = t; SEEK(t);
+  });
+}
+</script>

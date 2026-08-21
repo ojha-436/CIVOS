@@ -40,3 +40,8 @@ video/out/
 
 # Throwaway dir the CI country-lint negative control writes and removes.
 .lintcheck/
+
+# The film loads its typefaces straight from console/app/fonts/, which is where
+# they sit next to their OFL licence. A second copy under video/ would duplicate
+# six binaries and separate them from the licence that governs them.
+video/assets/fonts/
