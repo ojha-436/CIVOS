@@ -26,7 +26,11 @@ WORKDIR /app
 # republished artifact fail the build instead of installing quietly. It also
 # forces the set to be fully pinned — uv export refuses to emit a partial one.
 COPY pyproject.toml uv.lock ./
-RUN pip install --no-cache-dir uv==0.9.6 && \
+# uv is pinned to the exact version that wrote this lockfile. uv.lock here is
+# `version = 1, revision = 3`, and an older uv rejects a revision it does not
+# know — so an unpinned `pip install uv` would turn a lockfile refresh into a
+# build failure at deploy time. Bump this together with the lockfile.
+RUN pip install --no-cache-dir uv==0.11.28 && \
     uv export --frozen --no-dev --no-emit-project \
         --format requirements-txt -o /tmp/requirements.txt && \
     uv pip install --system --no-cache --require-hashes -r /tmp/requirements.txt && \
