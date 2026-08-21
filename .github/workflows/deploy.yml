@@ -176,6 +176,65 @@ jobs:
           fi
           echo "Build context and index are clean of .env."
 
+  # ── Gate: the container actually builds and runs ────────────────────────────
+  # Added after a deploy failed at `COPY pyproject.toml uv.lock ./` because
+  # .dockerignore excluded the lockfile. Every other gate was green: the unit
+  # tests inspect the Dockerfile and .dockerignore as text, and text inspection
+  # cannot tell you what Docker's context resolution will actually do.
+  #
+  # So this builds the image the same way Cloud Build does, then runs it. A
+  # static approximation of .dockerignore is a useful early warning;
+  # `docker build` is the authority.
+  container:
+    name: Container builds and runs
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Same context rules as `gcloud run deploy --source .`, so a file the
+      # Dockerfile needs but .dockerignore excludes fails here instead of in
+      # production.
+      - name: Build the image
+        run: docker build -t civos-api:ci .
+
+      - name: It must not run as root
+        run: |
+          UID_IN_IMAGE=$(docker run --rm --entrypoint id civos-api:ci -u)
+          echo "container uid: $UID_IN_IMAGE"
+          if [ "$UID_IN_IMAGE" = "0" ]; then
+            echo "::error::The image runs as root. One container-escape CVE from root on the node."
+            exit 1
+          fi
+
+      # An image that builds but cannot serve a request is not a passing build.
+      # /health needs no credentials, so this works without touching GCP.
+      - name: It must serve /health
+        run: |
+          docker run -d --name civos-ci -p 8080:8080 civos-api:ci
+          for i in $(seq 1 40); do
+            if curl -fsS http://localhost:8080/health >/dev/null 2>&1; then break; fi
+            sleep 2
+          done
+          BODY=$(curl -fsS http://localhost:8080/health) || {
+            echo "::error::The container never served /health."; docker logs civos-ci; exit 1; }
+          echo "$BODY"
+          echo "$BODY" | grep -q '"status":"ok"' || {
+            echo "::error::Unexpected /health body."; docker logs civos-ci; exit 1; }
+
+      - name: Security headers must be present on the real container
+        run: |
+          curl -sSI http://localhost:8080/health | tee /tmp/h.txt
+          grep -qi '^x-content-type-options: nosniff' /tmp/h.txt || { echo "::error::nosniff missing"; exit 1; }
+          grep -qi "^content-security-policy: default-src 'none'" /tmp/h.txt || { echo "::error::CSP missing"; exit 1; }
+
+      - name: Stop the container
+        if: always()
+        run: docker rm -f civos-ci || true
+
   deploy:
     name: Build & Deploy
     runs-on: ubuntu-latest
@@ -186,7 +245,7 @@ jobs:
     # A country literal in core/ falsifies the cross-border claim, which is 20%
     # of the score. A failing security test means the deployed surface is not the
     # reviewed surface. Do not ship past either.
-    needs: [lint, test, security]
+    needs: [lint, test, security, container]
     permissions:
       contents: read
 

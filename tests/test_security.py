@@ -531,6 +531,19 @@ def test_security_scan_gates_the_deploy():
     assert "security" in _deploy_needs()
 
 
+def test_container_build_gates_the_deploy():
+    """Text inspection of the Dockerfile cannot predict Docker's context rules.
+
+    The lockfile break proved it: every static gate was green while the build was
+    broken, because no job actually ran `docker build`.
+    """
+    assert "container" in _deploy_needs()
+    steps = " ".join(str(s) for s in _workflow()["jobs"]["container"]["steps"])
+    assert "docker build" in steps
+    assert "/health" in steps, "an image that builds but cannot serve is not a pass"
+    assert "entrypoint id" in steps, "the non-root check must run against the real image"
+
+
 def test_ci_audits_dependencies_and_the_served_surface():
     steps = [s.get("name", "") for s in _workflow()["jobs"]["security"]["steps"]]
     assert any("pip-audit" in n for n in steps)
@@ -634,3 +647,97 @@ def test_import_does_not_claim_work_it_does_not_do():
     assert "queued" not in data, "the endpoint still claims to queue records"
     assert data["persisted"] == 0
     assert "Nothing was stored" in data["note"]
+
+
+# ===========================================================================
+# 14. The Dockerfile and .dockerignore must not contradict each other
+# ===========================================================================
+#
+# Regression for a real production break: .dockerignore excluded `uv.lock`
+# (correct for the version of the Dockerfile that predated the lockfile install)
+# while the Dockerfile had started doing `COPY pyproject.toml uv.lock ./`. Both
+# files were individually sensible and jointly broken, so no test looking at
+# either one alone caught it. Cloud Build failed at step 4/13 with
+# "COPY failed: ... excluded by .dockerignore".
+
+
+def _dockerignore_excludes(path: str, patterns: list[str]) -> bool:
+    """Approximate Docker's .dockerignore matching: last matching rule wins."""
+    import fnmatch
+
+    excluded = False
+    for raw in patterns:
+        neg = raw.startswith("!")
+        pat = (raw[1:] if neg else raw).rstrip("/")
+        if not pat:
+            continue
+        hit = (
+            fnmatch.fnmatch(path, pat)
+            or fnmatch.fnmatch(path, pat + "/*")
+            or path == pat
+            or path.startswith(pat + "/")
+        )
+        if hit:
+            excluded = not neg
+    return excluded
+
+
+def _dockerignore_patterns() -> list[str]:
+    return [
+        l.strip()
+        for l in (REPO / ".dockerignore").read_text().splitlines()
+        if l.strip() and not l.startswith("#")
+    ]
+
+
+def _dockerfile_copy_sources() -> list[str]:
+    """Every explicit source path the Dockerfile COPYs, excluding `.`."""
+    out: list[str] = []
+    for line in (REPO / "Dockerfile").read_text().splitlines():
+        line = line.strip()
+        if not line.upper().startswith("COPY "):
+            continue
+        parts = [p for p in line.split()[1:] if not p.startswith("--")]
+        for src in parts[:-1]:  # the last token is the destination
+            if src not in (".", "./"):
+                out.append(src)
+    return out
+
+
+def test_every_dockerfile_copy_source_survives_the_dockerignore():
+    """The bug that broke the deploy: a COPY of a file the context excluded."""
+    patterns = _dockerignore_patterns()
+    sources = _dockerfile_copy_sources()
+    assert sources, "parsed no explicit COPY sources — the check would be vacuous"
+    blocked = [s for s in sources if _dockerignore_excludes(s, patterns)]
+    assert not blocked, (
+        f"Dockerfile COPYs {blocked}, which .dockerignore excludes. "
+        "Cloud Build will fail at that COPY step."
+    )
+
+
+def test_every_dockerfile_copy_source_exists_on_disk():
+    for src in _dockerfile_copy_sources():
+        assert (REPO / src).exists(), f"Dockerfile COPYs {src}, which does not exist"
+
+
+def test_the_matcher_would_have_caught_the_break():
+    """Negative control: with the old rule present, the check must fail.
+
+    Without this, the test above could silently stop matching and still pass.
+    """
+    with_bug = _dockerignore_patterns() + ["uv.lock"]
+    assert _dockerignore_excludes("uv.lock", with_bug), "matcher fails to detect exclusion"
+    assert not _dockerignore_excludes("uv.lock", _dockerignore_patterns()), \
+        "uv.lock is still excluded by the current .dockerignore"
+
+
+def test_dockerignore_still_excludes_secrets_and_the_film():
+    """Loosening the ignore file must not have reopened the things it exists for."""
+    patterns = _dockerignore_patterns()
+    for must_exclude in (".env", "video/out/frames/f1.png", "docs/screenshots/login.png"):
+        assert _dockerignore_excludes(must_exclude, patterns), f"{must_exclude} is no longer excluded"
+    assert not _dockerignore_excludes(".env.example", patterns), ".env.example must stay"
+    assert not _dockerignore_excludes(
+        "console/public/data/districts.geojson", patterns
+    ), "api/geo.py reads this at runtime"
