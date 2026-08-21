@@ -51,4 +51,10 @@ docs/screenshots/
 .DS_Store
 .idea/
 .vscode/
-uv.lock
+
+# NOT uv.lock. The Dockerfile copies it and installs from it with
+# --require-hashes, so excluding it here breaks the build at
+# `COPY pyproject.toml uv.lock ./`. It was carried over from the version of this
+# file that predated the lockfile install, where excluding it was correct.
+# tests/test_security.py cross-checks every COPY source against these patterns
+# so the two files cannot contradict each other again.
