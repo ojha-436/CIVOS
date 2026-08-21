@@ -8,10 +8,23 @@ Speak it, type it, or photograph it. In any language. CIVOS turns citizen reques
 into a costed, evidence-cited project dossier tied to a real government funding scheme —
 and finds the districts that never speak up at all.
 
+### ▶ Live now
+
+**[Open the console](https://civos-console-924096812044.asia-south1.run.app)** ·
+**[File a request](https://civos-console-924096812044.asia-south1.run.app/report)** ·
+**[Telegram: @Civos_in_bot](https://t.me/Civos_in_bot)** ·
+[API health](https://civos-api-924096812044.asia-south1.run.app/health)
+
+Deployed on Cloud Run in `asia-south1`. `/console` and `/report` sit behind a
+sign-in — use any email address, nothing is verified or emailed. Telegram needs
+no account at all.
+
+[![CI](https://github.com/ojha-436/CIVOS/actions/workflows/deploy.yml/badge.svg)](https://github.com/ojha-436/CIVOS/actions/workflows/deploy.yml)
 [![Licence: Apache-2.0](https://img.shields.io/badge/code-Apache--2.0-blue.svg)](LICENSE)
 [![Docs: CC-BY-4.0](https://img.shields.io/badge/docs%20%26%20data-CC--BY--4.0-lightgrey.svg)](OWNERSHIP.md)
 [![Gate 0](https://img.shields.io/badge/Gate%200-PROCEED__BQML-success.svg)](docs/GATE0-RESULT.md)
 [![Languages](https://img.shields.io/badge/languages-196%20measured-f3c14b.svg)](docs/LANGUAGE-COVERAGE.md)
+[![Security review](https://img.shields.io/badge/security-reviewed%20%C2%B7%2081%20tests-success.svg)](docs/SECURITY-REVIEW.md)
 
 Built for **Build with AI: Code for Communities — Second Edition** (Google Cloud × Hack2skill)
 · problem statement **PS-01**, AI for Digital Public Infrastructure & Governance.
@@ -162,8 +175,20 @@ districts rather than wherever a hash pointed.
 
 ## Try it
 
-Requires [Node 20+](https://nodejs.org). No cloud credentials needed — the console
-runs against a committed fixture.
+**Nothing to install — it is deployed:**
+
+> ### **https://civos-console-924096812044.asia-south1.run.app**
+
+Sign up with any email address (nothing is verified or emailed), then open
+`/console` for the policymaker view or `/report` to file a request as a citizen.
+Or skip the browser entirely and message **[@Civos_in_bot](https://t.me/Civos_in_bot)**
+a voice note, a photo, or a line of text in any language.
+
+Cloud Run scales to zero, so the very first request after an idle period takes a
+few seconds to wake the container. Every one after that is warm.
+
+<details>
+<summary><strong>Or run it locally</strong> — requires <a href="https://nodejs.org">Node 20+</a>, no cloud credentials</summary>
 
 ```bash
 git clone https://github.com/ojha-436/CIVOS.git
@@ -171,6 +196,12 @@ cd CIVOS/console
 npm install
 npm run dev          # http://localhost:3000
 ```
+
+The console reads a committed fixture, so it renders all 641 districts offline.
+The citizen intake needs the API for a live extraction; without it the page says
+so on screen rather than pretending.
+
+</details>
 
 | Route | What it is | Account |
 |---|---|---|
@@ -605,17 +636,32 @@ supports can still photograph a broken handpump and be heard.
 ## Repository layout
 
 ```
-core/            country-agnostic. Interfaces, models, extraction, scoring.
+core/            country-agnostic. Interfaces and models — contains ZERO country literals.
   interfaces/      LanguageModel · ChannelAdapter · Warehouse
   models/          Part · RawSubmission · NormalisedSignal · ExtractionResult
-adapters/in/     the CIVOS-IN country adapter
+adapters/in/       the CIVOS-IN country adapter — sectors · schemes · languages
 api/             FastAPI service (Cloud Run)
+  extraction.py    the one multimodal Gemini call
+  geo.py           EXIF GPS -> district by point-in-polygon
+  telegram.py      webhook channel, secret-token authenticated
+  guards.py        upload caps, rate limits, safe error surfaces
 console/         Next.js + MapLibre policymaker console and citizen intake
+  lib/scoring.ts   the priority formula — arithmetic, not a model
 scripts/         capability probes, fixture generation, the country lint
+  video/           the launch-film pipeline: narrate -> render -> assemble
+tests/           test_api.py + test_security.py (81 tests, offline)
+video/           the launch film: narration script, animation stage, UI crops
 config/          generated configuration, committed so results are reviewable
-docs/            gate results, language coverage, screenshots
+docs/            gate results, language coverage, the security review, screenshots
 sql/             the intelligence layer
 ```
+
+**The ranking is not a model.** `console/lib/scoring.ts` computes
+`w1·AdjustedDemand + w2·DeficitIndex + w3·max(SilenceGap,0) + w4·Forecast + w5·Evidence`
+with the weights exposed as sliders. Gemini reads voice, text and images into
+structured fields and writes the dossier prose; the priority score is arithmetic a
+ministry can re-derive by hand. That split is deliberate — a ranking nobody can
+inspect is a ranking nobody will adopt.
 
 `LanguageModel.extract()` takes a **`parts[]` list** — not named `audio=`, `text=`,
 `image=` arguments. That single decision is what makes one multimodal call
@@ -642,6 +688,58 @@ Public Good" is a specification, not a licence choice.
 
 ---
 
+## Security
+
+Reviewed, fixed, and gated — [**docs/SECURITY-REVIEW.md**](docs/SECURITY-REVIEW.md)
+carries the findings, the accepted risks, and the areas deliberately *not*
+reviewed. A review that only lists what it fixed is marketing.
+
+21 findings fixed. The two that mattered: `.dockerignore` did not exclude `.env`,
+so a `COPY . .` would have baked the live Telegram credentials into an image
+layer; and `/signal` read uploads with an unbounded `await upload.read()` on a
+service deployed `--allow-unauthenticated`, making one large POST an
+out-of-memory kill and a loop an open tap on the Gemini bill. Both closed, with
+tests.
+
+Prompt injection is handled **structurally** rather than by keyword denylist: the
+evidence bundle renders as `- Key: value` lines, so a newline is what an attacker
+needs to forge a field — and newlines are collapsed. Denylists on natural
+language get reworded; a structural constraint holds.
+
+Nothing is asserted. Every check gates the deploy:
+
+```
+deploy: needs [lint, test, security, container]
+```
+
+| Gate | What it does |
+|---|---|
+| `lint` | No country literal in `core/` — **and it proves it can fail first**, by running the linter over a deliberate violation and failing the build if that *passes* |
+| `test` | 81 tests, offline, Gemini mocked — so CI cannot spend money |
+| `security` | `pip-audit` the **locked** dependency set · `bandit` on the served surface (blocking) · lockfile in sync · `.env` cannot re-enter the build context |
+| `container` | Builds the image, then refuses it unless it runs non-root, serves `/health`, and returns the security headers |
+
+`uv.lock` is committed and the image installs from it with `--require-hashes`, so
+a substituted or republished artifact fails the build instead of installing
+quietly.
+
+---
+
+## The launch film
+
+A 2:18 introduction — what CIVOS is, the problem it solves, and how both sides of
+it are used. Built from this repo with no external video service: the narration is
+Google Cloud Chirp3-HD, the animation is a web page rendered frame by frame, and
+the footage is the deployed product rather than mock-ups.
+[**video/README.md**](video/README.md) explains the pipeline and lists every
+number checked against this repo before it was said on camera — including the one
+claim that was cut for being untrue.
+
+Where a frame is not observed data it says so on screen, because the console
+labels its own provenance and a film about it should not be less careful.
+
+---
+
 ## Status
 
 | Phase | State |
@@ -650,8 +748,10 @@ Public Good" is a specification, not a licence choice.
 | 5 — Console and citizen intake | ✅ built early, against a frozen data contract |
 | 1 — Real deficit data layer | ✅ complete — NFHS-5 loaded, 4/5 sectors real |
 | 2 — Signal corpus, evidence images, **Gate 1** | ✅ complete — 2,537 signals, 150 real photographs |
-| 3–4 — Multimodal intake, intelligence layer | next |
-| 6–7 — Second country adapter, submission | pending |
+| 3 — Multimodal intake | ✅ **live** — `/signal` and Telegram return real `gemini-2.5-flash` extractions via Vertex AI |
+| 4 — Intelligence layer | **partial** — dossier prose is generated live; the ranking is still served from the committed fixture, not BigQuery |
+| 6 — Second country adapter | pending — `core/` is verified country-clean, so it is a config directory away |
+| 7 — Submission | ✅ deployed, filmed, documented |
 
 The console was built ahead of the data layer deliberately: it is the phase most
 likely to overrun and the artefact evaluators actually click, so it runs against a
@@ -683,6 +783,9 @@ intelligence layer lands, one fetch URL changes and nothing else does.
 | [docs/FONT-ATTRIBUTION.md](docs/FONT-ATTRIBUTION.md) | Why the typefaces are vendored, and their OFL licensing |
 | [docs/GATE0-RESULT.md](docs/GATE0-RESULT.md) | Measured BigQuery capability, with the exact SQL and errors |
 | [docs/LANGUAGE-COVERAGE.md](docs/LANGUAGE-COVERAGE.md) | Measured language coverage, with provenance per tier |
+| [docs/SECURITY-REVIEW.md](docs/SECURITY-REVIEW.md) | Security findings, fixes, accepted risks, and what was **not** reviewed |
+| [docs/SUBMISSION-DESCRIPTION.md](docs/SUBMISSION-DESCRIPTION.md) | Submission copy in three lengths, with every claim checked against this repo |
+| [video/README.md](video/README.md) | How the launch film is built, and what is real in it versus tagged schematic |
 
 ---
 
