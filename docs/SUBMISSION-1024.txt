@@ -1,0 +1,9 @@
+Citizens report a local need by speaking, typing or photographing it, in any language, via web or Telegram. Voice buys access, text buys scale, a photo buys evidence and needs no language at all. One Gemini 2.5 Flash call handles all three against one schema.
+
+In BigQuery, ML.GENERATE_EMBEDDING + VECTOR_SEARCH collapse 800 reports about one dry borewell into one need, NFHS-5 deprivation data joins in, ARIMA_PLUS forecasts demand, and a participation correction exposes Silent Need: severe deficit, almost no citizen voice. CIVOS never auto-funds it; it dispatches outreach, fixing a measurement problem.
+
+The output is a document, not a chart: a dossier with citizens' words, the confirming government statistic, population, cost and the funding scheme. Every claim resolves to a source.
+
+The country is a config directory: core/ holds zero country literals, so adapters/za/ runs the same engine.
+
+Tech: Gemini 2.5 Flash, BigQuery ML, Python/FastAPI, Next.js/React/MapLibre, Firebase, Telegram, Cloud Run

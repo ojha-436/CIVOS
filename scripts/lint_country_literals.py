@@ -5,6 +5,13 @@ change. This script is the evidence for that claim, which is why it runs in CI
 rather than being a Day-8 tidy-up: a claim nobody checks is a slide, and
 cross-border applicability is 20% of the score.
 
+Wired in as the `Country lint (SPEC P0-14)` job in
+.github/workflows/deploy.yml, which the deploy job gates on. That job runs this
+linter twice: once over a throwaway file containing a deliberate violation, where
+a PASS fails the build, and once over core/, where a FAIL does. Note for anyone
+editing the checks below: a zero-file run reports PASS, so the caller is
+responsible for confirming there was anything to scan.
+
 Why not `grep -riE '\\b(india|IN)\\b' core/`, as the plan first suggested: `IN` is
 a SQL keyword and `in` is an English preposition, so that pattern matches almost
 every line of Python ever written. This scans string literals, identifiers and

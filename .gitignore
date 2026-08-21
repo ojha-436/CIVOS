@@ -2,7 +2,9 @@
 __pycache__/
 *.py[cod]
 .uv/
-uv.lock
+# uv.lock is COMMITTED on purpose (docs/SECURITY-REVIEW.md, finding D). Without
+# it the container resolved whatever versions existed on build day, and the CI
+# dependency audit graded a resolution that was not the one being shipped.
 
 node_modules/
 .next/
@@ -29,3 +31,17 @@ data/interim/
 # Next.js build output
 console/.next/
 console/next-env.d.ts
+
+# The launch film's working files. Note the bare `out/` rule above already
+# covers video/out/ — including the finished civos-launch.mp4, which is a build
+# artefact regenerable from video/script.json + stage.html. Upload the MP4 to the
+# submission dashboard rather than committing 30 MB of it.
+video/out/
+
+# Throwaway dir the CI country-lint negative control writes and removes.
+.lintcheck/
+
+# The film loads its typefaces straight from console/app/fonts/, which is where
+# they sit next to their OFL licence. A second copy under video/ would duplicate
+# six binaries and separate them from the licence that governs them.
+video/assets/fonts/

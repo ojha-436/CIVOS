@@ -82,7 +82,12 @@ def test_aggregate_endpoint():
 
 
 def test_import_endpoint():
-    """Verify POST /import accepts a legacy CSV and returns correct queues."""
+    """Verify POST /import accepts a legacy CSV and reports honestly.
+
+    The response used to say `queued: N`. It queued nothing — the Pub/Sub wiring
+    is plan.md Phase 4 — so the field named work that never happened. It now
+    reports `parseable` and `persisted: 0`. See docs/SECURITY-REVIEW.md finding G.
+    """
     csv_content = (
         "id,text,sector,district\n"
         "1,The borehole here is dry and broken,water_sanitation,Nashik\n"
@@ -98,8 +103,11 @@ def test_import_endpoint():
     assert response.status_code == 200
     data = response.json()
     assert data["received"] == 3
-    assert data["queued"] == 2  # Row 3 is empty and skipped
-    assert "note" in data
+    assert data["parseable"] == 2  # Row 3 has empty text and is skipped
+    assert data["skipped"] == 1
+    # The endpoint must not claim to have stored anything, because it does not.
+    assert data["persisted"] == 0
+    assert "Nothing was stored" in data["note"]
 
 
 @patch("api.main.extract")
