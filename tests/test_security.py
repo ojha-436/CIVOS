@@ -270,9 +270,23 @@ def test_null_population_does_not_crash_and_says_unavailable():
 
 
 def test_known_population_is_formatted_with_its_caveat():
+    """The figure must never travel without its provenance.
+
+    This asserted "NOT A CENSUS COUNT" until 20 Sep 2026, pinning a caveat that
+    had gone stale: the placeholder population was replaced by reconciled Census
+    2011 figures on 17 Aug, so the prompt was telling the model to disown a real
+    number. The intent of the test is unchanged — the provenance and the
+    remaining limitation must both be stated next to the figure — only the claim
+    being made about it is now the true one.
+    """
     prompt = build_bundle_prompt(DossierRequest(population_affected=48000))
     assert "48,000" in prompt
-    assert "NOT A CENSUS COUNT" in prompt
+    assert "Census 2011" in prompt
+    # The real limitation that survives: a district-wide rate applied to a
+    # district population estimates scale, it does not count individuals.
+    assert "estimate of scale" in prompt
+    # And the retired claim must not come back.
+    assert "PLACEHOLDER" not in prompt.upper()
 
 
 def test_dossier_endpoint_does_not_500_on_null_population():

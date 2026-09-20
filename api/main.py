@@ -492,9 +492,19 @@ def build_bundle_prompt(bundle: DossierRequest) -> str:
             "and MUST NOT estimate or substitute one."
         )
     else:
+        # Was "[DERIVED FROM A PLACEHOLDER DISTRICT POPULATION — NOT A CENSUS
+        # COUNT]" until 20 Sep 2026. The placeholder went away on 17 Aug, when
+        # build_population_layer.py reconciled real Census 2011 figures onto 526
+        # of the 641 districts and gave the rest None. This line outlived it, so
+        # every generated dossier was instructed to disown a real figure.
+        # Under-claiming provenance is still mis-stating it, and the dossier is
+        # the artefact that gets audited.
         population_line = (
             f"- Population affected (est.): {bundle.population_affected:,}  "
-            "[DERIVED FROM A PLACEHOLDER DISTRICT POPULATION \u2014 NOT A CENSUS COUNT]"
+            "[district population \u00d7 measured deficit. The population is a real "
+            "Census 2011 figure, reconciled onto this district via Wikidata (CC0). "
+            "The DEFICIT SHARE applied to it is a district-wide rate, so the product "
+            "is an estimate of scale, not a count of individuals.]"
         )
 
     bundle_prompt = f"""You are generating a project dossier for a government policymaker.
@@ -527,9 +537,11 @@ Generate 3-4 paragraphs:
 4. Data quality and caveats. You MUST state all of these that apply:
    - the citizen signal layer is synthetic, generated from real deficits
    - the evidence photographs are real and openly licensed
-   - the population-affected figure derives from a placeholder district
-     population, not a census count \u2014 or, if it is marked NOT AVAILABLE
-     above, that no figure exists for this district
+   - the population-affected figure is a real Census 2011 population
+     (via Wikidata, CC0) multiplied by a district-wide deficit rate, so it
+     estimates scale rather than counting individuals \u2014 or, if it is marked
+     NOT AVAILABLE above, that no census figure could be reconciled onto this
+     district and none has been substituted
    - if a DEFICIT CAVEAT is given above, state it plainly here, and do not
      describe that sector's deficit as being as reliable as it would be without it
 

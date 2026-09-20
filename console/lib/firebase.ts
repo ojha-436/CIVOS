@@ -16,7 +16,12 @@
  */
 
 import { getApp, getApps, initializeApp, type FirebaseOptions } from 'firebase/app';
-import { getAuth, type Auth } from 'firebase/auth';
+import {
+  browserLocalPersistence,
+  getAuth,
+  setPersistence,
+  type Auth,
+} from 'firebase/auth';
 import { getFirestore, type Firestore } from 'firebase/firestore';
 
 const config: FirebaseOptions = {
@@ -33,3 +38,37 @@ const config: FirebaseOptions = {
 export const firebaseApp = getApps().length ? getApp() : initializeApp(config);
 export const auth: Auth = getAuth(firebaseApp);
 export const db: Firestore = getFirestore(firebaseApp);
+
+/* Persist the session in localStorage rather than IndexedDB.
+ *
+ * The second half of why "Continue with Google" failed. Firebase Auth defaults
+ * to IndexedDB, and the OAuth handshake was actually SUCCEEDING — the throw came
+ * afterwards, on the write that stores the user:
+ *
+ *   Error: Database is closing/hidden
+ *     at tM._openDb → _withRetries → _withPendingWrite → _set
+ *     at setCurrentUser → directlySetCurrentUser
+ *
+ * Firebase closes its IndexedDB handle when the document is hidden, which is
+ * exactly what the sign-in popup does to the opener. The pending write then
+ * lands on a closing database and throws. Note it is a bare Error with no
+ * `code`, which is why the UI could only say "Could not complete that" — there
+ * was no auth/* identifier to map.
+ *
+ * localStorage is synchronous and has no open/close lifecycle to lose, so the
+ * write cannot be orphaned by a visibility change. What it costs: sessions are
+ * not shared across browser tabs the way IndexedDB allows, which for a console
+ * a policymaker opens in one tab is not a cost worth the failure mode.
+ *
+ * Awaited before any sign-in call (see lib/auth.tsx) — setPersistence applied
+ * after a sign-in has begun does not govern that sign-in.
+ */
+export const authPersistenceReady: Promise<void> =
+  typeof window === 'undefined'
+    ? Promise.resolve()
+    : setPersistence(auth, browserLocalPersistence).catch((e: unknown) => {
+        // Non-fatal: Firebase keeps its default. Sign-in may still work, and a
+        // hard failure here would lock out a browser that merely dislikes one
+        // storage backend.
+        console.warn('[civos] could not set auth persistence to localStorage:', e);
+      });
