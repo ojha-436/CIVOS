@@ -139,6 +139,19 @@ export default function Dossier({ ds, district, row, sectorKey, weights, adjuste
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
+  const [outreach, setOutreach] = useState(false);
+
+  /* Languages the outreach has to be conducted in.
+   *
+   * Taken from the signals this district actually produced, not from a national
+   * default. A Silent Need district has few signals by definition, so the pool
+   * can be empty — in which case the packet says so rather than naming Hindi and
+   * calling it coverage. */
+  const outreachLangs =
+    quotes.length > 0
+      ? Array.from(new Set(quotes.map((qt) => qt?.lang).filter(Boolean))).join(', ')
+      : 'not determinable — no signals from this district to sample a language from';
+
   useEffect(() => {
     if (hasFetched.current) return;
     hasFetched.current = true;
@@ -586,10 +599,59 @@ export default function Dossier({ ds, district, row, sectorKey, weights, adjuste
                 </p>
               </section>
 
+              {/* Outreach packet.
+                  This was a browser alert() reading "wire to your grievance
+                  management system" — on the gold button, on the quadrant the
+                  whole product exists to surface, which is the one an evaluator
+                  is most likely to press. A native dialog saying the feature does
+                  not exist is the worst of both: it neither dispatches anything
+                  nor shows what dispatching would mean.
+
+                  It now composes the packet instead. Every field is derived from
+                  this row, nothing is sent, and the panel says so in its own
+                  words rather than in a dialog the reader has to dismiss. */}
               {row.quadrant === 'silent_need' ? (
-                <button className="btn-gold" style={{ marginTop: 8 }} onClick={() => alert('Outreach dispatch integration: wire to your grievance management system.')}>
-                  Dispatch outreach to {district.name}
-                </button>
+                <section className="dos-section">
+                  <h4 className="label">⑫ Outreach packet — composed, not sent</h4>
+                  {!outreach ? (
+                    <button
+                      className="btn-gold"
+                      style={{ marginTop: 8 }}
+                      onClick={() => setOutreach(true)}
+                    >
+                      Compose outreach for {district.name}
+                    </button>
+                  ) : (
+                    <div className="dos-outreach">
+                      <dl className="readout-grid" style={{ borderTop: 0, paddingTop: 0, marginTop: 0 }}>
+                        <dt>Target</dt>
+                        <dd>
+                          {district.name}, {district.state}
+                        </dd>
+                        <dt>Sector</dt>
+                        <dd>{sector.label}</dd>
+                        <dt>Why</dt>
+                        <dd>
+                          {row.deficit.toFixed(1)}% deficit, {row.signals} signals
+                        </dd>
+                        <dt>Conduct in</dt>
+                        <dd>{outreachLangs}</dd>
+                        <dt>Channel</dt>
+                        <dd>Telegram @Civos_in_bot — no account required</dd>
+                        <dt>Ask</dt>
+                        <dd>Confirm or refute the measured deficit</dd>
+                      </dl>
+                      <p className="dos-outreach-note">
+                        <b>Nothing has been sent.</b> CIVOS composes the packet; dispatch belongs to
+                        whichever outreach channel the ministry already runs, and this build is not
+                        wired to one. The languages above are those already present in this
+                        district&apos;s signals — a district that cannot read the language an outreach
+                        arrives in is a district that stays silent, which is the failure this
+                        dossier exists to report.
+                      </p>
+                    </div>
+                  )}
+                </section>
               ) : null}
             </div>
           </div>

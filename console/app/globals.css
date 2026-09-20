@@ -2044,6 +2044,36 @@ a.wordmark:focus-visible {
 }
 
 /* ==========================================================================
+   Outreach packet — the Silent Need action
+   --------------------------------------------------------------------------
+   Replaces a browser alert(). The panel is part of the document rather than a
+   dialog over it, so it prints with the dossier: a recommendation to dispatch
+   outreach is worth more on the page than the reader is, five seconds after
+   dismissing a native modal.
+   ========================================================================== */
+
+.dos-outreach {
+  margin-top: 8px;
+  padding: 12px 14px;
+  border: 1px solid color-mix(in srgb, var(--q-silent) 45%, transparent);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--q-silent) 7%, transparent);
+}
+
+.dos-outreach-note {
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px dashed var(--rule);
+  font-size: 10.5px;
+  line-height: 1.6;
+  color: var(--paper-3);
+}
+
+.dos-outreach-note b {
+  color: var(--q-silent);
+}
+
+/* ==========================================================================
    Print
    --------------------------------------------------------------------------
    The dossier on screen is a fixed-position dark modal over a scrim. None of

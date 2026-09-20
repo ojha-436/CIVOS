@@ -55,7 +55,7 @@ function LoginInner() {
       router.replace(mode === 'signup' ? '/profile' : next);
     } catch (e: unknown) {
       const code = (e as { code?: string })?.code ?? '';
-      setErr(authMessage(code));
+      setErr(authMessage(code, (e as { message?: string })?.message));
     } finally {
       setBusy(false);
     }
@@ -68,7 +68,13 @@ function LoginInner() {
       await signInWithGoogle();
       router.replace(next);
     } catch (e: unknown) {
-      setErr(authMessage((e as { code?: string })?.code ?? ''));
+      // The popup path failing is not itself the end — signInWithGoogle retries
+      // via redirect, and a redirect navigates away rather than returning here.
+      // Reaching this catch means BOTH paths failed, so log the whole error:
+      // the on-screen message names the code, and this gives whoever opens
+      // DevTools the stack behind it.
+      console.error('[civos] Google sign-in failed on both popup and redirect:', e);
+      setErr(authMessage((e as { code?: string })?.code ?? '', (e as { message?: string })?.message));
     } finally {
       setBusy(false);
     }
@@ -84,7 +90,7 @@ function LoginInner() {
       await resetPassword(email);
       setOk(`Password reset link sent to ${email.trim()}.`);
     } catch (e: unknown) {
-      setErr(authMessage((e as { code?: string })?.code ?? ''));
+      setErr(authMessage((e as { code?: string })?.code ?? '', (e as { message?: string })?.message));
     }
   }
 
