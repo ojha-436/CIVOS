@@ -36,6 +36,7 @@ function ConsoleInner() {
   const [onQuads, setOnQuads] = useState<Set<QuadrantKey>>(new Set(QKEYS));
   const [hover, setHover] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
+  const [showAllRanked, setShowAllRanked] = useState(false);
 
   useEffect(() => {
     loadDataset().then(setDs).catch((e) => console.error(e));
@@ -115,9 +116,30 @@ function ConsoleInner() {
     return m;
   }, [ranked, onQuads, ds, sector, theme]);
 
+  /* The list draws a window, not the whole ranking.
+   *
+   * 639 rows re-rendering on every frame of a weight-slider drag is the one
+   * thing that would make the sliders feel slow, and instant re-weighting is the
+   * entire argument for having sliders. So the window stays.
+   *
+   * What changes is that it is now stated. The cap was a bare `.slice(0, 120)`
+   * with nothing on screen to explain it, so a console whose masthead reads
+   * "641 districts" showed a list ending at 120 and left the reader to conclude
+   * the tool only covers 120. Every other omission in this interface is
+   * disclosed — no_data rendered grey and counted, suppressed cells stated, the
+   * roads caveat permanent — and a silent truncation sitting directly under the
+   * calibration strip undercuts all of it.
+   */
+  const RANK_CAP = 120;
+
   const visibleRank = useMemo(
     () => ranked.filter(({ row }) => onQuads.has(row.quadrant)),
     [ranked, onQuads],
+  );
+
+  const shownRank = useMemo(
+    () => (showAllRanked ? visibleRank : visibleRank.slice(0, RANK_CAP)),
+    [visibleRank, showAllRanked],
   );
 
   const hoverRow = hover ? ranked.find((r) => r.row.code === hover) : null;
@@ -453,7 +475,7 @@ function ConsoleInner() {
                 </p>
               )}
               <ul className="rank-list" ref={listRef}>
-                {visibleRank.slice(0, 120).map(({ row, p }, i) => {
+                {shownRank.map(({ row, p }, i) => {
                   const d = districts.get(row.code);
                   const prev = otherRank.get(row.code);
                   const moved = prev ? prev - (i + 1) : 0;
@@ -498,6 +520,44 @@ function ConsoleInner() {
                   );
                 })}
               </ul>
+
+              {/* The count, always — not only when truncated. A reader who has
+                  filtered down to 40 districts wants to know it is 40 of 639 as
+                  much as an unfiltered reader wants to know the list stops at
+                  120, and a line that appears only on truncation teaches nobody
+                  what the denominator is. */}
+              {visibleRank.length > 0 && (
+                <div className="rank-foot">
+                  <span>
+                    {shownRank.length < visibleRank.length ? (
+                      <>
+                        Showing top <b className="num">{shownRank.length}</b> of{' '}
+                        <b className="num">{visibleRank.length}</b> ranked district-sectors
+                      </>
+                    ) : (
+                      <>
+                        All <b className="num">{visibleRank.length}</b> ranked district-sectors
+                      </>
+                    )}
+                    {coverage.districts < ds.meta.counts.districts && (
+                      <>
+                        {' '}
+                        · {ds.meta.counts.districts - coverage.districts} of{' '}
+                        {ds.meta.counts.districts} districts never ranked — no official value
+                      </>
+                    )}
+                  </span>
+                  {visibleRank.length > RANK_CAP && (
+                    <button
+                      type="button"
+                      className="rank-foot-btn"
+                      onClick={() => setShowAllRanked((v) => !v)}
+                    >
+                      {showAllRanked ? `Show top ${RANK_CAP}` : 'Show all'}
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </aside>
