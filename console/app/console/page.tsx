@@ -159,8 +159,13 @@ function ConsoleInner() {
           <b className="display">CIVOS</b>
           <span className="instance mono">IN</span>
         </Link>
+        {/* Counts come from the fixture, not from literals. They were hardcoded
+            as "641 districts · 5 sectors" while the strip below read the same
+            figures from `ds.meta`, so regenerating against a different boundary
+            set would have left the masthead quietly asserting the old number. */}
         <div className="tagline">
-          Citizen-signal infrastructure prioritisation · 641 districts · 5 sectors
+          Citizen-signal infrastructure prioritisation · {ds.meta.counts.districts} districts
+          · {ds.sectors.length} sectors
         </div>
         <div className="masthead-right">
           <AccountMenu />
@@ -182,25 +187,38 @@ function ConsoleInner() {
           P0-16 requires a persistent, visible distinction between the real
           official layer and the synthetic citizen layer. Built as instrument
           calibration rather than a warning banner, because a banner gets
-          dismissed and this must not be. */}
+          dismissed and this must not be.
+
+          Weighted, not trimmed. All three flags were set at identical type and
+          colour, which made the strip read as an apology for the one synthetic
+          layer rather than a statement of what is measured — and the leading
+          claim here is that 639 of 641 districts carry real NFHS-5 values,
+          which is the strongest thing on the page. So the coverage figure leads
+          and the two limits sit quieter. Quieter is a hierarchy signal; every
+          flag keeps its dot, its bold label, its permanent place and a contrast
+          step that still clears AA. Removing one would breach P0-16 and
+          contradict the argument the console exists to make. */}
       <div className="strip">
-        <div className="strip-item">
+        <div className="strip-item lead">
           <span className="dot real" />
           <span>
-            <b>Real</b> — boundaries, names, and <b>NFHS-5 2019-21 deficit values</b> for{' '}
-            {coverage.districts}/{ds.meta.counts.districts} districts
+            <b className="num">
+              {coverage.districts}/{ds.meta.counts.districts}
+            </b>{' '}
+            districts carry <b>real NFHS-5 2019-21 deficit values</b> — boundaries and names
+            real throughout
           </span>
         </div>
-        <div className="strip-item">
+        <div className="strip-item quiet">
           <span className="dot synth" />
           <span>
-            <b>Synthetic</b> — citizen signals, generated with a deliberate participation bias
+            <b>Synthetic</b> — citizen signals, deliberate participation bias
           </span>
         </div>
-        <div className="strip-item">
+        <div className="strip-item quiet">
           <span className="dot nodata" />
           <span>
-            <b>No data</b> — {quadCounts.no_data} district-sectors this view, excluded from ranking
+            <b>No data</b> — {quadCounts.no_data} district-sectors here, excluded from ranking
           </span>
         </div>
         {activeSector?.caveat && (

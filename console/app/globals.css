@@ -300,11 +300,55 @@ body::after {
   font-weight: 500;
 }
 
+/* Hierarchy within the strip.
+   `lead` states what is measured, `quiet` states the limits. Both stay on
+   screen permanently — only their weight differs, which is what stops the
+   disclosure reading as a disclaimer. The quiet tier bottoms out at --paper-4
+   deliberately: that token was already raised to the dimmest value clearing AA
+   on this ground (see its note above), so this is the floor, not a step below
+   it. Anything fainter would be concealment dressed as typography. */
+
+.strip-item.lead {
+  color: var(--paper-2);
+  font-size: 11px;
+}
+
+.strip-item.lead b {
+  color: var(--paper);
+  font-weight: 600;
+}
+
+.strip-item.lead .num {
+  font-size: 11.5px;
+  letter-spacing: 0;
+}
+
+.strip-item.quiet {
+  color: var(--paper-4);
+}
+
+.strip-item.quiet b {
+  color: var(--paper-3);
+  font-weight: 500;
+}
+
 .dot {
   width: 5px;
   height: 5px;
   border-radius: 50%;
   flex: none;
+}
+
+/* Scoped to the strip: `.dot` is also the landing page's provenance-table
+   marker, which is set at its own scale there. */
+.strip .dot {
+  width: 4px;
+  height: 4px;
+}
+
+.strip-item.quiet .dot {
+  box-shadow: none;
+  opacity: 0.9;
 }
 .dot.real {
   background: var(--q-gap);
@@ -1944,4 +1988,260 @@ a.wordmark:focus-visible {
 .acct-menu button:hover {
   background: var(--ink-700);
   color: var(--paper);
+}
+
+/* ==========================================================================
+   Executive summary — the block that gets read
+   --------------------------------------------------------------------------
+   The dossier was eleven numbered sections of working with no statement of the
+   finding. That is legible to whoever built the scoring function and to nobody
+   else, and the artefact's whole purpose is to be forwarded to people who did
+   not build it. This block states the rank, the measured deficit, the affected
+   population and the recommended action in one paragraph; everything below it
+   is the evidence for that paragraph.
+   ========================================================================== */
+
+.dos-summary {
+  padding: 14px 22px 16px;
+  border-bottom: 1px solid var(--rule);
+  background: color-mix(in srgb, var(--gold) 5%, transparent);
+  flex-shrink: 0;
+}
+
+.dos-summary p {
+  margin: 6px 0 0;
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--paper-2);
+  max-width: 96ch;
+}
+
+.dos-summary b {
+  color: var(--paper);
+  font-weight: 600;
+}
+
+.dos-summary-rec {
+  padding-top: 8px;
+  border-top: 1px dashed var(--rule);
+  margin-top: 10px !important;
+  color: var(--paper-2);
+}
+
+.dos-summary-rec > b:first-child {
+  color: var(--gold);
+}
+
+.dos-print-btn {
+  font-size: 10.5px;
+  white-space: nowrap;
+}
+
+/* Print-only document header. Hidden on screen, where the console already says
+   what this is. */
+.dos-print-meta {
+  display: none;
+}
+
+/* ==========================================================================
+   Print
+   --------------------------------------------------------------------------
+   The dossier on screen is a fixed-position dark modal over a scrim. None of
+   that survives contact with paper: a fixed element prints one viewport and
+   truncates, and a dark ground either burns a cartridge or drops to unreadable
+   grey on a ministry laser printer. So print is a genuine re-layout, not a
+   restyle — the modal becomes a document, the columns collapse to one, and the
+   palette inverts to ink on paper regardless of the theme the user was viewing.
+
+   Browser "Save as PDF" is the export path. It is already installed on every
+   evaluator's machine, it produces the file format a ministry circulates, and
+   it needs no server-side renderer to go wrong during a demo.
+   ========================================================================== */
+
+@page {
+  size: A4;
+  margin: 14mm 12mm 16mm;
+}
+
+@media print {
+  /* Everything that is not the dossier. The console behind it, the map canvas,
+     the rail, and the dossier's own controls. */
+  .shell,
+  .dossier-scrim,
+  .dos-print-btn,
+  .close-x,
+  .btn-gold,
+  .btn-ghost {
+    display: none !important;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Ink on paper, whichever theme was on screen. Redeclared as literals rather
+     than by switching data-theme, because print must not depend on the toggle
+     state at the moment someone hit Ctrl+P. */
+  :root,
+  :root[data-theme='dark'],
+  :root[data-theme='light'] {
+    --ink-900: #fff;
+    --ink-800: #fff;
+    --ink-700: #f4f2ed;
+    --ink-600: #ebe8e1;
+    --ink-500: #e2ded5;
+    --paper: #111;
+    --paper-2: #23292f;
+    --paper-3: #3d444c;
+    --paper-4: #565d66;
+    --rule: rgba(0, 0, 0, 0.16);
+    --rule-strong: rgba(0, 0, 0, 0.3);
+    --gold: #7a5b10;
+  }
+
+  .dossier-modal {
+    position: static !important;
+    inset: auto !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: #fff !important;
+    display: block !important;
+  }
+
+  .dossier-inner {
+    overflow: visible !important;
+    height: auto !important;
+    display: block !important;
+  }
+
+  /* One column. Two columns of dense readouts at A4 width produce ~40 character
+     measures, and the evidence table will not fit in half a page at all. */
+  .dos-body {
+    display: block !important;
+    overflow: visible !important;
+  }
+
+  .dos-col,
+  .dos-col + .dos-col {
+    overflow: visible !important;
+    border-left: 0 !important;
+    padding: 0 !important;
+  }
+
+  .dos-print-meta {
+    display: flex !important;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 0 0 8px;
+    margin-bottom: 12px;
+    border-bottom: 1.5px solid #111;
+  }
+
+  .dos-print-mast b {
+    font-family: var(--font-display), Georgia, serif;
+    font-weight: 400;
+    font-size: 19px;
+    letter-spacing: 0.01em;
+  }
+
+  .dos-print-mast span {
+    font-family: var(--font-mono), monospace;
+    font-size: 8px;
+    letter-spacing: 0.16em;
+    border: 1px solid #111;
+    padding: 1px 4px;
+    vertical-align: 2px;
+  }
+
+  .dos-print-meta-lines {
+    margin-left: auto;
+    text-align: right;
+    font-size: 9.5px;
+    line-height: 1.55;
+    color: #3d444c;
+  }
+
+  /* The on-screen head duplicates what the print header now states. */
+  .dos-head {
+    padding: 0 0 10px !important;
+  }
+
+  .dos-summary {
+    padding: 10px 12px !important;
+    margin-bottom: 14px;
+    background: #f7f4ec !important;
+    border: 1px solid rgba(0, 0, 0, 0.18) !important;
+  }
+
+  .dos-banner {
+    padding: 6px 0 !important;
+    background: transparent !important;
+  }
+
+  /* A section split across a page break loses the heading that gives its
+     numbers meaning, and a quote or photo broken in half is not evidence. */
+  .dos-section,
+  .dos-summary,
+  .quote,
+  .dos-photo,
+  .scheme {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .dos-table {
+    break-inside: auto;
+  }
+
+  .dos-table tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .dos-table thead {
+    display: table-header-group; /* repeat the header on every page */
+  }
+
+  .dos-photos {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .dos-photo {
+    aspect-ratio: 4 / 3;
+  }
+
+  .dos-photo img {
+    /* Without this the printer drops background-painted images entirely. */
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* Glow, blur and shadow are screen affordances that print as grey smears. */
+  .dot,
+  .dos-photo,
+  .quadrant-badge {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  .dos-prose-loading {
+    display: none !important;
+  }
+
+  /* The paper-tooth grain is a fixed, blend-mode overlay at z-index 9999. On
+     screen it stops large dark areas banding; on paper it prints as a grey haze
+     across every page, including the margins. */
+  body::after {
+    display: none !important;
+  }
+
+  a[href]::after {
+    content: '';
+  }
 }

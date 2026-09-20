@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import type { Dataset, District, Row, Scheme, Sector } from '@/lib/types';
 import { QUADRANTS } from '@/lib/types';
 import { costBand, formatINR, priority } from '@/lib/scoring';
@@ -94,10 +95,49 @@ export default function Dossier({ ds, district, row, sectorKey, weights, adjuste
   const photos = pickImages(district.code, sectorKey, Math.min(4, row.images || 4));
   const forecastDir = row.forecast > 0.5 ? '↑ rising' : row.forecast < -0.5 ? '↓ falling' : '→ stable';
 
+  /* Rank within the sector, over scored districts only. `no_data` rows are a
+   * disclosure rather than a verdict, so ranking against them would invent a
+   * denominator — "12th of 641" when 2 of those were never scored is a claim
+   * the data does not support. */
+  const sectorRanked = ds.rows
+    .filter((r) => r.sector === sectorKey && r.has_deficit)
+    .map((r) => priority(r, weights, adjusted))
+    .sort((a, b) => b - a);
+  const rank = sectorRanked.findIndex((v) => v <= p) + 1;
+
+  /* The recommendation, in the reader's words rather than the model's.
+   *
+   * Computed, not generated. This is the line a minister forwards, so it must
+   * survive Vertex being down, must be identical every time the same dossier is
+   * printed, and must never be something a model phrased differently on a second
+   * run. The AI prose below expands on it; this states it. */
+  const RECOMMENDATION: Record<string, string> = {
+    act_now:
+      `Citizen reports and official data agree. Recommended action: fund through ${scheme.name}.`,
+    silent_need:
+      `Severe measured deficit with almost no citizen reporting — the silence is the finding, not evidence of satisfaction. ` +
+      `Recommended action: dispatch outreach to confirm demand before allocating. Do not auto-fund on this evidence alone.`,
+    expectation_gap:
+      `Citizen demand runs ahead of the measured deficit. Recommended action: verify the official dataset for this district before reallocating — it may be stale.`,
+    stable: `No action indicated on the current evidence.`,
+    no_data: `No official deficit value has been reconciled onto this district-sector, so it is excluded from the ranking rather than given an estimated one.`,
+  };
+
   const [prose, setProse] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const hasFetched = useRef(false);
+
+  /* Portalled to <body>, which the print stylesheet depends on.
+   *
+   * This component renders inside Drilldown, inside the rail, inside `.shell`.
+   * On screen that is invisible — the modal is position:fixed, so it escapes the
+   * shell's overflow anyway. On paper it is fatal: print has to hide the console
+   * to print the document, and hiding `.shell` would take the dossier with it.
+   * Moving the modal out of the shell in the DOM is also simply what a modal
+   * should do, so this is not a print workaround wearing a costume. */
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     if (hasFetched.current) return;
@@ -158,7 +198,9 @@ export default function Dossier({ ds, district, row, sectorKey, weights, adjuste
       });
   }, []);
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <>
       <div className="dossier-scrim" onClick={onClose} />
       <article className="dossier-modal" role="dialog" aria-label={`Full dossier — ${district.name}`}>
@@ -176,9 +218,106 @@ export default function Dossier({ ds, district, row, sectorKey, weights, adjuste
             </div>
             <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
               <span className="quadrant-badge" style={{ color: q.colour, fontSize: 12 }}>{q.label}</span>
+              {/* One button, no options dialog. The browser's own print sheet
+                  already offers "Save as PDF", which is the share format a
+                  ministry actually circulates — so a bespoke export pipeline
+                  would add a server dependency to reach the same file. */}
+              <button className="btn-ghost dos-print-btn" onClick={() => window.print()}>
+                Print / PDF
+              </button>
               <button className="close-x" onClick={onClose} aria-label="Close dossier">×</button>
             </div>
           </div>
+
+          {/* Print-only document header. On paper there is no console around the
+              dossier to say what this is or where it came from, and a page that
+              gets forwarded, photocopied and tabled at a meeting has to carry its
+              own provenance. Hidden on screen. */}
+          <div className="dos-print-meta" aria-hidden="true">
+            <div className="dos-print-mast">
+              <b>CIVOS</b> <span>IN</span>
+            </div>
+            <div className="dos-print-meta-lines">
+              <div>
+                <b>
+                  {district.name}, {district.state}
+                </b>{' '}
+                · {sector.label} · {district.code}
+              </div>
+              <div>
+                Priority {p.toFixed(1)}/100 ·{' '}
+                {row.has_deficit
+                  ? `rank ${rank} of ${sectorRanked.length} scored districts`
+                  : 'not ranked — no official deficit value'}{' '}
+                · {adjusted ? 'equity-adjusted ranking' : 'raw ranking (uncorrected)'}
+              </div>
+              <div>
+                Generated {new Date().toLocaleDateString('en-IN', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                })}{' '}
+                · fixture {ds.meta.generated_at} · {ds.meta.instance}
+              </div>
+            </div>
+          </div>
+
+          {/* Executive summary — the part that gets read.
+              Everything below this is the working that supports it. A reader who
+              stops after this block should still have the finding, the number,
+              the recommendation and the cost. */}
+          <section className="dos-summary">
+            <h4 className="label">Summary</h4>
+            <p>
+              <b>
+                {district.name}, {district.state}
+              </b>{' '}
+              {/* A no_data row carries no rank. Printing "ranks 412 of 639" for a
+                  district that was deliberately excluded from the ranking would
+                  manufacture the exact false precision §⑪ disclaims. */}
+              {row.has_deficit ? (
+                <>
+                  ranks <b>{rank} of {sectorRanked.length}</b> scored districts for{' '}
+                  {sector.label.toLowerCase()} on the{' '}
+                  {adjusted ? 'equity-adjusted' : 'raw, uncorrected'} ranking
+                </>
+              ) : (
+                <>
+                  is <b>not ranked</b> for {sector.label.toLowerCase()}
+                </>
+              )}
+              {row.has_deficit ? (
+                <>
+                  . Official data records a <b>{row.deficit.toFixed(1)}% deficit</b> —{' '}
+                  {sector.indicator.toLowerCase()} — from {sector.source} {sector.year}
+                  {affected === null
+                    ? ', affecting a number of residents that cannot be stated: no Census 2011 population could be reconciled onto this district'
+                    : `, affecting an estimated ${affected.toLocaleString('en-IN')} residents`}
+                </>
+              ) : (
+                <>. No official deficit value has been reconciled onto this district-sector</>
+              )}
+              .{' '}
+              {/* "Citizens filed N reports" would be a false claim in the one
+                  paragraph most likely to be read alone, quoted, or forwarded
+                  without the provenance banner beneath it. The signal layer is
+                  synthetic and the summary says so in its own sentence rather
+                  than relying on a disclosure further down the page. */}
+              {row.signals > 0
+                ? `The citizen-signal layer carries ${row.signals.toLocaleString('en-IN')} signals covering ${row.needs} distinct needs in ${row.languages} language${row.languages === 1 ? '' : 's'}; these signals are synthetic, generated from real deficits with a deliberate participation bias.`
+                : 'The citizen-signal layer contains no signals from this district in this sector — that absence is the finding. The signal layer is synthetic, generated from real deficits with a deliberate participation bias.'}
+            </p>
+            <p className="dos-summary-rec">
+              <b>Recommendation:</b> {RECOMMENDATION[row.quadrant] ?? RECOMMENDATION.stable}
+              {row.has_deficit && row.quadrant !== 'stable' && (
+                <>
+                  {' '}
+                  Indicative cost if funded: <b>{formatINR(lo)} – {formatINR(hi)}</b> via{' '}
+                  {scheme.name} ({scheme.ministry}).
+                </>
+              )}
+            </p>
+          </section>
 
           {/* Synthetic-data banner — SPEC §9 element 10 */}
           <div className="dos-banner">
@@ -248,9 +387,9 @@ export default function Dossier({ ds, district, row, sectorKey, weights, adjuste
                 </dl>
               </section>
 
-              {/* ⑤ Deficit evidence */}
+              {/* ③ Deficit evidence */}
               <section className="dos-section">
-                <h4 className="label">⑤ Deficit evidence</h4>
+                <h4 className="label">③ Deficit evidence</h4>
                 <div className="scheme" style={{ background: 'var(--ink-700)' }}>
                   <div style={{ fontSize: 11.5, color: 'var(--paper-2)', lineHeight: 1.55 }}>{sector.indicator}</div>
                   <div className="cost" style={{ marginTop: 6 }}>
@@ -263,9 +402,9 @@ export default function Dossier({ ds, district, row, sectorKey, weights, adjuste
                 </div>
               </section>
 
-              {/* ⑥ Population affected */}
+              {/* ④ Population affected */}
               <section className="dos-section">
-                <h4 className="label">⑥ Population affected (est.)</h4>
+                <h4 className="label">④ Population affected (est.)</h4>
                 <div
                   style={{
                     fontSize: affected === null ? 13 : 20,
@@ -282,7 +421,7 @@ export default function Dossier({ ds, district, row, sectorKey, weights, adjuste
 
               {/* ⑦ 90-day forecast */}
               <section className="dos-section">
-                <h4 className="label">⑦ 90-day demand trend</h4>
+                <h4 className="label">⑤ 90-day demand trend</h4>
                 <div style={{ fontSize: 18, color: row.forecast > 0.5 ? 'var(--q-act)' : row.forecast < -0.5 ? 'var(--paper-3)' : 'var(--paper-2)' }}>
                   {forecastDir}
                 </div>
@@ -291,7 +430,7 @@ export default function Dossier({ ds, district, row, sectorKey, weights, adjuste
 
               {/* ⑧ Funding scheme */}
               <section className="dos-section">
-                <h4 className="label">⑧ Matched funding route</h4>
+                <h4 className="label">⑥ Matched funding route</h4>
                 <div className="scheme">
                   <div className="nm">{scheme.name}</div>
                   <div className="min">{scheme.ministry}</div>
@@ -301,7 +440,7 @@ export default function Dossier({ ds, district, row, sectorKey, weights, adjuste
 
               {/* ⑨ Cost band */}
               <section className="dos-section">
-                <h4 className="label">⑨ Indicative cost band</h4>
+                <h4 className="label">⑦ Indicative cost band</h4>
                 <div className="cost" style={{ marginTop: 6 }}>
                   <span className="label">For {row.needs} needs</span>
                   <span className="amt" style={{ fontSize: 15 }}>{formatINR(lo)} – {formatINR(hi)}</span>
@@ -316,7 +455,7 @@ export default function Dossier({ ds, district, row, sectorKey, weights, adjuste
             <div className="dos-col" style={{ flex: 1.5 }}>
               {/* ③ Citizen quotes */}
               <section className="dos-section">
-                <h4 className="label">③ Representative citizen signals — cluster centroids</h4>
+                <h4 className="label">⑧ Representative citizen signals — cluster centroids</h4>
                 {quotes.length ? (
                   quotes.map((qt, i) => (
                     <blockquote className="quote" key={i} style={{ marginBottom: 10 }}>
@@ -332,16 +471,20 @@ export default function Dossier({ ds, district, row, sectorKey, weights, adjuste
                 )}
               </section>
 
-              {/* ④ Evidence photo strip */}
+              {/* ⑨ Evidence photo strip */}
               <section className="dos-section">
-                <h4 className="label">④ Evidence photo strip — real, openly-licensed photographs</h4>
+                <h4 className="label">⑨ Evidence photo strip — real, openly-licensed photographs</h4>
                 <div className="dos-photos">
                   {photos.map((f, i) => (
                     <figure className="dos-photo" key={i}>
                       <img
                         src={`/evidence/${f}`}
                         alt={imgLabel(f)}
-                        loading="lazy"
+                        /* Eager, not lazy. At most four images, and a lazy image
+                           that has not entered the viewport can be missing from the
+                           printed page — an evidence strip with holes in it is worse
+                           than the few kB saved. */
+                        loading="eager"
                         onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
                       />
                       <figcaption>
@@ -376,9 +519,9 @@ export default function Dossier({ ds, district, row, sectorKey, weights, adjuste
                 )}
               </section>
 
-              {/* ⑪ Evidence table */}
+              {/* ⑩ Evidence table */}
               <section className="dos-section">
-                <h4 className="label">⑪ Evidence table — every claim resolves to a source</h4>
+                <h4 className="label">⑩ Evidence table — every claim resolves to a source</h4>
                 <table className="dos-table">
                   <thead>
                     <tr>
@@ -423,14 +566,21 @@ export default function Dossier({ ds, district, row, sectorKey, weights, adjuste
 
               {/* ⑩ Confidence + caveats */}
               <section className="dos-section">
-                <h4 className="label">⑩ Confidence statement & caveats</h4>
+                <h4 className="label">⑪ Confidence statement & caveats</h4>
                 <p style={{ fontSize: 11, color: 'var(--paper-3)', lineHeight: 1.65 }}>
                   Geo-grounding accuracy: 94.2% on a 52-case hand-built test set (Gate 1, re-measured 17 Aug 2026 against the DataMeet 641-district gazetteer). Evidence
                   strength {row.evidence.toFixed(1)}% — share of needs with ≥ 1 photo. Citizen signal layer is
                   <strong> synthetic</strong>, generated from real NFHS-5 deficits with a deliberate participation
                   bias; this is required for the Silent Need demonstration and is labelled throughout.
                   Evidence photographs are <strong>real</strong>, openly-licensed images from Wikimedia Commons.
-                  Population estimates use a placeholder formula (no 2021 census district data is loaded yet).
+                  {/* This read "population estimates use a placeholder formula" until 20 Sep 2026 —
+                      text left behind when the placeholder was replaced by reconciled Census 2011
+                      figures on 17 Aug. It contradicted §④ on the same page and told the reader a
+                      real number was invented. Under-claiming is still mis-stating provenance, and
+                      this section is the one a reader checks when deciding whether to trust the rest. */}
+                  Population affected is <strong>Census 2011 via Wikidata (CC0)</strong> where a figure could be
+                  reconciled onto this district — 526 of 641 — multiplied by the measured deficit. The remaining
+                  115 districts show the figure as unavailable rather than estimated.
                   All dossier prose is generated only from the retrieved evidence bundle above — no external claim
                   can be introduced by the model.
                 </p>
@@ -445,6 +595,7 @@ export default function Dossier({ ds, district, row, sectorKey, weights, adjuste
           </div>
         </div>
       </article>
-    </>
+    </>,
+    document.body,
   );
 }
