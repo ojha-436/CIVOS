@@ -274,3 +274,28 @@ def test_missing_population_is_declared_not_estimated():
     ev = main.assemble_letter_evidence(nopop["code"], row["sector"], sector["schemes"][0]["name"])
     assert ev["beneficiaries"] is None
     assert "MUST NOT estimate" in main.build_letter_prompt(ev)
+
+
+def test_the_caveat_reaches_the_letter_without_an_internal_file_pointer():
+    """A live run turned "See docs/ROADS-INDICATOR.md" into a filename that does
+    not exist — a fabricated citation inside text the model was told to copy.
+
+    The fix is not a sterner instruction. A ministry reader cannot open a path in
+    our repository, so the pointer has no business in front of the model at all.
+    The substance of the caveat must still survive.
+    """
+    ev = main.assemble_letter_evidence(
+        "IN-AS-karbi-anglong", "roads_transport", "Pradhan Mantri Gram Sadak Yojana"
+    )
+    assert ev["caveat"]
+    assert "docs/" not in ev["caveat"]
+    assert "inconsistently between states" in ev["caveat"]
+    prompt = main.build_letter_prompt(ev)
+    assert "docs/" not in prompt
+    assert "VERBATIM" in prompt
+
+
+def test_public_caveat_leaves_a_clean_caveat_alone():
+    assert main.public_caveat(None) is None
+    assert main.public_caveat("Coding varies by state.") == "Coding varies by state."
+    assert main.public_caveat("Varies by state. See docs/X-Y.md.") == "Varies by state."

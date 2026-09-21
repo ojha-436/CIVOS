@@ -924,8 +924,8 @@ def build_letter_prompt(ev: dict) -> str:
         )
     if ev["caveat"]:
         lines.append(
-            f"- DATA CAVEAT \u2014 you MUST reproduce this in the caveats section: "
-            f"{_flat(ev['caveat'], 800)}"
+            "- DATA CAVEAT \u2014 reproduce this VERBATIM in the caveats section. Do not "
+            f"paraphrase it and do not alter any reference inside it: {_flat(ev['caveat'], 800)}"
         )
     lines += [
         "- MANDATORY DISCLOSURE \u2014 you MUST include, in the caveats section, that the "
@@ -935,6 +935,23 @@ def build_letter_prompt(ev: dict) -> str:
         "\"This note was composed by CIVOS from the evidence cited above. It has not been sent.\"",
     ]
     return "\n".join(lines)
+
+
+# Internal documentation pointers belong in the repository, not on ministry
+# letterhead. Stripping them also removes the only thing in the caveat a model
+# was observed to get wrong: asked to reproduce a caveat ending "See
+# docs/ROADS-INDICATOR.md", a live run wrote "See docs/ROADS-SECTOR-GAP.md" —
+# a fabricated citation inside text it had been told to copy. The safest fix is
+# not a sterner instruction, it is not putting a filename in front of the model
+# when the reader has no way to open it anyway.
+_DOC_REF = re.compile(r"\s*See\s+docs/[A-Za-z0-9._\-]+\.?", re.IGNORECASE)
+
+
+def public_caveat(caveat: str | None) -> str | None:
+    """The caveat as an outside reader should see it, minus internal pointers."""
+    if not caveat:
+        return None
+    return _DOC_REF.sub("", caveat).strip() or None
 
 
 def assemble_letter_evidence(code: str, sector_key: str, scheme_name: str) -> dict:
@@ -972,7 +989,7 @@ def assemble_letter_evidence(code: str, sector_key: str, scheme_name: str) -> di
         "indicator": sector["indicator"],
         "source": sector["source"],
         "year": sector["year"],
-        "caveat": sector.get("caveat"),
+        "caveat": public_caveat(sector.get("caveat")),
         "deficit": row["deficit"],
         "percentile": round(100 * rank / max(1, len(same_sector))),
         "quadrant": row["quadrant"].replace("_", " "),
