@@ -199,6 +199,11 @@ function ConsoleInner() {
           <Link href="/" className="btn-ghost">
             ← Home
           </Link>
+          {/* The workbench is where the ranking on this page becomes a funded
+              portfolio. Without a link it is an orphan route nobody finds. */}
+          <Link href="/allocate" className="btn-ghost">
+            Budget workbench ↗
+          </Link>
           <Link href="/report" className="btn-ghost">
             Citizen intake ↗
           </Link>
