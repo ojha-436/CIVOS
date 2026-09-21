@@ -53,6 +53,9 @@ from api.guards import (
     read_capped,
     safe_detail,
 )
+from api.channels.telephony import router as telephony_router
+from core.allocation import Constraints, allocate
+from api.candidates import DEFAULT_WEIGHTS, build_candidates
 from api.telegram import router as telegram_router
 
 log = logging.getLogger("civos.api")
@@ -134,6 +137,7 @@ K_ANONYMITY = 5
 # PS-01 shares one extraction path with the web widget rather than forking it —
 # POST /telegram/webhook, GET /telegram/status.
 app.include_router(telegram_router)
+app.include_router(telephony_router)
 
 
 # ---------------------------------------------------------------------------
@@ -660,4 +664,119 @@ def aggregate(
         "total": len(rows),
         "sector_filter": sector,
         "quadrant_filter": quadrant,
+    }
+
+
+# ---------------------------------------------------------------------------
+# POST /allocate — budget envelope in, three lanes out
+# ---------------------------------------------------------------------------
+
+
+class AllocateRequest(BaseModel):
+    """The policy dials, all of them defensible ministry choices."""
+
+    budget: int = Field(gt=0, le=10**13, description="Delivery envelope in the adapter's currency")
+    sector_cap_share: float = Field(default=0.40, ge=0.05, le=1.0)
+    equity_floor_share: float = Field(default=0.30, ge=0.0, le=1.0)
+    min_groups: int = Field(default=8, ge=1, le=40)
+    outreach_reserve_share: float = Field(default=0.05, ge=0.0, le=0.5)
+    confidence_floor: float = Field(default=55.0, ge=0.0, le=100.0)
+    sector: str | None = None
+
+
+@lru_cache(maxsize=1)
+def _candidates() -> tuple:
+    """Build the candidate set once per process.
+
+    It depends only on the fixture and the default weights, both fixed for the
+    life of the process, but it costs ~25 ms — which is most of the latency budget
+    for a control somebody drags. The solve itself is ~4 ms, so caching this is
+    what makes the budget slider feel like a slider rather than a form submission.
+
+    Returns a tuple because lru_cache requires a hashable return it can hand back
+    repeatedly without callers mutating the cached value.
+    """
+    return tuple(build_candidates(_load_scores(), DEFAULT_WEIGHTS))
+
+
+@app.post("/allocate")
+def allocate_endpoint(req: AllocateRequest, _: None = Depends(rate_limit)):
+    """Solve the portfolio for a given envelope.
+
+    Re-solves on every call rather than caching, because the whole point of the
+    control is that somebody drags it and watches the answer move. The solve is
+    greedy with repair passes and runs in milliseconds on ~6,000 candidates, so
+    there is nothing to cache that would not go stale on the next keystroke.
+
+    Returns three lanes, not one portfolio: what to fund, what to verify first,
+    and where to send somebody because nobody there has spoken. The third lane is
+    the reason this is not a generic optimiser — SPEC §8 forbids auto-funding
+    silence, so silence gets a budget line for going and asking instead.
+    """
+    try:
+        data = _load_scores()
+    except FileNotFoundError:
+        raise HTTPException(
+            503, "Score fixture not found — run scripts/generate_console_fixtures.py"
+        ) from None
+
+    cands = list(_candidates())
+    if req.sector:
+        sector = clamp_text(req.sector, 64)
+        cands = [c for c in cands if c.sector == sector]
+
+    result = allocate(
+        cands,
+        Constraints(
+            budget=req.budget,
+            sector_cap_share=req.sector_cap_share,
+            equity_floor_share=req.equity_floor_share,
+            min_groups=req.min_groups,
+            outreach_reserve_share=req.outreach_reserve_share,
+            confidence_floor=req.confidence_floor,
+        ),
+    )
+
+    names = {d["code"]: d for d in data["districts"]}
+
+    def _award(a):
+        d = names.get(a.candidate.unit_code, {})
+        return {
+            "id": a.candidate.candidate_id,
+            "code": a.candidate.unit_code,
+            "district": d.get("name"),
+            "state": a.candidate.group_key,
+            "sector": a.candidate.sector,
+            "scheme": a.candidate.scheme_key,
+            "units": a.candidate.units,
+            "cost": a.cost,
+            "priority": a.candidate.priority,
+            "confidence": a.candidate.confidence,
+            "beneficiaries": a.candidate.beneficiaries,
+            "deprived": a.candidate.deprived,
+            "rationale": a.rationale,
+        }
+
+    return {
+        "summary": result.summary(),
+        "constraints": [
+            {
+                "name": c.name,
+                "satisfied": c.satisfied,
+                "detail": c.detail,
+                "value": c.value,
+                "limit": c.limit,
+                "kind": c.kind,
+            }
+            for c in result.constraints
+        ],
+        "funded": [_award(a) for a in result.funded],
+        "verify": [_award(a) for a in result.verify],
+        "outreach": [_award(a) for a in result.outreach],
+        # A sample, not the whole list: 4,700 rejections is a download, not an
+        # explanation. The console asks for one candidate's reason on demand.
+        "dropped_sample": [
+            {"id": d.candidate.candidate_id, "reason": d.reason} for d in result.dropped[:50]
+        ],
+        "dropped_total": len(result.dropped),
     }

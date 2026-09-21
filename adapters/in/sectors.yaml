@@ -5,6 +5,12 @@
 # recognise in a citizen photograph. The indicator↔scheme binding is chosen to
 # serve the funding route — a recommendation with no funding route is a wish.
 #
+# `indicator.measures` records the settlement type the indicator is computed over.
+# It is what makes scheme eligibility checkable: a deficit measured on villages
+# cannot justify a scheme whose published scope is statutory towns. A scheme is
+# eligible when its `applies_to` overlaps this — rural against `both` is fine,
+# urban against `rural` is not.
+#
 # Nothing here may move into core/. The country lint enforces that.
 
 country_code: IN
@@ -17,6 +23,8 @@ sectors:
     sdg: [6]
     indicator:
       primary: pct_households_no_improved_water
+      # NFHS-5 samples rural and urban households in every district
+      measures: both
       label: Households without an improved drinking water source
       secondary: pct_households_no_improved_sanitation
       source: NFHS-5 district factsheets
@@ -35,6 +43,8 @@ sectors:
       # calling these habitations would misdescribe the data by a factor nobody
       # could audit.
       primary: pct_villages_no_pucca_road
+      # The Village Directory counts villages. It has no urban universe at all, so an urban roads scheme cannot be justified from it
+      measures: rural
       label: Villages without a black-topped (pucca) road
       source: Census 2011 Village Directory (MHA / ORGI)
       year: 2011
@@ -59,6 +69,8 @@ sectors:
     sdg: [7]
     indicator:
       primary: pct_households_no_electricity
+      # NFHS-5 household electrification covers both settings
+      measures: both
       label: Households without an electricity connection
       source: NFHS-5; NITI National MPI
       year: 2021
@@ -71,6 +83,8 @@ sectors:
     sdg: [3]
     indicator:
       primary: pct_births_non_institutional
+      # NFHS-5 institutional births are recorded across both settings
+      measures: both
       label: Births not delivered in a health facility
       source: NFHS-5; Rural Health Statistics
       year: 2021
@@ -83,6 +97,8 @@ sectors:
     sdg: [4]
     indicator:
       primary: pct_children_out_of_school
+      # NFHS-5 school attendance is recorded across both settings
+      measures: both
       label: Children of school age not attending school
       source: NFHS-5; NITI National MPI
       year: 2021
