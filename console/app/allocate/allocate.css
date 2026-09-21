@@ -16,12 +16,70 @@
 
 /* ── controls rail ───────────────────────────────────────────────────── */
 
+/* The rail sticks. Without this, scrolling the award list scrolls the controls
+   off the top, so reading a result and changing the thing that produced it
+   become two different scroll positions — which is the whole interaction this
+   page exists for. It scrolls internally when the dials are taller than the
+   viewport rather than growing the page. */
 .wb-controls {
   border-right: 1px solid var(--rule);
   padding: 22px 20px 40px;
   display: flex;
   flex-direction: column;
   gap: 26px;
+  position: sticky;
+  top: var(--masthead);
+  align-self: start;
+  max-height: calc(100vh - var(--masthead));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Range inputs on a touch screen are the classic case of a drag being stolen by
+   the scroller: the browser cannot tell a horizontal drag on a thin control from
+   the start of a vertical pan, so it scrolls the page and the value never moves.
+   `touch-action: none` on the track settles it in the control's favour, and the
+   enlarged thumb gives a finger something to actually catch. */
+.wb-controls input[type='range'],
+.budget-slider {
+  touch-action: none;
+  height: 22px;
+  cursor: pointer;
+}
+
+.wb-controls input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--gold);
+  border: 2px solid var(--ink-800);
+  cursor: grab;
+}
+
+.wb-controls input[type='range']:active::-webkit-slider-thumb {
+  cursor: grabbing;
+}
+
+.wb-controls input[type='range']::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--rule-strong);
+}
+
+.wb-controls input[type='range']::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--gold);
+  border: 2px solid var(--ink-800);
+}
+
+.wb-controls input[type='range']::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--rule-strong);
 }
 
 .budget-block {
@@ -119,7 +177,12 @@
   min-width: 0;
 }
 
+/* Sticky for the same reason as the rail: the four numbers are the answer, and
+   scrolling the list of awards must not take the answer off screen. */
 .stats {
+  position: sticky;
+  top: var(--masthead);
+  z-index: 5;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   gap: 1px;
@@ -389,13 +452,60 @@
     grid-template-columns: 1fr;
   }
 
+  /* Stacked, so sticky would pin a full-height column over the results. The
+     rail returns to normal flow and only the budget control stays put. */
   .wb-controls {
     border-right: 0;
     border-bottom: 1px solid var(--rule);
+    position: static;
+    max-height: none;
+    overflow: visible;
+    gap: 16px;
+  }
+
+  /* The six secondary dials pushed the result strip roughly 800px down the
+     page, so moving the budget produced no visible change and the only way to
+     find out what had happened was to scroll past everything to the list. They
+     fold away by default on a narrow screen; the envelope, which is the control
+     anyone actually came to move, stays out and directly above the numbers. */
+  .dials-fold {
+    border-top: 1px solid var(--rule);
+    padding-top: 12px;
+  }
+
+  .dials-fold > summary {
+    cursor: pointer;
+    font-size: 0.82rem;
+    color: var(--paper-2);
+    list-style: none;
+  }
+
+  .dials-fold > summary::after {
+    content: ' ▾';
+    color: var(--paper-4);
+  }
+
+  .dials-fold[open] > summary::after {
+    content: ' ▴';
+  }
+
+  .dials {
+    padding-top: 16px;
   }
 
   .wb-main {
     padding: 18px 16px 48px;
+  }
+
+  .stats {
+    top: 0;
+  }
+}
+
+/* Wide enough for the rail: the fold is not a fold, it is just a container. */
+@media (min-width: 901px) {
+  .dials-fold > summary {
+    display: none;
   }
 }
 

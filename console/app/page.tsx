@@ -88,8 +88,9 @@ export default function Landing() {
           <div className="lp-nav-links">
             <a href="#blind-spot">The blind spot</a>
             <a href="#how">How it works</a>
-            <a href="#telegram">Telegram</a>
+            <a href="#feature-phone">Feature phone</a>
             <a href="#dossier">The output</a>
+            <a href="#money">The money</a>
             <a href="#provenance">Provenance</a>
           </div>
 
@@ -557,12 +558,99 @@ export default function Landing() {
         </section>
 
         {/* ==============================================================
-            05 — The dossier
+            05 — Feature phone + the loop back
+            ============================================================== */}
+        <section className="lp-sec" id="feature-phone">
+          <div className="lp-wrap">
+            <div className="lp-sec-head" data-reveal>
+              <span className="lp-sec-idx">05</span>
+              <h2 className="lp-sec-title">A missed call is a complete report.</h2>
+              <span className="rule" />
+            </div>
+
+            <div className="lp-split">
+              <div data-reveal>
+                <p className="lp-lede">
+                  Every channel above still needs a smartphone and a data connection. The
+                  citizen this system exists to hear — no literacy, no app, no data — could
+                  not use any of them. That is not a missing feature so much as a
+                  contradiction: a product whose whole argument is that digital intake
+                  over-samples the connected cannot itself be reachable only by the
+                  connected.
+                </p>
+                <p className="lp-lede">
+                  So: <strong>dial and hang up.</strong> CIVOS calls back, records what you
+                  say in your own language, and runs it through the same single extraction
+                  call as every other channel. The citizen is never charged and never has to
+                  stay on the line. <strong>SMS works too</strong>, in either direction.
+                </p>
+                <p className="lp-lede">
+                  <strong>Then the loop closes.</strong> You get a six-character code. Text it
+                  back to the same number and you are told what happened — funded, being
+                  field-checked, or an outreach visit scheduled. No app, no account, no
+                  internet.
+                </p>
+                <p
+                  style={{
+                    fontSize: 11.5,
+                    color: 'var(--paper-4)',
+                    lineHeight: 1.6,
+                    marginTop: 14,
+                  }}
+                >
+                  Honest status: the webhooks are implemented, signed and exercised
+                  end-to-end by a simulator. No carrier account exists on this build — a
+                  virtual number needs a registered business entity and DLT registration.
+                  The carrier leg is unproven and{' '}
+                  <code className="mono">/channel/status</code> says so.
+                </p>
+              </div>
+
+              <div data-reveal style={{ '--i': 1 } as React.CSSProperties}>
+                <div className="lp-matrix-frame">
+                  <div className="lp-matrix">
+                    <div className="lp-cell">
+                      <span className="cell-k">The token encodes the need</span>
+                      <span className="cell-n">Not the person</span>
+                      <p style={{ fontSize: 11.5, color: 'var(--paper-3)', lineHeight: 1.6 }}>
+                        The obvious way to build this is a table mapping code to caller. This
+                        is not that. The code is a reversible encoding of which
+                        district-sector the report belongs to and which language to answer
+                        in — so there is no record of who reported what, and none to leak.
+                      </p>
+                    </div>
+                    <div className="lp-cell">
+                      <span className="cell-k">What that buys</span>
+                      <span className="cell-n">A promise, not a policy</span>
+                      <p style={{ fontSize: 11.5, color: 'var(--paper-3)', lineHeight: 1.6 }}>
+                        CIVOS can answer <em>what happened to the thing you told us about</em>{' '}
+                        while being structurally unable to answer{' '}
+                        <em>what did this person tell us</em>. For grievances about the state,
+                        addressed to the state, that is worth more than a lookup table.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <p style={{ fontSize: 11.5, color: 'var(--paper-3)', lineHeight: 1.6, marginTop: 14 }}>
+                  Status is computed from the live funding cycle, never copied into a row
+                  somebody has to remember to update. Check one at{' '}
+                  <Link href="/track" className="mono">
+                    /track
+                  </Link>
+                  .
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ==============================================================
+            06 — The dossier
             ============================================================== */}
         <section className="lp-sec" id="dossier">
           <div className="lp-wrap">
             <div className="lp-sec-head" data-reveal>
-              <span className="lp-sec-idx">05</span>
+              <span className="lp-sec-idx">06</span>
               <h2 className="lp-sec-title">The output is a dossier, not a dashboard.</h2>
               <span className="rule" />
             </div>
@@ -670,12 +758,111 @@ export default function Landing() {
         </section>
 
         {/* ==============================================================
-            06 — Cross-border
+            07 — The allocator
+            ============================================================== */}
+        <section className="lp-sec" id="money">
+          <div className="lp-wrap">
+            <div className="lp-sec-head" data-reveal>
+              <span className="lp-sec-idx">07</span>
+              <h2 className="lp-sec-title">A ranking is half an answer.</h2>
+              <span className="rule" />
+            </div>
+
+            <div className="lp-split">
+              <div data-reveal>
+                <p className="lp-lede">
+                  The problem statement opens by naming <em>misaligned public spending</em>.
+                  An officer with a fixed envelope does not ask which district is worst. They
+                  ask <strong>which of these forty to fund this quarter</strong>, and what to
+                  tell the auditor about the rest.
+                </p>
+                <p className="lp-lede">
+                  So the console has a budget control. Drag it and the portfolio re-solves
+                  against a sector ceiling, an equity floor, a minimum geographic spread and
+                  the published unit cost of every scheme. Every rejected candidate carries a
+                  reason. Where the constraints cannot all hold,{' '}
+                  <strong>the page says so</strong> rather than quietly relaxing one and
+                  presenting the result as optimal.
+                </p>
+                <p className="lp-lede">
+                  Then it drafts the note. Scheme, ministry, measured indicator, national
+                  percentile, cost, people served — composed from the evidence and nothing
+                  else. <strong>Composed, never sent:</strong> CIVOS drafts, an officer reads,
+                  and dispatch belongs to whatever channel the ministry already runs.
+                </p>
+                <Link href="/allocate" className="lp-btn" style={{ marginTop: 18 }}>
+                  Open the budget workbench <span className="arrow">→</span>
+                </Link>
+              </div>
+
+              <div data-reveal style={{ '--i': 1 } as React.CSSProperties}>
+                <div className="lp-matrix-frame">
+                  <div className="lp-matrix">
+                    <div className="lp-cell">
+                      <span className="cell-k">Corroborated, confident</span>
+                      <span className="cell-n">
+                        <i className="swatch" style={{ background: 'var(--q-act)' }} />
+                        Fund
+                      </span>
+                      <p style={{ fontSize: 11.5, color: 'var(--paper-3)', lineHeight: 1.6 }}>
+                        Money moves, against a named scheme at a published unit cost.
+                      </p>
+                    </div>
+                    <div className="lp-cell">
+                      <span className="cell-k">Worth funding, thin evidence</span>
+                      <span className="cell-n">
+                        <i className="swatch" style={{ background: 'var(--q-gap)' }} />
+                        Verify first
+                      </span>
+                      <p style={{ fontSize: 11.5, color: 'var(--paper-3)', lineHeight: 1.6 }}>
+                        Send somebody to look. Never discarded — a system that silently drops
+                        what it distrusts reproduces the bias it exists to correct.
+                      </p>
+                    </div>
+                    <div className="lp-cell">
+                      <span className="cell-k">Severe deficit, nobody spoke</span>
+                      <span className="cell-n">
+                        <i className="swatch" style={{ background: 'var(--q-silent)' }} />
+                        Outreach
+                      </span>
+                      <p style={{ fontSize: 11.5, color: 'var(--paper-3)', lineHeight: 1.6 }}>
+                        Silence is never auto-funded. A reserved slice of the envelope pays
+                        for going and asking instead. A budget optimiser cannot produce this
+                        lane, because it has no concept of a place that said nothing.
+                      </p>
+                    </div>
+                    <div className="lp-cell">
+                      <span className="cell-k">Ranked, did not fit</span>
+                      <span className="cell-n">
+                        <i className="swatch" style={{ background: 'var(--q-stable)' }} />
+                        Not this cycle
+                      </span>
+                      <p style={{ fontSize: 11.5, color: 'var(--paper-3)', lineHeight: 1.6 }}>
+                        The envelope ran out, a sector hit its ceiling, or a competing scheme
+                        was already chosen for that district. Each rejection carries its own
+                        reason, and the citizen who reported it is told this rather than
+                        nothing.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <p style={{ fontSize: 11.5, color: 'var(--paper-4)', lineHeight: 1.6, marginTop: 14 }}>
+                  Near-optimal, not proven optimal: a density-ordered solve with equity and
+                  spread repair, stated as such rather than dressed up. Every inclusion and
+                  every exclusion is individually traceable.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ==============================================================
+            08 — Cross-border
             ============================================================== */}
         <section className="lp-sec">
           <div className="lp-wrap">
             <div className="lp-sec-head" data-reveal>
-              <span className="lp-sec-idx">06</span>
+              <span className="lp-sec-idx">08</span>
               <h2 className="lp-sec-title">A country is a folder, not a codebase.</h2>
               <span className="rule" />
             </div>
@@ -788,12 +975,12 @@ export default function Landing() {
         </section>
 
         {/* ==============================================================
-            07 — Provenance
+            09 — Provenance
             ============================================================== */}
         <section className="lp-sec" id="provenance">
           <div className="lp-wrap">
             <div className="lp-sec-head" data-reveal>
-              <span className="lp-sec-idx">07</span>
+              <span className="lp-sec-idx">09</span>
               <h2 className="lp-sec-title">What is real, and what is not.</h2>
               <span className="rule" />
             </div>

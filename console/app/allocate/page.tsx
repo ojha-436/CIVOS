@@ -262,7 +262,20 @@ function WorkbenchInner() {
   const [letterFor, setLetterFor] = useState<Award | null>(null);
   const [letter, setLetter] = useState<LetterResult | null>(null);
   const [letterBusy, setLetterBusy] = useState(false);
+  // Open on a wide screen, folded on a narrow one. Set after mount rather than
+  // from an `open` attribute, because that attribute is static markup and CSS
+  // cannot close a <details> — so a media query alone would have left all six
+  // dials expanded on exactly the screens the fold exists for.
+  const [dialsOpen, setDialsOpen] = useState(true);
   const abort = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 901px)');
+    const sync = () => setDialsOpen(mq.matches);
+    sync();
+    mq.addEventListener('change', sync);
+    return () => mq.removeEventListener('change', sync);
+  }, []);
 
   /* Debounced so a drag issues one solve per pause rather than one per pixel,
      and the in-flight request is aborted rather than left to land out of order —
@@ -352,7 +365,15 @@ function WorkbenchInner() {
             </div>
           </div>
 
-          <div className="dials">
+          {/* `open` above 900px where the summary is hidden, so it reads as an
+              ordinary container. Narrow, it collapses — see allocate.css. */}
+          <details
+            className="dials-fold"
+            open={dialsOpen}
+            onToggle={(e) => setDialsOpen((e.currentTarget as HTMLDetailsElement).open)}
+          >
+            <summary>Constraints and reserves</summary>
+            <div className="dials">
             <Dial
               label="Sector ceiling"
               hint="No single sector may absorb more than this share. Stops a portfolio becoming one programme."
@@ -413,7 +434,8 @@ function WorkbenchInner() {
               format={(v) => `${v}`}
               onChange={(v) => set('confidence_floor', v)}
             />
-          </div>
+            </div>
+          </details>
 
           <button className="btn-reset" onClick={() => setDials(DEFAULT_DIALS)}>
             Reset to defaults
