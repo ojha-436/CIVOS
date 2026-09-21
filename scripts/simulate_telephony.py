@@ -37,10 +37,17 @@ console = Console()
 
 # Real phrasing a citizen would actually send, in the languages the corpus
 # already covers. Short, because a feature-phone keypad makes people terse.
+#
+# Two name a district and two do not, deliberately. Both are real outcomes and
+# the demo has to show both: a report that can be placed gets a tracking code,
+# and one that cannot is told what would fix it rather than handed a code that
+# resolves to nothing. An earlier version of this script used only unplaceable
+# messages, so it never once exercised the loop it exists to demonstrate.
 SMS_CASES = [
-    ("+919812345678", "hamare gaon me handpump 5 mahine se kharab hai koi nahi aaya"),
+    ("+919812345678", "shrawasti me hamare gaon ka handpump 5 mahine se kharab hai"),
     ("+919823456789", "gavat rasta nahi ahe, pavsat shala band hote"),
-    ("+919834567890", "no electricity in our hamlet since last week, transformer burnt"),
+    ("+919834567890", "no electricity in bahraich hamlet since last week, transformer burnt"),
+    ("+919845678901", "school building has no roof, children sit outside"),
 ]
 
 
@@ -76,6 +83,7 @@ def main(
             console.print("  [green]ok[/green] caller number does not appear in the response")
 
         console.rule("[bold]Inbound SMS[/bold]")
+        tokens: list[str] = []
         for number, text in SMS_CASES:
             body = urlencode({"From": number, "Body": text}).encode()
             r = client.post("/channel/sms", content=body, headers=sign(secret, body))
@@ -83,12 +91,35 @@ def main(
                 console.print(f"  [red]{r.status_code}[/red] {r.text[:200]}")
                 continue
             j = r.json()
-            console.print(f"  [green]{r.status_code}[/green] {text[:44]}...")
+            console.print(f"  [green]{r.status_code}[/green] {text[:52]}...")
             console.print(
                 f"       lang={j['language']} sector={j['sector']} severity={j['severity']}"
+                f" placed={j.get('placed')}"
             )
             console.print(f"       reply → [bold]{j['reply']}[/bold] ({len(j['reply'])} chars)")
             assert number[-10:] not in r.text, "caller number leaked into the response"
+            if j.get("token"):
+                tokens.append(j["token"])
+
+        # The half that matters: text the code back and be told what happened.
+        console.rule("[bold]Texting the code back[/bold]")
+        if not tokens:
+            console.print(
+                "  [yellow]No report could be placed, so there is no code to text back.[/yellow] "
+                "Add a district name to one of the SMS_CASES above."
+            )
+        for tok in tokens:
+            body = urlencode({"From": "+919812345678", "Body": tok}).encode()
+            r = client.post("/channel/sms", content=body, headers=sign(secret, body))
+            j = r.json()
+            console.print(f"  [green]{r.status_code}[/green] sent [bold]{tok}[/bold]")
+            if j.get("found"):
+                st = j["status"]
+                console.print(f"       {st['district']} · {st['sector']} → [bold]{st['headline']}[/bold]")
+                console.print(f"       reply → [bold]{j['reply']}[/bold] ({len(j['reply'])} chars)")
+                console.print(f"       [dim]{st['privacy']}[/dim]")
+            else:
+                console.print(f"       [yellow]{j.get('reply')}[/yellow]")
 
     console.print()
     console.print(
