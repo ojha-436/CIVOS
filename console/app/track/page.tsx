@@ -47,7 +47,7 @@ export default function TrackPage() {
   }
 
   return (
-    <div className="shell">
+    <div className="shell-page">
       <header className="masthead">
         <Link href="/" className="wordmark" aria-label="CIVOS home">
           <b className="display">CIVOS</b>

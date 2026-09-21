@@ -42,6 +42,11 @@ const BUDGET_STEPS = [
   1e8, 2e8, 4e8, 6e8, 8e8, 1e9, 1.5e9, 2e9, 3e9, 4e9, 6e9, 8e9, 1e10,
 ];
 
+/* How many awards render before the list asks. The whole set re-renders on every
+   solve and a solve fires on every rung of the envelope, so an unwindowed list
+   would make the control that matters feel slow. The exit is one click. */
+const AWARD_WINDOW = 120;
+
 function nearestStep(v: number): number {
   let best = 0;
   BUDGET_STEPS.forEach((s, i) => {
@@ -267,6 +272,11 @@ function WorkbenchInner() {
   // cannot close a <details> — so a media query alone would have left all six
   // dials expanded on exactly the screens the fold exists for.
   const [dialsOpen, setDialsOpen] = useState(true);
+  // Same window-and-exit the ranked list on the console uses. 421 rows re-render
+  // on every solve, and a solve fires on every rung of the envelope, so the
+  // window is what keeps dragging responsive — but a list that stops without
+  // saying so teaches the reader the wrong number.
+  const [showAll, setShowAll] = useState(false);
   const abort = useRef<AbortController | null>(null);
 
   useEffect(() => {
@@ -330,6 +340,8 @@ function WorkbenchInner() {
       .finally(() => setLetterBusy(false));
   }, []);
 
+  useEffect(() => setShowAll(false), [lane]);
+
   const awards = useMemo(() => {
     if (!result) return [];
     return lane === 'fund' ? result.funded : lane === 'verify' ? result.verify : result.outreach;
@@ -338,7 +350,7 @@ function WorkbenchInner() {
   const s = result?.summary;
 
   return (
-    <div className="shell">
+    <div className="shell-page">
       <header className="masthead">
         <Link href="/" className="wordmark" aria-label="CIVOS home">
           <b className="display">CIVOS</b>
@@ -558,15 +570,24 @@ function WorkbenchInner() {
           <p className="lane-hint">{LANES[lane].hint}</p>
 
           <ul className="awards">
-            {awards.slice(0, 120).map((a) => (
+            {(showAll ? awards : awards.slice(0, AWARD_WINDOW)).map((a) => (
               <AwardRow key={a.id} a={a} lane={lane} onDraft={onDraft} />
             ))}
           </ul>
-          {awards.length > 120 ? (
-            <p className="more mono">
-              showing 120 of {awards.length} — the full set is in the API response
-            </p>
-          ) : null}
+          {awards.length > AWARD_WINDOW ? (
+            <div className="more">
+              <span className="mono">
+                {showAll
+                  ? `all ${awards.length} shown`
+                  : `showing ${AWARD_WINDOW} of ${awards.length}`}
+              </span>
+              <button className="btn-reset" onClick={() => setShowAll((v) => !v)}>
+                {showAll ? `Show first ${AWARD_WINDOW}` : `Show all ${awards.length}`}
+              </button>
+            </div>
+          ) : (
+            <p className="more mono">all {awards.length} shown</p>
+          )}
 
           {result ? (
             <details className="dropped">

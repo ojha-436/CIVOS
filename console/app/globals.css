@@ -209,11 +209,40 @@ body::after {
    Shell
    ========================================================================== */
 
+/* The console's application layout: a masthead, a calibration strip, and panes
+   that scroll internally. Fixed to the viewport on purpose — a map beside a rail
+   must not move the page. */
 .shell {
   display: grid;
   grid-template-rows: var(--masthead) var(--strip) 1fr;
   height: 100dvh;
   overflow: hidden;
+}
+
+/* A document-shaped page: masthead on top, everything under it scrolls normally.
+ *
+ * This exists because `.shell` was reused for pages that are read downward, and
+ * it is exactly the wrong shape for them. Two things went wrong at once. The
+ * page became a grid child and landed in the 30px calibration-strip row, and
+ * `overflow: hidden` then clipped it at the viewport — so the budget workbench
+ * rendered 421 funded districts and a reader could reach about ten, with no way
+ * to scroll to the rest. The tracker had the same bug and escaped notice only by
+ * being short enough to fit.
+ *
+ * The masthead stays put so the way back is always reachable, which also gives
+ * the sticky rail and stats strip inside the workbench a stable thing to sit
+ * under. */
+.shell-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.shell-page > .masthead {
+  position: sticky;
+  top: 0;
+  flex: 0 0 auto;
+  min-height: var(--masthead);
 }
 
 /* -- masthead -------------------------------------------------------------- */
