@@ -202,8 +202,29 @@ _OWNERSHIP: dict[str, tuple[float, bool]] = {}
 OWNERSHIP_TTL = 300.0
 
 
+def _routable(n: dict) -> bool:
+    """Is this number one an application can actually be attached to?
+
+    Presence in the list is not ownership. A trial account is lent a *shared*
+    number — it appears in `/numbers`, reports `status: active` and
+    `voice_enabled: true`, and carries `account_id: ""` with
+    `is_trial_number: true`. Attaching an application to it is refused with
+    `400 access denied`, so a caller would reach Vobiz and never reach us.
+
+    Checking only for presence is what let the site advertise exactly such a
+    number. Ownership is the empty-account_id test; the trial flag is belt and
+    braces.
+    """
+    return (
+        bool(str(n.get("account_id") or "").strip())
+        and not n.get("is_trial_number")
+        and not n.get("is_blocked")
+        and str(n.get("status", "")).lower() == "active"
+    )
+
+
 async def owns_number(e164: str) -> bool:
-    """Does this account actually hold the number we advertise?
+    """Does this account hold a routable number matching what we advertise?
 
     Credentials being present is not the same as the line being answerable. The
     account can be on trial with a shared number, or the number can sit on a
@@ -232,7 +253,10 @@ async def owns_number(e164: str) -> bool:
         if r.status_code == 200:
             body = r.json()
             items = body.get("items", body.get("objects", []))
-            ok = any(str(n.get("e164") or n.get("number")) == e164 for n in items)
+            ok = any(
+                str(n.get("e164") or n.get("number")) == e164 and _routable(n)
+                for n in items
+            )
     except Exception as exc:
         log.warning("number ownership check failed: %s", type(exc).__name__)
     _OWNERSHIP[e164] = (now, ok)

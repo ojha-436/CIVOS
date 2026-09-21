@@ -88,7 +88,11 @@ def main(
             raise typer.Exit(1)
         payload = r.json()
         items = payload.get("items", [])
-        mine = next((n for n in items if n.get("e164") == want), None)
+        listed = next((n for n in items if n.get("e164") == want), None)
+        # Listed is not owned. A trial account is lent a shared number that shows
+        # up here as active and voice-enabled with an empty account_id, and Vobiz
+        # refuses to attach an application to it.
+        mine = listed if listed and vobiz._routable(listed) else None
 
         t = Table(show_header=True, header_style="bold")
         for col in ("number", "country", "status", "voice", "sms", "blocked"):
@@ -103,7 +107,19 @@ def main(
             )
         console.print(t)
 
-        if mine is None:
+        if mine is None and listed is not None:
+            console.print(
+                f"[red]{want} is listed but not owned by {vobiz.auth_id()}.[/red] "
+                f"account_id={listed.get('account_id')!r} is_trial_number={listed.get('is_trial_number')} "
+                f"status={listed.get('status')!r}"
+            )
+            console.print(
+                "  This is Vobiz's [bold]shared trial number[/bold]. It answers, but an application "
+                "cannot be attached to it — Vobiz returns 400 access denied — so calls stop at the\n"
+                "  operator. Purchase a dedicated number in the console, update\n"
+                "  adapters/in/channels.yaml if it differs, and re-run --apply."
+            )
+        elif mine is None:
             console.print(
                 f"[red]{want} is not held by account {vobiz.auth_id()}.[/red]"
             )

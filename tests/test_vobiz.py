@@ -263,3 +263,31 @@ def test_status_does_not_claim_an_sms_channel(cfg):
     j = cfg.get("/channel/status").json()
     assert j["sms"]["provider"] is None
     assert "no SMS send API" in j["sms"]["note"]
+
+
+def test_a_shared_trial_number_does_not_count_as_owned():
+    """The production case. Present in /numbers, active, voice-enabled — and
+    unattachable, because no account holds it.
+
+        {"e164": "+918065354620", "account_id": "", "is_trial_number": true,
+         "status": "active", "voice_enabled": true}
+
+    Vobiz answers `400 access denied` when an application is attached to it, so
+    every call would reach the operator and stop there. Presence is not
+    ownership, and the site must not print it.
+    """
+    shared = {"e164": "+918065354620", "account_id": "", "is_trial_number": True,
+              "status": "active", "voice_enabled": True}
+    assert vobiz._routable(shared) is False
+
+
+def test_a_purchased_number_does_count():
+    owned = {"e164": "+918065354620", "account_id": "MA_J2MDCWR1",
+             "is_trial_number": False, "status": "active", "is_blocked": False}
+    assert vobiz._routable(owned) is True
+
+
+def test_a_blocked_or_inactive_number_does_not_count():
+    base = {"e164": "+91806", "account_id": "MA_X", "is_trial_number": False}
+    assert vobiz._routable({**base, "status": "active", "is_blocked": True}) is False
+    assert vobiz._routable({**base, "status": "pending", "is_blocked": False}) is False
