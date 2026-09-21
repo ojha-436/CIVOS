@@ -21,6 +21,8 @@ import os
 import sys
 from pathlib import Path
 
+from urllib.parse import quote
+
 import httpx
 import typer
 import yaml
@@ -39,7 +41,11 @@ APP_NAME = "CIVOS_Citizen_Intake"
 def _client() -> httpx.Client:
     return httpx.Client(
         base_url=f"{vobiz.API_ROOT}/Account/{vobiz.auth_id()}",
-        headers={"X-Auth-ID": vobiz.auth_id(), "X-Auth-Token": vobiz.auth_token()},
+        headers={
+            "X-Auth-ID": vobiz.auth_id(),
+            "X-Auth-Token": vobiz.auth_token(),
+            "Content-Type": "application/json",
+        },
         timeout=30.0,
     )
 
@@ -47,10 +53,6 @@ def _client() -> httpx.Client:
 def _number() -> str:
     cfg = yaml.safe_load((REPO / "adapters" / "in" / "channels.yaml").read_text())["voice"]
     return cfg["number"]
-
-
-def _digits(n: str) -> str:
-    return "".join(c for c in n if c.isdigit())
 
 
 def main(
@@ -68,72 +70,89 @@ def main(
         raise typer.Exit(1)
 
     answer_url = vobiz.callback_url("/channel/voice/answer")
-    want = _digits(_number())
+    want = _number()
     console.rule("[bold]Vobiz[/bold]")
     console.print(f"account   [bold]{vobiz.auth_id()}[/bold]")
-    console.print(f"number    [bold]{_number()}[/bold]")
+    console.print(f"number    [bold]{want}[/bold]")
     console.print(f"answer    [bold]{answer_url}[/bold]")
+    console.print()
 
     with _client() as c:
+        # ── the number ──────────────────────────────────────────────────────
+        # Lowercase `/numbers`, not `/Number/`. Both exist; the capitalised one
+        # answers 401 on this account and the lowercase one is what the Phone
+        # Numbers API documents. Its payload is `items`, not `objects`.
+        r = c.get("/numbers")
+        if r.status_code != 200:
+            console.print(f"[red]GET /numbers -> {r.status_code}[/red] {r.text[:200]}")
+            raise typer.Exit(1)
+        payload = r.json()
+        items = payload.get("items", [])
+        mine = next((n for n in items if n.get("e164") == want), None)
+
+        t = Table(show_header=True, header_style="bold")
+        for col in ("number", "country", "status", "voice", "sms", "blocked"):
+            t.add_column(col)
+        for n in items:
+            caps = n.get("capabilities") or {}
+            t.add_row(
+                str(n.get("e164")), str(n.get("country")), str(n.get("status")),
+                "yes" if caps.get("voice") else "no",
+                "yes" if caps.get("sms") else "[dim]no[/dim]",
+                "[red]yes[/red]" if n.get("is_blocked") else "no",
+            )
+        console.print(t)
+
+        if mine is None:
+            console.print(f"[red]{want} is not on this account.[/red] Check adapters/in/channels.yaml.")
+            raise typer.Exit(1)
+        if payload.get("is_trial") or mine.get("is_trial_number"):
+            console.print(
+                "[yellow]Trial account.[/yellow] Trial numbers usually accept calls only from "
+                "verified handsets — verify the phone you will demo from, in the console, before "
+                "relying on it."
+            )
+        if mine.get("awaiting_registration"):
+            console.print("[yellow]awaiting_registration is true[/yellow] — the number may not route yet.")
+
+        # ── the application ─────────────────────────────────────────────────
         apps = c.get("/Application/").json().get("objects", [])
         app = next((a for a in apps if a.get("app_name") == APP_NAME), None)
 
         if app and app.get("answer_url") != answer_url:
-            console.print(
-                f"  [yellow]application exists but points elsewhere[/yellow]: {app.get('answer_url')}"
-            )
+            console.print(f"[yellow]application points elsewhere[/yellow]: {app.get('answer_url')}")
             if apply:
-                c.post(f"/Application/{app['app_id']}/", data={"answer_url": answer_url,
-                                                               "answer_method": "POST"})
-                console.print("  [green]updated[/green] answer_url")
+                r = c.post(f"/Application/{app['app_id']}/",
+                           json={"answer_url": answer_url, "answer_method": "POST"})
+                console.print(f"  update -> {r.status_code}")
         elif app:
-            console.print(f"  [green]ok[/green] application {app['app_id']} already points here")
+            console.print(f"[green]ok[/green] application {app['app_id']} already answers at this URL")
         elif apply:
-            r = c.post("/Application/", data={"app_name": APP_NAME, "answer_url": answer_url,
+            r = c.post("/Application/", json={"app_name": APP_NAME, "answer_url": answer_url,
                                               "answer_method": "POST"})
             if r.status_code >= 400:
-                console.print(f"  [red]create failed {r.status_code}[/red] {r.text[:200]}")
+                console.print(f"[red]create application -> {r.status_code}[/red] {r.text[:250]}")
                 raise typer.Exit(1)
             app = r.json()
-            console.print(f"  [green]created[/green] application {app.get('app_id')}")
+            console.print(f"[green]created[/green] application {app.get('app_id')}")
         else:
-            console.print("  [yellow]no application[/yellow] — run with --apply")
+            console.print("[yellow]no application yet[/yellow] — run with --apply")
 
-        nums = c.get("/Number/").json().get("objects", [])
-        mine = next((n for n in nums if _digits(str(n.get("number", ""))) == want), None)
-        t = Table(show_header=True, header_style="bold")
-        for col in ("number", "application", "points at CIVOS"):
-            t.add_column(col)
-        for n in nums:
-            nid = str(n.get("number"))
-            attached = str(n.get("application") or "—")
-            ok = bool(app) and str(app.get("app_id")) in attached
-            t.add_row(nid, attached, "[green]yes[/green]" if ok else "[red]no[/red]")
-        console.print(t)
-
-        if mine is None:
-            console.print(
-                f"  [red]{_number()} is not on this account.[/red] Check adapters/in/channels.yaml "
-                "against the console."
-            )
-            raise typer.Exit(1)
-
-        already = bool(app) and str(app.get("app_id")) in str(mine.get("application") or "")
-        if already:
-            console.print("  [green]ok[/green] the number is attached to this application")
-        elif apply and app:
-            r = c.post(f"/Number/{_digits(_number())}/", data={"app_id": app["app_id"]})
+        # ── attach ──────────────────────────────────────────────────────────
+        # The number payload carries no application field, so there is nothing to
+        # read back: attaching is the only way to know, and it is idempotent.
+        if apply and app:
+            enc = quote(want, safe="")
+            r = c.post(f"/numbers/{enc}/application", json={"application_id": app["app_id"]})
             if r.status_code >= 400:
-                console.print(f"  [red]attach failed {r.status_code}[/red] {r.text[:200]}")
+                console.print(f"[red]attach -> {r.status_code}[/red] {r.text[:250]}")
                 raise typer.Exit(1)
-            console.print("  [green]attached[/green] the number to the application")
-        else:
-            console.print("  [yellow]not attached[/yellow] — run with --apply")
+            console.print(f"[green]attached[/green] {want} -> application {app['app_id']}")
 
     console.print()
     console.print(
-        "A green row above means Vobiz will deliver the call. It does not prove CIVOS answers it — "
-        "dial the number and watch the logs for that."
+        "Vobiz will now deliver calls to the answer URL. That is not proof CIVOS answers them — "
+        "dial the number and watch the service logs for that."
     )
 
 
