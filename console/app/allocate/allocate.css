@@ -35,31 +35,39 @@
   overscroll-behavior: contain;
 }
 
-/* Range inputs on a touch screen are the classic case of a drag being stolen by
-   the scroller: the browser cannot tell a horizontal drag on a thin control from
-   the start of a vertical pan, so it scrolls the page and the value never moves.
-   `touch-action: none` on the track settles it in the control's favour, and the
-   enlarged thumb gives a finger something to actually catch. */
-.wb-controls input[type='range'],
-.budget-slider {
-  touch-action: none;
+/* Range inputs, styled properly.
+ *
+ * `appearance: none` on the INPUT is the load-bearing line, and leaving it off
+ * is what broke dragging. Styling ::-webkit-slider-thumb without it leaves the
+ * native control in charge of geometry and hit-testing while the custom thumb
+ * paints on top: the gold circle you see and the thumb the browser will actually
+ * let you grab come apart, so pressing the visible handle does nothing. Clicking
+ * the track still jumps the value, which is exactly why this survived a test —
+ * the test clicked the track, not the thumb.
+ *
+ * `margin-top` then has to re-centre the thumb, because once appearance is none
+ * the thumb aligns to the top of the runnable track rather than its middle:
+ * (track 4px - thumb 20px) / 2 = -8px.
+ *
+ * `touch-action: none` is the separate mobile fix: a browser cannot tell a
+ * horizontal drag on a thin control from the start of a vertical pan, so without
+ * it the page scrolls and the value never moves. */
+.wb-controls input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
   height: 22px;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  touch-action: none;
   cursor: pointer;
 }
 
-.wb-controls input[type='range']::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: var(--gold);
-  border: 2px solid var(--ink-800);
-  cursor: grab;
-}
-
-.wb-controls input[type='range']:active::-webkit-slider-thumb {
-  cursor: grabbing;
+.wb-controls input[type='range']:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+  border-radius: 4px;
 }
 
 .wb-controls input[type='range']::-webkit-slider-runnable-track {
@@ -68,18 +76,38 @@
   background: var(--rule-strong);
 }
 
-.wb-controls input[type='range']::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
+.wb-controls input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: -8px;
   border-radius: 50%;
   background: var(--gold);
   border: 2px solid var(--ink-800);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  cursor: grab;
+}
+
+.wb-controls input[type='range']:active::-webkit-slider-thumb {
+  cursor: grabbing;
+  transform: scale(1.08);
 }
 
 .wb-controls input[type='range']::-moz-range-track {
   height: 4px;
   border-radius: 2px;
   background: var(--rule-strong);
+  border: 0;
+}
+
+.wb-controls input[type='range']::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--gold);
+  border: 2px solid var(--ink-800);
+  cursor: grab;
 }
 
 .budget-block {
@@ -102,8 +130,9 @@
 }
 
 .budget-slider {
+  /* Geometry and colour come from the shared range rule above. `accent-color`
+     does nothing once appearance is none, so it is not repeated here. */
   width: 100%;
-  accent-color: var(--gold);
 }
 
 .budget-ends {
@@ -143,8 +172,10 @@
 }
 
 .dial input[type='range'] {
+  /* Geometry and colour come from the shared range rule. `accent-color` has no
+     effect once appearance is none — leaving it here implied these dials were
+     styled differently from the envelope, and they are not. */
   width: 100%;
-  accent-color: var(--paper-3);
 }
 
 .dial-hint {
@@ -654,4 +685,46 @@
   .letter-evidence dt {
     margin-top: 8px;
   }
+}
+
+/* Envelope stepper. The buttons are a peer of the track, not a fallback: one
+   rung at a time is what people actually do, and a button cannot be defeated by
+   a trackpad, a touch target or a remote desktop session. */
+.budget-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.budget-control .budget-slider {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.budget-control .step {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--rule-strong);
+  background: transparent;
+  color: var(--paper);
+  font-size: 1.05rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 0.16s var(--ease), color 0.16s var(--ease);
+}
+
+.budget-control .step:hover:not(:disabled) {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.budget-control .step:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.budget-ends {
+  gap: 10px;
 }

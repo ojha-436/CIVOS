@@ -307,6 +307,19 @@ function WorkbenchInner() {
     [],
   );
 
+  const stepIndex = nearestStep(dials.budget);
+  const nudge = useCallback(
+    (delta: number) =>
+      setDials((d) => {
+        const i = Math.min(
+          BUDGET_STEPS.length - 1,
+          Math.max(0, nearestStep(d.budget) + delta),
+        );
+        return { ...d, budget: BUDGET_STEPS[i] };
+      }),
+    [],
+  );
+
   const onDraft = useCallback((a: Award) => {
     setLetterFor(a);
     setLetter(null);
@@ -349,18 +362,53 @@ function WorkbenchInner() {
           <div className="budget-block">
             <div className="budget-label">Delivery envelope</div>
             <div className="budget-value display">{formatINR(dials.budget)}</div>
-            <input
-              className="budget-slider"
-              type="range"
-              min={0}
-              max={BUDGET_STEPS.length - 1}
-              step={1}
-              value={nearestStep(dials.budget)}
-              onChange={(e) => set('budget', BUDGET_STEPS[Number(e.target.value)])}
-              aria-label="Delivery envelope"
-            />
+
+            {/* Buttons as well as a track.
+             *
+             * A range input is the right control for sweeping an envelope and
+             * watching a portfolio move, and it is also the control most likely
+             * to behave differently across a browser, a trackpad, a touchscreen
+             * and a remote desktop. Stepping is the operation people actually
+             * need — one rung up, one rung down — so it gets buttons that cannot
+             * misbehave, and the slider stays for the sweep. Neither is a
+             * fallback for the other; they are two ways to reach the same state.
+             */}
+            <div className="budget-control">
+              <button
+                type="button"
+                className="step"
+                aria-label="Smaller envelope"
+                disabled={stepIndex === 0}
+                onClick={() => nudge(-1)}
+              >
+                −
+              </button>
+              <input
+                className="budget-slider"
+                type="range"
+                min={0}
+                max={BUDGET_STEPS.length - 1}
+                step={1}
+                value={stepIndex}
+                onChange={(e) => set('budget', BUDGET_STEPS[Number(e.target.value)])}
+                aria-label="Delivery envelope"
+              />
+              <button
+                type="button"
+                className="step"
+                aria-label="Larger envelope"
+                disabled={stepIndex === BUDGET_STEPS.length - 1}
+                onClick={() => nudge(1)}
+              >
+                +
+              </button>
+            </div>
+
             <div className="budget-ends mono">
               <span>{formatINR(BUDGET_STEPS[0])}</span>
+              <span>
+                step {stepIndex + 1} of {BUDGET_STEPS.length}
+              </span>
               <span>{formatINR(BUDGET_STEPS[BUDGET_STEPS.length - 1])}</span>
             </div>
           </div>

@@ -1955,3 +1955,96 @@ body:has(.lp) {
     transform: none;
   }
 }
+
+/* ── phone channel: status and method ──────────────────────────────────────
+   Added because the section described a way to report and then gave neither a
+   number nor a method, which reads as an omission rather than the honest
+   position it actually is. Saying "no number yet" loudly, and saying exactly
+   what will happen when there is one, is worth more than a quiet footnote. */
+
+.lp-phone-status {
+  margin-top: 22px;
+  padding: 16px 18px;
+  border: 1px solid var(--rule-strong);
+  border-left: 3px solid var(--q-silent);
+  border-radius: 10px;
+}
+
+.lp-phone-flag {
+  display: inline-block;
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--q-silent);
+  border: 1px solid var(--q-silent);
+  border-radius: 999px;
+  padding: 2px 10px;
+  margin-bottom: 10px;
+}
+
+.lp-phone-status p {
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--paper-3);
+  margin: 0 0 9px;
+}
+
+.lp-phone-status p:last-child {
+  margin-bottom: 0;
+}
+
+.lp-phone-status strong {
+  color: var(--paper);
+}
+
+.lp-howto {
+  margin-top: 22px;
+}
+
+.lp-howto h3 {
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+  margin: 0 0 12px;
+}
+
+.lp-howto ol {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.lp-howto li {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--paper-2);
+}
+
+.lp-howto li b {
+  color: var(--paper);
+}
+
+.lp-howto-now {
+  margin: 16px 0 0;
+  padding-top: 13px;
+  border-top: 1px solid var(--rule);
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--paper-3);
+}
+
+/* Inline links inside body copy. Without this they fall back to the UA default
+   blue, which is the one colour nothing else on this page uses. */
+.lp-inline-link {
+  color: var(--gold);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+}
+
+.lp-inline-link:hover {
+  text-decoration-thickness: 2px;
+}
