@@ -519,6 +519,9 @@ def main(
                 # Disclosure that reaches the screen is worth more than disclosure
                 # that only reaches a YAML file.
                 "caveat": " ".join(s["indicator"].get("caveat", "").split()) or None,
+                # What population the indicator is computed over. Drives scheme
+                # eligibility — see api/candidates.py.
+                "measures": s["indicator"]["measures"],
                 "schemes": [
                     {
                         "name": schemes[k]["name"],
@@ -526,6 +529,8 @@ def main(
                         "eligibility": " ".join(schemes[k]["eligibility"].split()),
                         "unit": schemes[k]["unit"],
                         "unit_cost_inr": schemes[k]["unit_cost_inr"],
+                        "beneficiaries_per_unit": schemes[k]["beneficiaries_per_unit"],
+                        "applies_to": schemes[k]["applies_to"],
                     }
                     for k in s["schemes"]
                     if k in schemes

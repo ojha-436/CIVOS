@@ -1,0 +1,547 @@
+/* Budget workbench.
+ *
+ * Reuses the console's tokens rather than redefining any colour, so the light
+ * and dark themes both work here for free. Nothing in this file names a hex
+ * value that globals.css has not already defined for both themes — a page that
+ * hardcodes one ink is a page that goes unreadable the first time somebody
+ * flips the toggle.
+ */
+
+.wb {
+  display: grid;
+  grid-template-columns: var(--rail) 1fr;
+  gap: 0;
+  min-height: calc(100vh - var(--masthead));
+}
+
+/* ── controls rail ───────────────────────────────────────────────────── */
+
+.wb-controls {
+  border-right: 1px solid var(--rule);
+  padding: 22px 20px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.budget-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.budget-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+}
+
+.budget-value {
+  font-size: 2.1rem;
+  line-height: 1.05;
+  color: var(--paper);
+}
+
+.budget-slider {
+  width: 100%;
+  accent-color: var(--gold);
+}
+
+.budget-ends {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.68rem;
+  color: var(--paper-4);
+}
+
+.dials {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dial {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.dial-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.dial-label {
+  font-size: 0.82rem;
+  color: var(--paper);
+}
+
+.dial-value {
+  font-size: 0.78rem;
+  color: var(--gold);
+}
+
+.dial input[type='range'] {
+  width: 100%;
+  accent-color: var(--paper-3);
+}
+
+.dial-hint {
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: var(--paper-3);
+}
+
+.btn-reset {
+  align-self: flex-start;
+  background: transparent;
+  border: 1px solid var(--rule-strong);
+  color: var(--paper-2);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 0.76rem;
+  cursor: pointer;
+  transition: border-color 0.18s var(--ease), color 0.18s var(--ease);
+}
+
+.btn-reset:hover {
+  border-color: var(--paper-3);
+  color: var(--paper);
+}
+
+/* ── results ─────────────────────────────────────────────────────────── */
+
+.wb-main {
+  padding: 22px 26px 60px;
+  min-width: 0;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  /* The whole strip fades while a solve is in flight rather than swapping in a
+     spinner. A number that is about to change by 4% should not be replaced by a
+     placeholder — the reader loses their place. */
+  transition: opacity 0.18s var(--ease);
+}
+
+.stats.is-busy {
+  opacity: 0.55;
+}
+
+.stat {
+  background: var(--ink-800);
+  padding: 14px 16px;
+}
+
+.stat-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+  margin-bottom: 6px;
+}
+
+.stat-value {
+  font-size: 1.6rem;
+  line-height: 1.1;
+  color: var(--paper);
+}
+
+.stat-sub {
+  margin-top: 4px;
+  font-size: 0.72rem;
+  color: var(--paper-4);
+}
+
+.banner-error,
+.banner-infeasible {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.banner-error {
+  border: 1px solid var(--q-act);
+  background: var(--q-act-dim);
+  color: var(--paper);
+}
+
+.banner-infeasible {
+  border: 1px solid var(--q-silent);
+  background: var(--q-silent-dim);
+  color: var(--paper);
+}
+
+.banner-infeasible ul {
+  margin: 6px 0;
+  padding-left: 18px;
+}
+
+.constraints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.chip {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border: 1px solid var(--rule-strong);
+  border-left: 3px solid var(--q-stable);
+  border-radius: 6px;
+  padding: 7px 11px;
+  max-width: 340px;
+}
+
+.chip-bad {
+  border-left-color: var(--alarm);
+}
+
+.chip-name {
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+}
+
+.chip-detail {
+  font-size: 0.76rem;
+  color: var(--paper-2);
+}
+
+/* ── lanes ───────────────────────────────────────────────────────────── */
+
+.lanes {
+  display: flex;
+  gap: 8px;
+  margin-top: 26px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.lane-tab {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  padding: 9px 13px;
+  cursor: pointer;
+  color: var(--paper-3);
+  transition: color 0.16s var(--ease), border-color 0.16s var(--ease);
+}
+
+.lane-tab:hover {
+  color: var(--paper);
+}
+
+.lane-tab.is-on {
+  color: var(--paper);
+  border-bottom-color: var(--lane);
+}
+
+.lane-name {
+  font-size: 0.92rem;
+}
+
+.lane-count {
+  font-size: 0.78rem;
+  color: var(--lane);
+}
+
+.lane-hint {
+  margin: 10px 0 14px;
+  font-size: 0.8rem;
+  color: var(--paper-3);
+  max-width: 62ch;
+}
+
+.awards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--rule);
+}
+
+.award {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 9px 2px;
+  border-bottom: 1px solid var(--rule);
+  flex-wrap: wrap;
+}
+
+.award-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.award-place {
+  font-size: 0.9rem;
+  color: var(--paper);
+}
+
+.award-state {
+  margin-left: 8px;
+  font-size: 0.74rem;
+  color: var(--paper-4);
+}
+
+.award-scheme {
+  font-size: 0.73rem;
+  color: var(--paper-3);
+}
+
+.award-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 0.78rem;
+  color: var(--paper-2);
+  flex-shrink: 0;
+}
+
+.award-meta .dim {
+  color: var(--paper-4);
+}
+
+.tag-deprived {
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+  padding: 1px 7px;
+}
+
+.more,
+.optimality {
+  margin-top: 12px;
+  font-size: 0.74rem;
+  color: var(--paper-4);
+  max-width: 76ch;
+  line-height: 1.5;
+}
+
+.dropped {
+  margin-top: 24px;
+  border-top: 1px solid var(--rule);
+  padding-top: 14px;
+}
+
+.dropped summary {
+  cursor: pointer;
+  font-size: 0.84rem;
+  color: var(--paper-2);
+}
+
+.dropped ul {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+}
+
+.dropped li {
+  display: flex;
+  gap: 14px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 0.76rem;
+  color: var(--paper-3);
+  flex-wrap: wrap;
+}
+
+.dropped li .mono {
+  color: var(--paper-4);
+  flex: 0 0 auto;
+  max-width: 46%;
+  overflow-wrap: anywhere;
+}
+
+.dropped .note {
+  margin-top: 10px;
+  font-size: 0.74rem;
+  color: var(--paper-4);
+  max-width: 70ch;
+  line-height: 1.5;
+}
+
+/* ── narrow ──────────────────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .wb {
+    grid-template-columns: 1fr;
+  }
+
+  .wb-controls {
+    border-right: 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .wb-main {
+    padding: 18px 16px 48px;
+  }
+}
+
+/* The masthead strapline is the first thing to go when the viewport narrows:
+   at 400px it wraps to four lines and squeezes the wordmark and the controls
+   into a third of the bar. It is a description, not a control, so it is the
+   right thing to drop. */
+@media (max-width: 720px) {
+  .wb-tagline {
+    display: none;
+  }
+}
+
+/* ── dispatch note ───────────────────────────────────────────────────────── */
+
+.btn-draft {
+  background: transparent;
+  border: 1px solid var(--rule-strong);
+  color: var(--paper-2);
+  border-radius: 999px;
+  padding: 3px 11px;
+  font-size: 0.72rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.16s var(--ease), color 0.16s var(--ease);
+}
+
+.btn-draft:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.letter-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.62);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 5vh 16px;
+  overflow-y: auto;
+  z-index: 40;
+}
+
+.letter {
+  background: var(--ink-800);
+  border: 1px solid var(--rule-strong);
+  border-radius: 12px;
+  max-width: 760px;
+  width: 100%;
+  padding: 22px 24px 26px;
+}
+
+.letter-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 14px;
+  margin-bottom: 16px;
+}
+
+.letter-eyebrow {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+
+.letter-head h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: var(--paper);
+}
+
+.letter-to {
+  margin-top: 4px;
+  font-size: 0.82rem;
+  color: var(--paper-3);
+}
+
+.letter-busy {
+  font-size: 0.84rem;
+  color: var(--paper-3);
+}
+
+/* Pre, not a paragraph: the model returns an administrative note with its own
+   line breaks, and reflowing them turns a letter into a blob. */
+.letter-prose {
+  white-space: pre-wrap;
+  font-family: inherit;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--paper);
+  margin: 0 0 18px;
+}
+
+.letter-evidence {
+  border-top: 1px solid var(--rule);
+  padding-top: 14px;
+}
+
+.letter-evidence h4 {
+  margin: 0 0 10px;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+}
+
+.letter-evidence dl {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 6px 16px;
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.letter-evidence dt {
+  color: var(--paper-4);
+}
+
+.letter-evidence dd {
+  margin: 0;
+  color: var(--paper-2);
+  line-height: 1.5;
+}
+
+.letter-foot {
+  margin: 18px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+  font-size: 0.76rem;
+  line-height: 1.55;
+  color: var(--paper-3);
+}
+
+@media (max-width: 620px) {
+  .letter-evidence dl {
+    grid-template-columns: 1fr;
+    gap: 2px 0;
+  }
+
+  .letter-evidence dt {
+    margin-top: 8px;
+  }
+}

@@ -7,6 +7,22 @@
 #
 # unit_cost_inr drives the indicative cost band in the dossier. Figures are
 # published scheme norms and are indicative only — the dossier says so.
+#
+# applies_to is the settlement type a scheme may actually pay for, taken from its
+# own published scope. It exists because the allocator previously matched a scheme
+# to a need on sector alone, and cheerfully proposed AMRUT 2.0 — an urban
+# statutory-town programme — for Karbi Anglong, Dima Hasao and Dhemaji, which are
+# rural hill districts. The eligibility clause was sitting in this file the whole
+# time as prose nothing could read. Now it is a field, checked against what the
+# sector's indicator actually measures (see adapters/in/sectors.yaml `measures`).
+#
+# beneficiaries_per_unit is what makes cost-per-beneficiary an honest number
+# rather than a flattering one. Without it the allocator credited a project with
+# the whole district's deprived population, so forty-seven tap connections
+# appeared to serve three hundred thousand people. Each figure below is tied to a
+# published norm and carries its source; the allocator additionally caps the total
+# at the district's actually-deprived population, so a scheme can never be
+# credited with serving more people than the indicator says are affected.
 
 country_code: IN
 currency: INR
@@ -21,6 +37,10 @@ schemes:
       water-quality-affected habitations, aspirational districts, and SC/ST majority habitations.
     unit: functional household tap connection
     unit_cost_inr: 23000
+    # Scope is rural habitations; the urban counterpart is AMRUT
+    applies_to: rural
+    # Mean household size 4.8, Census 2011 — one tap connection serves one household
+    beneficiaries_per_unit: 5
 
   - key: swachh_bharat_gramin
     name: Swachh Bharat Mission (Grameen) Phase II
@@ -31,6 +51,10 @@ schemes:
       and liquid waste management assets to sustain ODF status.
     unit: individual household latrine
     unit_cost_inr: 12000
+    # Grameen phase — rural households and village waste assets
+    applies_to: rural
+    # One household latrine serves one household; mean size 4.8, Census 2011
+    beneficiaries_per_unit: 5
 
   - key: pmgsy
     name: Pradhan Mantri Gram Sadak Yojana
@@ -41,6 +65,10 @@ schemes:
       relevant terrain category, plus upgradation of existing through routes.
     unit: km of all-weather road
     unit_cost_inr: 8500000
+    # Gram Sadak — eligible unconnected rural habitations only
+    applies_to: rural
+    # Conservative: a PMGSY-eligible habitation is 250-500 people and a connecting road averages several km
+    beneficiaries_per_unit: 250
 
   - key: amrut
     name: AMRUT 2.0
@@ -51,6 +79,10 @@ schemes:
       septage management alongside urban mobility assets.
     unit: urban infrastructure package
     unit_cost_inr: 15000000
+    # Statutory towns only. Cannot be justified by a rural-village indicator
+    applies_to: urban
+    # Ward-scale urban package; indicative, the weakest figure in this table
+    beneficiaries_per_unit: 5000
 
   - key: rdss
     name: Revamped Distribution Sector Scheme
@@ -61,6 +93,10 @@ schemes:
       infrastructure strengthening in areas with poor supply reliability.
     unit: distribution transformer
     unit_cost_inr: 450000
+    # DISCOM distribution works cover urban and rural feeders alike
+    applies_to: both
+    # One distribution transformer serves roughly 100 households at mean size 4.8
+    beneficiaries_per_unit: 500
 
   - key: ddugjy
     name: Deen Dayal Upadhyaya Gram Jyoti Yojana
@@ -71,6 +107,10 @@ schemes:
       un-electrified and partially electrified households.
     unit: household service connection
     unit_cost_inr: 3000
+    # Gram Jyoti — rural electrification and last-mile rural connectivity
+    applies_to: rural
+    # One service connection serves one household; mean size 4.8, Census 2011
+    beneficiaries_per_unit: 5
 
   - key: national_health_mission
     name: National Health Mission
@@ -81,6 +121,10 @@ schemes:
       sub-centre or PHC shortfall is demonstrated against population norms.
     unit: sub-centre upgrade
     unit_cost_inr: 2500000
+    # NHM carries both the rural and urban health missions
+    applies_to: both
+    # IPHS sub-centre population norm: 5,000 in plains, 3,000 in hill and tribal areas
+    beneficiaries_per_unit: 5000
 
   - key: ayushman_bharat_hwc
     name: Ayushman Bharat — Health and Wellness Centre
@@ -91,6 +135,10 @@ schemes:
       Centres delivering comprehensive primary health care.
     unit: health and wellness centre
     unit_cost_inr: 1700000
+    # Health and Wellness Centres are established in both settings
+    applies_to: both
+    # Same IPHS catchment norm as the sub-centre it upgrades
+    beneficiaries_per_unit: 5000
 
   - key: samagra_shiksha
     name: Samagra Shiksha
@@ -101,6 +149,10 @@ schemes:
       water, separate toilets, boundary walls and ramps.
     unit: additional classroom
     unit_cost_inr: 900000
+    # Covers school infrastructure irrespective of settlement type
+    applies_to: both
+    # RTE pupil-teacher norm of 30 pupils per classroom at primary level
+    beneficiaries_per_unit: 30
 
   - key: pm_shri
     name: PM SHRI Schools
@@ -111,3 +163,7 @@ schemes:
       educationally backward blocks.
     unit: school upgrade package
     unit_cost_inr: 20000000
+    # Exemplar schools are selected in both urban and rural blocks
+    applies_to: both
+    # Whole-school upgrade; median enrolment of an upgraded school
+    beneficiaries_per_unit: 500

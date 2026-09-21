@@ -266,6 +266,23 @@ jobs:
           project_id: ${{ env.PROJECT_ID }}
 
       # ── 3. Deploy FastAPI (civos-api) ─────────────────────────────────────
+      #
+      # Three secrets added for the telephony and tracking surfaces. Each is
+      # referenced whether or not it is configured, and each fails safe when it
+      # is not:
+      #   CIVOS_TELEPHONY_SECRET — unset means /channel/* returns 503 and
+      #     /channel/status reports signature_configured:false. An intake webhook
+      #     that fell open without a signature would be a relay for fabricated
+      #     citizen signals, so refusing is the correct unconfigured state.
+      #   CIVOS_SUBMITTER_SALT — unset means a random per-process salt, so
+      #     distinct-submitter counting still works within an instance and nothing
+      #     durable is written that could be reversed later.
+      #   CIVOS_TOKEN_SECRET — unset falls back to a fixed development value.
+      #     Tracking tokens are not capabilities: they reveal the public status of
+      #     a public need, and the check character guards against a typo rather
+      #     than an attacker. A stable value matters more than a secret one,
+      #     because changing it invalidates every token already in a citizen's
+      #     inbox.
       - name: Deploy API
         run: |
           gcloud run deploy ${{ env.API_SERVICE }} \
@@ -273,7 +290,7 @@ jobs:
             --region ${{ env.REGION }} \
             --project ${{ env.PROJECT_ID }} \
             --allow-unauthenticated \
-            --set-env-vars CIVOS_PROJECT=${{ env.PROJECT_ID }},CIVOS_BQ_LOCATION=${{ env.REGION }},CIVOS_BQ_DATASET=civos,CIVOS_BQ_CONNECTION=civos_vertex,CIVOS_GEMINI_MODEL=gemini-2.5-flash,TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }},TELEGRAM_WEBHOOK_SECRET=${{ secrets.TELEGRAM_WEBHOOK_SECRET }} \
+            --set-env-vars CIVOS_PROJECT=${{ env.PROJECT_ID }},CIVOS_BQ_LOCATION=${{ env.REGION }},CIVOS_BQ_DATASET=civos,CIVOS_BQ_CONNECTION=civos_vertex,CIVOS_GEMINI_MODEL=gemini-2.5-flash,TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }},TELEGRAM_WEBHOOK_SECRET=${{ secrets.TELEGRAM_WEBHOOK_SECRET }},CIVOS_TELEPHONY_SECRET=${{ secrets.CIVOS_TELEPHONY_SECRET }},CIVOS_SUBMITTER_SALT=${{ secrets.CIVOS_SUBMITTER_SALT }},CIVOS_TOKEN_SECRET=${{ secrets.CIVOS_TOKEN_SECRET }} \
             --memory 1Gi \
             --timeout 120 \
             --min-instances 0 \
