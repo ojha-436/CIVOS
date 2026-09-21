@@ -98,34 +98,13 @@ def test_missing_signature_is_rejected(client):
     assert r.status_code == 403
 
 
-# ── provider-agnostic field mapping ────────────────────────────────────────
-
-
-def test_missed_call_asks_for_a_callback(client):
-    body = b"From=%2B919812345678&CallSid=abc123"
-    r = client.post(
-        "/channel/voice/missed-call",
-        content=body,
-        headers={**_sign(body), "content-type": "application/x-www-form-urlencoded"},
-    )
-    assert r.status_code == 200
-    j = r.json()
-    assert j["action"] == "callback"
-    assert j["recording_webhook"] == "/channel/voice/recording"
-    # The caller's number must not come back out.
-    assert "9812345678" not in r.text
-
-
-def test_alternate_gateway_spelling_is_accepted(client):
-    """Exotel says CallFrom, Twilio says From. Both must work."""
-    body = b"CallFrom=09812345678&call_sid=xyz"
-    r = client.post(
-        "/channel/voice/missed-call",
-        content=body,
-        headers={**_sign(body), "content-type": "application/x-www-form-urlencoded"},
-    )
-    assert r.status_code == 200
-    assert r.json()["action"] == "callback"
+# ── the voice channel ───────────────────────────────────────────────────────
+#
+# Voice moved to the operator's own dialect when a real number arrived: signed
+# Vobiz callbacks, answered in Voice XML. Those cases live in tests/test_vobiz.py,
+# where they can assert the actual signature construction rather than a
+# placeholder of our own invention. What stays here is SMS, which has no operator
+# attached and keeps the generic contract.
 
 
 def test_empty_sms_is_rejected(client):
@@ -138,9 +117,14 @@ def test_empty_sms_is_rejected(client):
     assert r.status_code == 422
 
 
-def test_status_admits_the_carrier_leg_is_unproven():
-    """If somebody ever quietly flips this to True without a carrier, fail."""
-    c = TestClient(main.app)
-    j = c.get("/channel/status").json()
-    assert j["carrier_account"] is False
-    assert "unproven" in j["note"]
+def test_status_does_not_advertise_sms_without_an_operator():
+    """Vobiz carries voice and WhatsApp; it has no SMS send API.
+
+    The old version of this test pinned `carrier_account: false`, which was true
+    when there was no operator and would have stayed false after one arrived. A
+    status field that can only report one answer is decoration — the replacement
+    asserts the shape that has to keep telling the truth.
+    """
+    j = TestClient(main.app).get("/channel/status").json()
+    assert j["sms"]["provider"] is None
+    assert "no SMS send API" in j["sms"]["note"]

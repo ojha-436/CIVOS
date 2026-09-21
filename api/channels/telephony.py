@@ -58,13 +58,18 @@ import logging
 import os
 import secrets
 import uuid
+from functools import lru_cache
+from pathlib import Path
 from datetime import datetime, timezone
 from typing import Any
 
 import httpx
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request, Response
+
+import yaml
 
 from api import tracking
+from api.channels import vobiz
 from api.extraction import extract
 from api.fixture import load_scores, resolve_unit_by_name
 from api.guards import MAX_AUDIO_BYTES, rate_limit, safe_detail
@@ -307,53 +312,143 @@ async def sms_webhook(request: Request, _: None = Depends(rate_limit)):
     return out
 
 
+# ── the voice channel, as the operator actually drives it ───────────────────
+#
+# These two endpoints answer in Voice XML, because that is what the gateway
+# executes. An earlier version returned a JSON object describing what it would
+# like to happen, which no operator reads — it was a placeholder standing in for
+# an integration that did not exist yet.
+
+
+@lru_cache(maxsize=1)
+def voice_config() -> dict:
+    """Number and prompt, from the country adapter."""
+    path = Path(__file__).resolve().parents[2] / "adapters" / "in" / "channels.yaml"
+    return yaml.safe_load(path.read_text())["voice"]
+
+
+ANSWER_PATH = "/channel/voice/answer"
+RECORDING_PATH = "/channel/voice/recording"
+
+
+@router.post("/voice/answer")
+async def voice_answer(request: Request, _: None = Depends(rate_limit)):
+    """A citizen dialled the number. Return the flow they will hear.
+
+    Prompt, beep, record, thank, hang up. The whole interaction is four seconds
+    of talking and then listening, because the person on the line is paying for
+    the call and did not ring to navigate a menu.
+    """
+    vobiz.verify(request, ANSWER_PATH)
+    cfg = voice_config()
+    return Response(
+        content=vobiz.answer(
+            " ".join(cfg["prompt_primary"].split()),
+            " ".join(cfg["prompt_secondary"].split()),
+            record_path=RECORDING_PATH,
+            max_seconds=int(cfg.get("max_record_seconds", 90)),
+        ),
+        media_type="application/xml",
+    )
+
+
 @router.post("/voice/recording")
 async def voice_recording(request: Request, _: None = Depends(rate_limit)):
-    """The callback leg: the gateway has a recording of what the citizen said."""
-    raw = await request.body()
-    _verify_signature(request, raw)
+    """The recording is ready. Turn it into a signal.
+
+    Returns an empty Response because the Record element is configured with
+    `redirect="false"`: the call has already moved on, and returning anything
+    else here would interrupt a flow that is past this point.
+
+    The citizen is not made to wait on the line for Gemini. They have already
+    heard the acknowledgement and hung up; this runs after.
+    """
+    vobiz.verify(request, RECORDING_PATH)
     form = dict((await request.form()).items())
-    n = _normalise(form)
-    if not n["recording_url"]:
-        raise HTTPException(422, "No recording on this callback.")
-    audio = await _fetch_recording(str(n["recording_url"]))
-    return await ingest(channel="ivr", caller=n["from"], audio=audio)
+
+    # The action request fires near the START of recording and carries no file.
+    # Only the RecordStop callback means there is something to fetch.
+    url = _pick(form, _RECORDING_KEYS)
+    if not url:
+        return Response(content=vobiz.empty(), media_type="application/xml")
+
+    try:
+        audio = await vobiz.fetch_recording(str(url), MAX_AUDIO_BYTES)
+        result = await ingest(channel="ivr", caller=_pick(form, _FROM_KEYS), audio=audio,
+                              audio_mime="audio/mpeg")
+        log.info(
+            "voice report placed=%s sector=%s lang=%s",
+            result.get("placed"), result.get("sector"), result.get("language"),
+        )
+    except HTTPException:
+        raise
+    except Exception as exc:  # never let a processing failure break the call flow
+        log.warning("voice recording processing failed: %s", type(exc).__name__)
+
+    return Response(content=vobiz.empty(), media_type="application/xml")
 
 
 @router.post("/voice/missed-call")
 async def missed_call(request: Request, _: None = Depends(rate_limit)):
-    """A missed call arrived. Tell the gateway to ring the citizen back.
+    """A missed call arrived — ring the citizen back so the report costs nothing.
 
-    The citizen is never charged and never has to stay on the line. This is the
-    cheapest possible act of participation: dial, hang up, answer, speak.
+    Separate from `/voice/answer` because it is a different economic promise, not
+    a different call flow: the callback leg reaches the same answer URL, so a
+    citizen who dials and holds and one who dials and hangs up hear the same
+    thing. Wire this only to a number configured to reject and report, never to
+    the number that answers, or the two will chase each other.
     """
-    raw = await request.body()
-    _verify_signature(request, raw)
+    vobiz.verify(request, "/channel/voice/missed-call")
     form = dict((await request.form()).items())
-    n = _normalise(form)
-    if not n["from"]:
+    caller = _pick(form, _FROM_KEYS)
+    if not caller:
         raise HTTPException(422, "No caller on this missed call.")
-    return {
-        "action": "callback",
-        "submitter_hash": submitter_hash(n["from"]),
-        "prompt": "record_after_tone",
-        "max_seconds": 90,
-        "recording_webhook": "/channel/voice/recording",
-        "note": "Citizen is called back so the report costs them nothing.",
-    }
+    await vobiz.place_call(caller, ANSWER_PATH)
+    return Response(content=vobiz.empty(), media_type="application/xml")
 
 
 @router.get("/status")
 async def telephony_status():
-    """What is wired, and what is honestly not."""
+    """What is wired, what is not, and what a citizen can actually dial.
+
+    Every field is computed, never asserted. This endpoint used to hardcode
+    `carrier_account: false`, which was true at the time and would have quietly
+    stayed false after an operator was connected. A status page that can only
+    report one answer is decoration.
+    """
+    cfg = voice_config()
+    creds = bool(vobiz.auth_id() and vobiz.auth_token())
+    base = bool(vobiz.public_base())
     return {
-        "channels": ["sms", "ivr"],
-        "signature_configured": bool(os.environ.get("CIVOS_TELEPHONY_SECRET")),
+        "voice": {
+            "provider": cfg.get("provider"),
+            "number": cfg.get("number") if creds and base else None,
+            "display": cfg.get("display") if creds and base else None,
+            "credentials_configured": creds,
+            "public_base_configured": base,
+            "answer_url": vobiz.callback_url(ANSWER_PATH) if base else None,
+            "ready": creds and base,
+            # Being reachable is not the same as being credentialed. The number
+            # also has to be attached to an application pointing at answer_url,
+            # which happens in the operator console or via scripts/vobiz_setup.py,
+            # and this service cannot observe that from the inside.
+            "note": (
+                "Credentials and answer URL configured. Confirm the number is attached to an "
+                "application pointing at answer_url — run scripts/vobiz_setup.py --check."
+                if creds and base
+                else "Set VOBIZ_AUTH_ID, VOBIZ_AUTH_TOKEN and CIVOS_PUBLIC_BASE_URL. Until then "
+                "the voice endpoints refuse with 503 rather than accepting unsigned callbacks."
+            ),
+        },
+        "sms": {
+            # Said plainly because the honest answer is a capability gap in the
+            # operator, not in this service: Vobiz carries voice and WhatsApp and
+            # exposes no SMS send API. The endpoint stays, unconfigured, for a
+            # gateway that does.
+            "provider": None,
+            "configured": bool(os.environ.get("CIVOS_TELEPHONY_SECRET")),
+            "note": "No SMS operator attached. Vobiz carries voice and WhatsApp; it has no SMS send API.",
+        },
+        "channels": ["voice"] + (["sms"] if os.environ.get("CIVOS_TELEPHONY_SECRET") else []),
         "salt_configured": bool(os.environ.get("CIVOS_SUBMITTER_SALT")),
-        "carrier_account": False,
-        "note": (
-            "Webhooks are implemented and exercised by tests and by scripts/simulate_telephony.py. "
-            "No carrier account exists on this build — a virtual number requires a registered "
-            "business entity and DLT registration. The carrier leg is unproven and labelled so."
-        ),
     }

@@ -27,11 +27,14 @@ from urllib.parse import urlencode
 
 import httpx
 import typer
+import yaml
 from rich.console import Console
 from rich.panel import Panel
 
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
+
+from api.channels import vobiz  # noqa: E402
 
 console = Console()
 
@@ -52,6 +55,8 @@ SMS_CASES = [
 
 
 def sign(secret: str, body: bytes) -> dict[str, str]:
+    """The generic SMS contract. Voice is signed by the operator's own scheme —
+    see `vobiz.sign_headers`, which reproduces exactly what Vobiz sends."""
     return {
         "X-Civos-Signature": hmac.new(secret.encode(), body, hashlib.sha256).hexdigest(),
         "content-type": "application/x-www-form-urlencoded",
@@ -62,6 +67,8 @@ def main(
     base: str = typer.Option("http://127.0.0.1:8080", help="API base URL"),
     secret: str = typer.Option("", help="Defaults to CIVOS_TELEPHONY_SECRET"),
 ):
+    voice_number = (yaml.safe_load((REPO / "adapters" / "in" / "channels.yaml").read_text())
+                    ["voice"]["number"])
     secret = secret or os.environ.get("CIVOS_TELEPHONY_SECRET", "")
     if not secret:
         console.print(
@@ -74,13 +81,18 @@ def main(
         status = client.get("/channel/status")
         console.print(Panel.fit(str(status.json()), title="channel status"))
 
-        console.rule("[bold]Missed call → callback[/bold]")
-        body = urlencode({"CallFrom": "09845123456", "CallSid": "sim-001"}).encode()
-        r = client.post("/channel/voice/missed-call", content=body, headers=sign(secret, body))
-        console.print(f"  {r.status_code} {r.json()}")
+        console.rule("[bold]Inbound voice call[/bold]")
+        # Exactly what Vobiz posts to the Answer URL when somebody dials.
+        path = "/channel/voice/answer"
+        body = urlencode({"CallUUID": "sim-001", "From": "+919845123456",
+                          "To": voice_number, "Direction": "inbound"}).encode()
+        r = client.post(path, content=body, headers=vobiz.sign_headers(path))
         if r.status_code == 200:
-            assert "9845123456" not in r.text, "caller number leaked into the response"
-            console.print("  [green]ok[/green] caller number does not appear in the response")
+            console.print("  [green]200[/green] answer URL returned Voice XML:")
+            for line in r.text.splitlines():
+                console.print(f"       [dim]{line}[/dim]")
+        else:
+            console.print(f"  [red]{r.status_code}[/red] {r.text[:200]}")
 
         console.rule("[bold]Inbound SMS[/bold]")
         tokens: list[str] = []

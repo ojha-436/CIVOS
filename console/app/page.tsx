@@ -31,6 +31,23 @@ const WAVE = [5, 9, 14, 8, 16, 11, 6, 13, 17, 10, 7, 12, 15, 8, 5, 10, 6, 9, 4, 
 
 export default function Landing() {
   const [stuck, setStuck] = useState(false);
+  /* The dialable number is read from the service rather than written into the
+     page. A number printed in markup keeps being printed after the operator is
+     detached, and a citizen who dials a dead number does not dial again — the
+     one failure this channel cannot afford. `ready` is true only when the
+     credentials and the answer URL are both configured. */
+  const [voice, setVoice] = useState<{
+    ready: boolean;
+    number: string | null;
+    display: string | null;
+  } | null>(null);
+
+  useEffect(() => {
+    fetch('/api/channel/status')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => j && setVoice(j.voice))
+      .catch(() => setVoice(null));
+  }, []);
   const [instance, setInstance] = useState<0 | 1>(0);
 
   /* -- nav materialises once the hero starts leaving ---------------------- */
@@ -590,42 +607,47 @@ export default function Landing() {
                   field-checked, or an outreach visit scheduled. No app, no account, no
                   internet.
                 </p>
-                <div className="lp-phone-status">
-                  <span className="lp-phone-flag">No number yet</span>
-                  <p>
-                    <strong>There is nothing to dial today, and we are not going to
-                    pretend otherwise.</strong>{' '}
-                    A phone number is not something you build — it is rented from a
-                    telephony operator, and an Indian one needs a registered business
-                    entity plus DLT registration. That is weeks of paperwork, not code.
-                  </p>
-                  <p>
-                    What exists is everything on this side of the number: signed webhooks,
-                    the extraction pipeline behind them, the tracking code and the status
-                    loop — all running in production and exercised end to end by{' '}
-                    <code className="mono">scripts/simulate_telephony.py</code>, which posts
-                    the exact payloads a gateway would. Connecting a real operator is a
-                    configuration change: point its webhook at{' '}
-                    <code className="mono">/channel/sms</code> and paste in the signing
-                    secret.
-                  </p>
-                  <p>
-                    <code className="mono">/channel/status</code> reports{' '}
-                    <code className="mono">carrier_account: false</code> and a test keeps it
-                    false, so this cannot quietly start claiming otherwise.
-                  </p>
-                </div>
+                {voice?.ready && voice.number ? (
+                  <div className="lp-phone-live">
+                    <span className="lp-phone-flag live">Live now</span>
+                    <a className="lp-phone-number display" href={`tel:${voice.number}`}>
+                      {voice.display ?? voice.number}
+                    </a>
+                    <p>
+                      Dial it and speak. Any language, any handset, no app and no
+                      account. Carried by Vobiz on an Indian number, answered by CIVOS.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="lp-phone-status">
+                    <span className="lp-phone-flag">Number not answering yet</span>
+                    <p>
+                      <strong>The line is provisioned but not yet attached, and this page
+                      will not print a number that would ring out.</strong>{' '}
+                      It appears here automatically the moment{' '}
+                      <code className="mono">/channel/status</code> reports the operator
+                      credentials and the answer URL are both live.
+                    </p>
+                    <p>
+                      Everything on this side of the number already runs in production:
+                      signed callbacks, the Voice XML the operator executes, the
+                      extraction behind it, the tracking code and the status loop.
+                    </p>
+                  </div>
+                )}
 
                 <div className="lp-howto">
                   <h3>What a citizen will do</h3>
                   <ol>
                     <li>
-                      <b>Give a missed call</b> to the constituency number, or text what is
-                      wrong. Any language. No app, no data, no account.
+                      <b>Call{voice?.display ? ` ${voice.display}` : ' the constituency number'}</b>{' '}
+                      and say what is wrong after the beep. Any language. No app, no data,
+                      no account. Say your district name so the report can be placed.
                     </li>
                     <li>
-                      <b>CIVOS calls back</b> and records what you say, so the call costs you
-                      nothing. An SMS is read as it is.
+                      <b>CIVOS understands it</b> — the recording goes through the same
+                      Gemini call every other channel uses, so the language you spoke is the
+                      language it reads.
                     </li>
                     <li>
                       <b>You get a six-character code</b> by SMS — say{' '}
