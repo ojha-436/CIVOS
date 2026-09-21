@@ -276,6 +276,11 @@ function ReportInner() {
         <div className="intake-head-right">
           <AccountMenu />
           <ThemeToggle />
+          {/* A citizen who files needs to know the report can be checked, and
+              this is the only page they are certain to see. */}
+          <Link href="/track" className="btn-ghost">
+            Check a report ↗
+          </Link>
           <Link href="/console" className="btn-ghost">
             Console ↗
           </Link>

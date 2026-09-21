@@ -113,3 +113,83 @@ export async function solve(dials: Dials, signal?: AbortSignal): Promise<Allocat
   if (!res.ok) throw new Error(`allocate ${res.status}`);
   return (await res.json()) as AllocationResult;
 }
+
+
+/* ── the dispatch note ─────────────────────────────────────────────────────
+ *
+ * The request names a recommendation; it does not carry the evidence. The
+ * server assembles that from the fixture itself, so a caller can choose which
+ * recommendation to write up but cannot choose what the evidence says. That is
+ * the stronger grounding property, and this is the output that would end up on
+ * ministry letterhead.
+ */
+
+export interface LetterEvidence {
+  ministry: string;
+  scheme: string;
+  district: string;
+  state: string;
+  sector_label: string;
+  indicator: string;
+  source: string;
+  year: number;
+  deficit: number;
+  percentile: number;
+  needs: number;
+  signals: number;
+  confidence: number;
+  units: number;
+  unit: string;
+  cost: number;
+  beneficiaries: number | null;
+  caveat: string | null;
+}
+
+export interface LetterResult {
+  prose: string | null;
+  evidence: LetterEvidence;
+  sent?: boolean;
+  error?: string;
+}
+
+export async function draftLetter(
+  code: string,
+  sector: string,
+  scheme: string,
+  signal?: AbortSignal,
+): Promise<LetterResult> {
+  const res = await fetch('/api/letter', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ code, sector, scheme }),
+    signal,
+  });
+  const body = (await res.json()) as LetterResult;
+  if (!res.ok && !body?.evidence) throw new Error(`letter ${res.status}`);
+  return body;
+}
+
+/* ── citizen status ────────────────────────────────────────────────────────── */
+
+export interface TrackStatus {
+  token: string;
+  language: string;
+  district: string;
+  state: string | null;
+  sector: string;
+  lane: string;
+  scheme: string | null;
+  headline: string;
+  detail: string;
+  quadrant: string | null;
+  privacy: string;
+}
+
+export async function track(token: string): Promise<TrackStatus> {
+  const res = await fetch(`/api/track/${encodeURIComponent(token)}`);
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body?.detail || `That token was not recognised.`);
+  }
+  return (await res.json()) as TrackStatus;
+}

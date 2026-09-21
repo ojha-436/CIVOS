@@ -408,3 +408,140 @@
     display: none;
   }
 }
+
+/* ── dispatch note ───────────────────────────────────────────────────────── */
+
+.btn-draft {
+  background: transparent;
+  border: 1px solid var(--rule-strong);
+  color: var(--paper-2);
+  border-radius: 999px;
+  padding: 3px 11px;
+  font-size: 0.72rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.16s var(--ease), color 0.16s var(--ease);
+}
+
+.btn-draft:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.letter-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.62);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 5vh 16px;
+  overflow-y: auto;
+  z-index: 40;
+}
+
+.letter {
+  background: var(--ink-800);
+  border: 1px solid var(--rule-strong);
+  border-radius: 12px;
+  max-width: 760px;
+  width: 100%;
+  padding: 22px 24px 26px;
+}
+
+.letter-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 14px;
+  margin-bottom: 16px;
+}
+
+.letter-eyebrow {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+
+.letter-head h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: var(--paper);
+}
+
+.letter-to {
+  margin-top: 4px;
+  font-size: 0.82rem;
+  color: var(--paper-3);
+}
+
+.letter-busy {
+  font-size: 0.84rem;
+  color: var(--paper-3);
+}
+
+/* Pre, not a paragraph: the model returns an administrative note with its own
+   line breaks, and reflowing them turns a letter into a blob. */
+.letter-prose {
+  white-space: pre-wrap;
+  font-family: inherit;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--paper);
+  margin: 0 0 18px;
+}
+
+.letter-evidence {
+  border-top: 1px solid var(--rule);
+  padding-top: 14px;
+}
+
+.letter-evidence h4 {
+  margin: 0 0 10px;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+}
+
+.letter-evidence dl {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 6px 16px;
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.letter-evidence dt {
+  color: var(--paper-4);
+}
+
+.letter-evidence dd {
+  margin: 0;
+  color: var(--paper-2);
+  line-height: 1.5;
+}
+
+.letter-foot {
+  margin: 18px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+  font-size: 0.76rem;
+  line-height: 1.55;
+  color: var(--paper-3);
+}
+
+@media (max-width: 620px) {
+  .letter-evidence dl {
+    grid-template-columns: 1fr;
+    gap: 2px 0;
+  }
+
+  .letter-evidence dt {
+    margin-top: 8px;
+  }
+}

@@ -1,0 +1,137 @@
+/* Citizen-facing, so wider type and fewer things on screen than the console.
+   Reuses the console tokens, so both themes work without a second palette. */
+
+.track {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 44px 20px 80px;
+}
+
+.track h1 {
+  font-size: 2rem;
+  line-height: 1.15;
+  color: var(--paper);
+  margin: 0 0 12px;
+}
+
+.track-lede {
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: var(--paper-3);
+  margin: 0 0 26px;
+}
+
+.track-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.track-form input {
+  flex: 1 1 200px;
+  min-width: 0;
+  background: var(--ink-700);
+  border: 1px solid var(--rule-strong);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 1.25rem;
+  letter-spacing: 0.22em;
+  color: var(--paper);
+}
+
+.track-form input:focus {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
+}
+
+.track-form button {
+  background: var(--gold);
+  color: var(--ink-900);
+  border: 0;
+  border-radius: 8px;
+  padding: 12px 22px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.track-form button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.track-error {
+  margin-top: 18px;
+  padding: 12px 14px;
+  border: 1px solid var(--alarm);
+  background: var(--q-act-dim);
+  border-radius: 8px;
+  color: var(--paper);
+  font-size: 0.88rem;
+}
+
+.track-result {
+  margin-top: 26px;
+  border: 1px solid var(--rule-strong);
+  border-left: 4px solid var(--tone);
+  border-radius: 10px;
+  padding: 20px 22px;
+}
+
+.track-place {
+  font-size: 0.82rem;
+  color: var(--paper-2);
+  margin-bottom: 8px;
+}
+
+.track-place .dim {
+  color: var(--paper-4);
+}
+
+.track-result h2 {
+  margin: 0 0 10px;
+  font-size: 1.45rem;
+  line-height: 1.2;
+  color: var(--paper);
+}
+
+.track-detail {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--paper-2);
+}
+
+.track-scheme {
+  margin: 12px 0 0;
+  font-size: 0.9rem;
+  color: var(--paper-2);
+}
+
+.track-privacy {
+  margin: 16px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--paper-3);
+}
+
+.track-note {
+  margin-top: 30px;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--paper-4);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

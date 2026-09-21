@@ -55,7 +55,9 @@ from api.guards import (
 )
 from api.channels.telephony import router as telephony_router
 from core.allocation import Constraints, allocate
-from api.candidates import DEFAULT_WEIGHTS, build_candidates
+from api.candidates import DEFAULT_WEIGHTS, build_candidates, trust_for
+from api.fixture import load_scores
+from api import tracking
 from api.telegram import router as telegram_router
 
 log = logging.getLogger("civos.api")
@@ -610,21 +612,10 @@ async def dossier_endpoint(bundle: DossierRequest, _: None = Depends(rate_limit)
     return {"prose": prose}
 
 
-@lru_cache(maxsize=1)
-def _load_scores() -> dict:
-    """Read and parse the score fixture once per process.
-
-    It was being re-read and re-parsed on every request. The file is multi-MB, so
-    that turned a cheap read endpoint into a disk-and-CPU amplifier that any
-    unauthenticated caller could pin an instance with.
-    """
-    with open(_SCORES_PATH) as f:
-        return json.load(f)
-
-
-_SCORES_PATH = (
-    os.path.dirname(os.path.dirname(__file__)) + "/console/public/data/scores.json"
-)
+# Moved to api/fixture.py so the telephony channel can share the one cached parse
+# rather than opening a second one. Kept under the old name because several
+# endpoints and their tests reach for it.
+_load_scores = load_scores
 
 
 @app.get("/aggregate")
@@ -780,3 +771,261 @@ def allocate_endpoint(req: AllocateRequest, _: None = Depends(rate_limit)):
         ],
         "dropped_total": len(result.dropped),
     }
+
+
+# ---------------------------------------------------------------------------
+# GET /track/{token} — what happened to the thing a citizen reported
+# ---------------------------------------------------------------------------
+
+# Fixed for citizen-facing status. The console's slider must not make a
+# villager's SMS say "approved" one minute and "not selected" the next.
+CYCLE_BUDGET = int(os.environ.get("CIVOS_CYCLE_BUDGET", 4_000_000_000))
+
+
+@lru_cache(maxsize=1)
+def _need_table() -> tuple[tuple[str, str], ...]:
+    return tuple(tracking.build_need_table(_load_scores()))
+
+
+@lru_cache(maxsize=1)
+def _cycle_lanes() -> dict[tuple[str, str], tuple[str, str | None]]:
+    """Lane per (unit, sector) for the current cycle, computed once.
+
+    Derived from the same allocator the console drives, at the fixed cycle
+    envelope, so a citizen's status and an official's portfolio can never
+    disagree about the same need.
+    """
+    result = allocate(list(_candidates()), Constraints(budget=CYCLE_BUDGET))
+    lanes: dict[tuple[str, str], tuple[str, str | None]] = {}
+    for award in result.funded:
+        lanes[(award.candidate.unit_code, award.candidate.sector)] = (
+            "fund",
+            award.candidate.scheme_key,
+        )
+    for award in result.verify:
+        lanes.setdefault((award.candidate.unit_code, award.candidate.sector), ("verify_first", None))
+    for award in result.outreach:
+        lanes.setdefault((award.candidate.unit_code, award.candidate.sector), ("outreach", None))
+    return lanes
+
+
+def resolve_status(token: str) -> dict:
+    """Turn a token into a status. Raises tracking.TokenError on a bad one."""
+    need_index, language = tracking.decode(token)
+    table = _need_table()
+    if need_index >= len(table):
+        raise tracking.TokenError("That code does not match any area we cover.")
+    unit_code, sector = table[need_index]
+
+    data = _load_scores()
+    district = next((d for d in data["districts"] if d["code"] == unit_code), None)
+    row = next((r for r in data["rows"] if r["code"] == unit_code and r["sector"] == sector), None)
+
+    lane, scheme = _cycle_lanes().get((unit_code, sector), ("none", None))
+    if row is not None and not row.get("has_deficit", True):
+        lane = "no_data"
+
+    return {
+        "token": token.strip().upper(),
+        "language": language,
+        "district": district["name"] if district else unit_code,
+        "state": district["state"] if district else None,
+        "sector": sector,
+        "lane": lane,
+        "scheme": scheme,
+        "headline": tracking.STATUS_TEXT[lane],
+        "detail": tracking.STATUS_DETAIL[lane],
+        "quadrant": row.get("quadrant") if row else None,
+        # Said out loud because it is the unusual part and it is a promise, not
+        # a technicality: there is no record of the person who asked.
+        "privacy": (
+            "This token identifies the need, not the reporter. CIVOS holds no record "
+            "linking you to this report and cannot produce one."
+        ),
+    }
+
+
+@app.get("/track/{token}")
+def track(token: str, _: None = Depends(rate_limit)):
+    """Public status lookup. No account, no identity, no stored report."""
+    try:
+        return resolve_status(clamp_text(token, 32) or "")
+    except tracking.TokenError as exc:
+        raise HTTPException(404, str(exc)) from None
+
+
+# ---------------------------------------------------------------------------
+# POST /letter — the dispatch note an officer signs, composed from evidence
+# ---------------------------------------------------------------------------
+
+
+class LetterRequest(BaseModel):
+    """Which funded recommendation to write up. Nothing else is accepted."""
+
+    code: str = Field(max_length=64)
+    sector: str = Field(max_length=64)
+    scheme: str = Field(max_length=200)
+
+
+def build_letter_prompt(ev: dict) -> str:
+    """Render the assembled evidence into the letter prompt.
+
+    Note what is different from `build_bundle_prompt`: that one is handed a
+    bundle by the caller, so it guarantees the prose cannot exceed the bundle but
+    not that the bundle is true. Here the server assembles the bundle itself from
+    the fixture, keyed by a district, a sector and a scheme. A caller can choose
+    which recommendation to write up; it cannot choose what the evidence says.
+    That is the stronger property, and this endpoint is the one that ends up on
+    ministry letterhead.
+
+    Every value is flattened to a single line by `_flat`, so no field can forge
+    another field or open a new instruction block.
+    """
+    lines = [
+        "You are drafting an official dispatch note for a district administration in the",
+        "country this deployment serves. Write it for a civil servant to review and sign.",
+        "",
+        "ABSOLUTE RULES",
+        "- Use ONLY the facts listed below. Invent nothing: no dates, no officer names,",
+        "  no file numbers, no statistics that are not here, no promises of timelines.",
+        "- If a figure below is marked unavailable, say it is unavailable. Never estimate.",
+        "- Do not claim the work is approved, sanctioned or funded. This is a request.",
+        "- Plain administrative prose. No marketing language. No adjectives of praise.",
+        "- 250-350 words. Structure: subject line, reference to the scheme, the measured",
+        "  need, the citizen evidence, what is requested, and the caveats.",
+        "",
+        "FACTS",
+        f"- Addressed to: {_flat(ev['ministry'], 200)}",
+        f"- Scheme invoked: {_flat(ev['scheme'], 200)}",
+        f"- Scheme eligibility text: {_flat(ev['eligibility'], 800)}",
+        f"- District: {_flat(ev['district'], 120)}, {_flat(ev['state'], 120)}",
+        f"- Sector: {_flat(ev['sector_label'], 120)}",
+        f"- Official indicator: {_flat(ev['indicator'], 300)}",
+        f"- Indicator value: {ev['deficit']}% ({_flat(ev['source'], 200)}, {ev['year']})",
+        f"- National percentile for this indicator: {ev['percentile']}",
+        f"- Assessment: {_flat(ev['quadrant'], 64)}",
+        f"- Distinct needs after de-duplication: {ev['needs']} (from {ev['signals']} raw reports)",
+        f"- Languages the reports arrived in: {ev['languages']}",
+        f"- Reports carrying a photograph: {ev['images']}",
+        f"- Corroboration confidence: {ev['confidence']} out of 100",
+        f"- Units requested: {ev['units']} x {_flat(ev['unit'], 120)}",
+        f"- Indicative cost: {ev['cost']} at a published unit cost of {ev['unit_cost']}",
+    ]
+    if ev["beneficiaries"] is None:
+        lines.append(
+            "- People served: NOT AVAILABLE \u2014 no census population reconciled onto this "
+            "district. You MUST say the figure is unavailable and MUST NOT estimate one."
+        )
+    else:
+        lines.append(
+            f"- People served: {ev['beneficiaries']}, being the funded units multiplied by the "
+            "scheme's published per-unit norm, capped at the population the indicator records "
+            "as deprived."
+        )
+    if ev["caveat"]:
+        lines.append(
+            f"- DATA CAVEAT \u2014 you MUST reproduce this in the caveats section: "
+            f"{_flat(ev['caveat'], 800)}"
+        )
+    lines += [
+        "- MANDATORY DISCLOSURE \u2014 you MUST include, in the caveats section, that the "
+        "citizen reports underlying this note are synthetic demonstration data, while the "
+        "official indicator, the boundaries and the scheme unit costs are real.",
+        "- MANDATORY CLOSING LINE \u2014 end with exactly: "
+        "\"This note was composed by CIVOS from the evidence cited above. It has not been sent.\"",
+    ]
+    return "\n".join(lines)
+
+
+def assemble_letter_evidence(code: str, sector_key: str, scheme_name: str) -> dict:
+    """Pull every fact the letter may use out of the fixture. Nothing else exists."""
+    data = _load_scores()
+    district = next((d for d in data["districts"] if d["code"] == code), None)
+    row = next((r for r in data["rows"] if r["code"] == code and r["sector"] == sector_key), None)
+    sector = next((s for s in data["sectors"] if s["key"] == sector_key), None)
+    if district is None or row is None or sector is None:
+        raise HTTPException(404, "No such district and sector.")
+    scheme = next((s for s in sector["schemes"] if s["name"] == scheme_name), None)
+    if scheme is None:
+        raise HTTPException(404, "That scheme is not bound to this sector.")
+    if not row.get("has_deficit"):
+        raise HTTPException(
+            409, "No official indicator reconciled onto this district and sector, so there is "
+            "nothing to cite. A dispatch note without a measured deficit is a wish."
+        )
+
+    same_sector = sorted(r["deficit"] for r in data["rows"] if r["sector"] == sector_key and r["has_deficit"])
+    rank = sum(1 for v in same_sector if v <= row["deficit"])
+    units = max(1, round(row["needs"] * 0.6))
+    pop = district.get("population")
+    affected = int(pop * row["deficit"] / 100.0) if pop else None
+    reach = units * int(scheme["beneficiaries_per_unit"])
+    trust = trust_for(row)
+
+    return {
+        "ministry": scheme["ministry"],
+        "scheme": scheme["name"],
+        "eligibility": scheme["eligibility"],
+        "district": district["name"],
+        "state": district["state"],
+        "sector_label": sector["label"],
+        "indicator": sector["indicator"],
+        "source": sector["source"],
+        "year": sector["year"],
+        "caveat": sector.get("caveat"),
+        "deficit": row["deficit"],
+        "percentile": round(100 * rank / max(1, len(same_sector))),
+        "quadrant": row["quadrant"].replace("_", " "),
+        "needs": row["needs"],
+        "signals": row["signals"],
+        "languages": row["languages"],
+        "images": row["images"],
+        "confidence": trust.confidence,
+        "units": units,
+        "unit": scheme["unit"],
+        "unit_cost": scheme["unit_cost_inr"],
+        "cost": units * int(scheme["unit_cost_inr"]),
+        "beneficiaries": min(reach, affected) if affected is not None else None,
+    }
+
+
+@app.post("/letter")
+def letter_endpoint(req: LetterRequest, _: None = Depends(rate_limit)):
+    """Compose the dispatch note for one recommendation. Composed, never sent.
+
+    This is the step between "here is the evidence" and "here is the thing you
+    sign", and it is deliberately the smaller of the two claims: CIVOS drafts,
+    an officer reads, and dispatch happens on whatever channel the ministry
+    already runs. Nothing here transmits anything.
+    """
+    ev = assemble_letter_evidence(
+        clamp_text(req.code, 64) or "", clamp_text(req.sector, 64) or "",
+        clamp_text(req.scheme, 200) or "",
+    )
+    prompt = build_letter_prompt(ev)
+
+    try:
+        from google import genai
+        from google.genai import types as gtypes
+
+        client = genai.Client(
+            vertexai=True,
+            project=os.environ.get("CIVOS_PROJECT", "civos-in"),
+            location=os.environ.get("CIVOS_BQ_LOCATION", "asia-south1"),
+        )
+        response = client.models.generate_content(
+            model=os.environ.get("CIVOS_GEMINI_MODEL", "gemini-2.5-flash"),
+            contents=[gtypes.Content(parts=[gtypes.Part.from_text(text=prompt)], role="user")],
+            config=gtypes.GenerateContentConfig(temperature=0.2),
+        )
+        prose = (response.text or "").strip()
+        if not prose:
+            raise RuntimeError("model returned empty prose")
+    except Exception as exc:
+        safe_detail(exc, "letter generation failed")
+        return JSONResponse(
+            status_code=503,
+            content={"prose": None, "evidence": ev, "error": "Letter drafting is temporarily unavailable."},
+        )
+
+    return {"prose": prose, "evidence": ev, "sent": False}

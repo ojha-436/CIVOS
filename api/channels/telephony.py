@@ -64,7 +64,9 @@ from typing import Any
 import httpx
 from fastapi import APIRouter, Depends, HTTPException, Request
 
+from api import tracking
 from api.extraction import extract
+from api.fixture import load_scores, resolve_unit_by_name
 from api.guards import MAX_AUDIO_BYTES, rate_limit, safe_detail
 
 log = logging.getLogger("civos.telephony")
@@ -132,21 +134,62 @@ def _token() -> str:
     return "".join(secrets.choice(alphabet) for _ in range(6))
 
 
-def build_sms_reply(token: str, district: str | None, sector: str | None) -> str:
+def build_sms_reply(token: str | None, district: str | None, sector: str | None) -> str:
     """A receipt that survives a 70-character UCS-2 message.
 
     Token first: if a gateway truncates, the citizen keeps the one thing they need
     to follow the report up. Acknowledgement is not decoration — a citizen who
     hears nothing back does not report again, and every one of those is a data
     point the participation correction then has to reconstruct.
+
+    When the report could not be placed there is no token, because a token that
+    resolves to nothing is worse than none: the citizen texts it back, gets an
+    error, and concludes the system lost their report. Instead the receipt asks
+    for the one thing that would fix it.
     """
+    if not token:
+        return "Received. Reply with your district name so we can place it."[:SMS_UCS2_LIMIT]
     parts = [token]
     if district:
         parts.append(district)
     if sector:
         parts.append(sector.replace("_", " "))
-    msg = " · ".join(parts)
+    return " · ".join(parts)[:SMS_UCS2_LIMIT]
+
+
+def build_status_reply(status: dict) -> str:
+    """The answer to a citizen texting their token back."""
+    head = status["headline"]
+    place = status.get("district") or ""
+    msg = f"{status['token']} {place}: {head}"
     return msg[:SMS_UCS2_LIMIT]
+
+
+def place_report(result, text: str | None) -> tuple[str | None, str | None]:
+    """Work out which need this report belongs to, and mint its token.
+
+    Returns (token, district name), either of which may be None. Placing is
+    best-effort by design on this channel: an SMS carries no coordinates and no
+    picker, so the only signal is whatever place name the citizen mentioned. A
+    report that cannot be placed is still extracted, still acknowledged and still
+    counted — it simply cannot be tracked yet, and the receipt says so rather
+    than issuing a token pointing at a district nobody named.
+    """
+    if not result.sector:
+        return None, None
+    haystack = " ".join(filter(None, [result.geo_hint, result.translation, result.raw_text, text]))
+    code = resolve_unit_by_name(haystack)
+    if not code:
+        return None, None
+    data = load_scores()
+    table = tracking.build_need_table(data)
+    try:
+        index = table.index((code, result.sector))
+    except ValueError:
+        return None, None
+    language = (result.language or "en").split("-")[0].lower()
+    district = next((d["name"] for d in data["districts"] if d["code"] == code), None)
+    return tracking.encode(index, language), district
 
 
 def _verify_signature(request: Request, raw: bytes) -> None:
@@ -200,10 +243,12 @@ async def ingest(
     except Exception as exc:
         raise HTTPException(502, safe_detail(exc, "Extraction failed.")) from exc
 
-    token = _token()
+    token, district = place_report(result, text)
     return {
         "signal_id": str(uuid.uuid4()),
         "token": token,
+        "district": district,
+        "placed": token is not None,
         "channel": channel,
         "submitter_hash": submitter_hash(caller) if caller else None,
         "language": result.language,
@@ -214,21 +259,52 @@ async def ingest(
         "geo_hint": result.geo_hint,
         "relevance": result.relevance,
         "received_at": datetime.now(timezone.utc).isoformat(),
-        "reply": build_sms_reply(token, None, result.sector),
+        "reply": build_sms_reply(token, district, result.sector),
         "carrier_leg": "unproven — no telephony account on this build; see api/channels/telephony.py",
     }
 
 
 @router.post("/sms")
 async def sms_webhook(request: Request, _: None = Depends(rate_limit)):
-    """Inbound SMS from the gateway. Form-encoded, provider-agnostic."""
+    """Inbound SMS. Either a new report, or a token being texted back.
+
+    The same number does both, because asking a citizen on a feature phone to
+    remember a second shortcode is asking them not to bother. A message that is
+    *nothing but* a token is a status enquiry; anything else is a report. The
+    test for that is strict on purpose — a sentence that happens to contain six
+    consonants is a report, and mistaking one for the other would swallow it.
+    """
     raw = await request.body()
     _verify_signature(request, raw)
     form = dict((await request.form()).items())
     n = _normalise(form)
     if not n["body"]:
         raise HTTPException(422, "Empty message.")
-    return await ingest(channel="sms", caller=n["from"], text=str(n["body"])[:1000])
+    body = str(n["body"])[:1000]
+
+    if tracking.looks_like_token(body):
+        # Imported here rather than at module scope: api.main imports this
+        # router, so a module-level import would close the circle.
+        from api.main import resolve_status
+
+        try:
+            status = resolve_status(body)
+        except tracking.TokenError as exc:
+            return {
+                "kind": "status",
+                "found": False,
+                "reply": str(exc)[:SMS_UCS2_LIMIT],
+            }
+        return {
+            "kind": "status",
+            "found": True,
+            "status": status,
+            "reply": build_status_reply(status),
+        }
+
+    out = await ingest(channel="sms", caller=n["from"], text=body)
+    out["kind"] = "report"
+    return out
 
 
 @router.post("/voice/recording")

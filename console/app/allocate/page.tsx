@@ -24,10 +24,12 @@ import {
   LANES,
   solve,
   type AllocationResult,
+  draftLetter,
   type Award,
   type ConstraintStatus,
   type Dials,
   type LaneKey,
+  type LetterResult,
 } from '@/lib/allocation';
 import './allocate.css';
 
@@ -125,7 +127,15 @@ function Dial({
   );
 }
 
-function AwardRow({ a, lane }: { a: Award; lane: LaneKey }) {
+function AwardRow({
+  a,
+  lane,
+  onDraft,
+}: {
+  a: Award;
+  lane: LaneKey;
+  onDraft: (a: Award) => void;
+}) {
   return (
     <li className="award">
       <div className="award-main">
@@ -142,8 +152,104 @@ function AwardRow({ a, lane }: { a: Award; lane: LaneKey }) {
         ) : null}
         <span className="mono dim">conf {a.confidence.toFixed(0)}</span>
         {a.deprived ? <span className="tag-deprived">deprived</span> : null}
+        {lane === 'fund' ? (
+          <button className="btn-draft" onClick={() => onDraft(a)}>
+            Draft note
+          </button>
+        ) : null}
       </div>
     </li>
+  );
+}
+
+/* The dispatch note.
+ *
+ * This is the step between "here is the evidence" and "here is the thing you
+ * sign", and it is deliberately the smaller of the two claims. CIVOS drafts; an
+ * officer reads; dispatch happens on whatever channel the ministry already runs.
+ * The panel says so twice — in the header and at the foot — because a drafted
+ * letter on screen is exactly the artefact somebody could mistake for a sent one.
+ */
+function LetterPanel({
+  award,
+  result,
+  busy,
+  onClose,
+}: {
+  award: Award;
+  result: LetterResult | null;
+  busy: boolean;
+  onClose: () => void;
+}) {
+  const ev = result?.evidence;
+  return (
+    <div className="letter-scrim" onClick={onClose}>
+      <div className="letter" onClick={(e) => e.stopPropagation()}>
+        <header className="letter-head">
+          <div>
+            <div className="letter-eyebrow">Dispatch note · composed, not sent</div>
+            <h3 className="display">
+              {award.district} — {award.scheme}
+            </h3>
+            {ev ? <div className="letter-to">To: {ev.ministry}</div> : null}
+          </div>
+          <button className="btn-ghost" onClick={onClose}>
+            Close
+          </button>
+        </header>
+
+        {busy ? <p className="letter-busy">Drafting from the cited evidence…</p> : null}
+
+        {result?.error ? (
+          <div className="banner-error">
+            {result.error} The evidence below is still shown, because it is the part that
+            came from the data rather than the model.
+          </div>
+        ) : null}
+
+        {result?.prose ? <pre className="letter-prose">{result.prose}</pre> : null}
+
+        {ev ? (
+          <div className="letter-evidence">
+            <h4>Everything the draft was allowed to use</h4>
+            <dl>
+              <dt>Indicator</dt>
+              <dd>
+                {ev.indicator} — {ev.deficit}% ({ev.source}, {ev.year}), {ev.percentile}th
+                percentile nationally
+              </dd>
+              <dt>Citizen signal</dt>
+              <dd>
+                {ev.needs} distinct needs from {ev.signals} reports · confidence{' '}
+                {ev.confidence.toFixed(0)}/100
+              </dd>
+              <dt>Requested</dt>
+              <dd>
+                {ev.units} × {ev.unit} · {formatINR(ev.cost)}
+              </dd>
+              <dt>People served</dt>
+              <dd>
+                {ev.beneficiaries === null
+                  ? 'Unavailable — no census population reconciled onto this district. Not estimated.'
+                  : formatCompact(ev.beneficiaries)}
+              </dd>
+              {ev.caveat ? (
+                <>
+                  <dt>Caveat</dt>
+                  <dd>{ev.caveat}</dd>
+                </>
+              ) : null}
+            </dl>
+          </div>
+        ) : null}
+
+        <p className="letter-foot">
+          <b>Nothing has been sent.</b> CIVOS composes the note; dispatch belongs to whatever
+          channel the ministry already runs. The citizen reports behind it are synthetic
+          demonstration data — the indicator, the boundaries and the unit costs are real.
+        </p>
+      </div>
+    </div>
   );
 }
 
@@ -153,6 +259,9 @@ function WorkbenchInner() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [lane, setLane] = useState<LaneKey>('fund');
+  const [letterFor, setLetterFor] = useState<Award | null>(null);
+  const [letter, setLetter] = useState<LetterResult | null>(null);
+  const [letterBusy, setLetterBusy] = useState(false);
   const abort = useRef<AbortController | null>(null);
 
   /* Debounced so a drag issues one solve per pause rather than one per pixel,
@@ -184,6 +293,16 @@ function WorkbenchInner() {
     <K extends keyof Dials>(k: K, v: Dials[K]) => setDials((d) => ({ ...d, [k]: v })),
     [],
   );
+
+  const onDraft = useCallback((a: Award) => {
+    setLetterFor(a);
+    setLetter(null);
+    setLetterBusy(true);
+    draftLetter(a.code, a.sector, a.scheme)
+      .then(setLetter)
+      .catch((e) => setLetter({ prose: null, evidence: null as never, error: String(e) }))
+      .finally(() => setLetterBusy(false));
+  }, []);
 
   const awards = useMemo(() => {
     if (!result) return [];
@@ -370,7 +489,7 @@ function WorkbenchInner() {
 
           <ul className="awards">
             {awards.slice(0, 120).map((a) => (
-              <AwardRow key={a.id} a={a} lane={lane} />
+              <AwardRow key={a.id} a={a} lane={lane} onDraft={onDraft} />
             ))}
           </ul>
           {awards.length > 120 ? (
@@ -414,6 +533,18 @@ function WorkbenchInner() {
           </p>
         </main>
       </div>
+
+      {letterFor ? (
+        <LetterPanel
+          award={letterFor}
+          result={letter}
+          busy={letterBusy}
+          onClose={() => {
+            setLetterFor(null);
+            setLetter(null);
+          }}
+        />
+      ) : null}
     </div>
   );
 }
