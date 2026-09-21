@@ -201,12 +201,53 @@ def test_credentials_are_sent_only_to_a_vobiz_host(cfg, monkeypatch):
 # ── status ──────────────────────────────────────────────────────────────────
 
 
-def test_status_reports_the_number_only_when_it_could_work(cfg):
+def test_status_reports_the_number_only_when_it_could_work(cfg, monkeypatch):
+    async def owned(_e164):
+        return True
+
+    monkeypatch.setattr(vobiz, "owns_number", owned)
     j = cfg.get("/channel/status").json()
     assert j["voice"]["provider"] == "vobiz"
     assert j["voice"]["ready"] is True
     assert j["voice"]["number"] == "+918065354620"
     assert j["voice"]["answer_url"] == f"{BASE}/channel/voice/answer"
+
+
+def test_credentials_alone_do_not_make_a_number_dialable(cfg, monkeypatch):
+    """The failure this guard exists for, found in production.
+
+    A trial account holding a shared number looks identical from inside this
+    service: credentials present, answer URL configured, everything green — and
+    a caller hears nothing, because the operator does not route that number to
+    us. The site was advertising it. Ownership is now asked of the operator.
+    """
+
+    async def not_owned(_e164):
+        return False
+
+    monkeypatch.setattr(vobiz, "owns_number", not_owned)
+    j = cfg.get("/channel/status").json()["voice"]
+    assert j["credentials_configured"] is True
+    assert j["number_on_account"] is False
+    assert j["ready"] is False
+    assert j["number"] is None
+    assert "not held by this operator account" in j["note"]
+
+
+def test_an_unreachable_operator_is_not_a_yes(cfg, monkeypatch):
+    """Any failure in the check must answer no, never default to advertising."""
+
+    class Boom:
+        def __init__(self, *a, **k): pass
+        async def __aenter__(self): return self
+        async def __aexit__(self, *a): return False
+        async def get(self, *a, **k): raise RuntimeError("operator down")
+
+    monkeypatch.setattr(vobiz.httpx, "AsyncClient", Boom)
+    vobiz._OWNERSHIP.clear()
+    j = cfg.get("/channel/status").json()["voice"]
+    assert j["ready"] is False
+    assert j["number"] is None
 
 
 def test_status_withholds_the_number_when_unconfigured(monkeypatch):

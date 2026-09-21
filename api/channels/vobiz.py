@@ -43,6 +43,7 @@ import hashlib
 import hmac
 import logging
 import os
+import time
 from urllib.parse import urlparse, urlunparse
 from xml.sax.saxutils import escape
 
@@ -195,6 +196,47 @@ def unavailable(message_en: str) -> str:
 
 
 # ── outbound ────────────────────────────────────────────────────────────────
+
+
+_OWNERSHIP: dict[str, tuple[float, bool]] = {}
+OWNERSHIP_TTL = 300.0
+
+
+async def owns_number(e164: str) -> bool:
+    """Does this account actually hold the number we advertise?
+
+    Credentials being present is not the same as the line being answerable. The
+    account can be on trial with a shared number, or the number can sit on a
+    different account, and in both cases everything on our side looks configured
+    while a caller hears nothing. Since the landing page prints the number only
+    when it can be answered, the check has to ask the operator rather than infer
+    it from our own environment.
+
+    Cached, because this backs a public unauthenticated endpoint and an
+    uncached upstream call there is somebody else's rate limit to spend. Any
+    failure answers False: advertising a dead number is the one outcome this
+    guard exists to prevent, so an unreachable operator must not read as yes.
+    """
+    now = time.monotonic()
+    hit = _OWNERSHIP.get(e164)
+    if hit and now - hit[0] < OWNERSHIP_TTL:
+        return hit[1]
+    ok = False
+    try:
+        async with httpx.AsyncClient(timeout=8.0) as client:
+            r = await client.get(
+                f"{API_ROOT}/Account/{auth_id()}/numbers",
+                headers={"X-Auth-ID": auth_id(), "X-Auth-Token": auth_token()},
+                params={"per_page": 100},
+            )
+        if r.status_code == 200:
+            body = r.json()
+            items = body.get("items", body.get("objects", []))
+            ok = any(str(n.get("e164") or n.get("number")) == e164 for n in items)
+    except Exception as exc:
+        log.warning("number ownership check failed: %s", type(exc).__name__)
+    _OWNERSHIP[e164] = (now, ok)
+    return ok
 
 
 async def place_call(to: str, answer_path: str) -> dict:

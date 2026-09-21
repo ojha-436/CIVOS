@@ -104,15 +104,24 @@ def main(
         console.print(t)
 
         if mine is None:
-            console.print(f"[red]{want} is not on this account.[/red] Check adapters/in/channels.yaml.")
-            raise typer.Exit(1)
-        if payload.get("is_trial") or mine.get("is_trial_number"):
+            console.print(
+                f"[red]{want} is not held by account {vobiz.auth_id()}.[/red]"
+            )
+            if payload.get("trial_message"):
+                console.print(f"  operator says: [yellow]{payload['trial_message']}[/yellow]")
+            console.print(
+                "  Nothing here can fix that: an application can be registered, but a number the\n"
+                "  account does not own cannot be pointed anywhere. Buy or transfer the number in\n"
+                "  the console, then re-run --apply. The application below is created regardless,\n"
+                "  so attaching later is one step."
+            )
+        if payload.get("is_trial") or (mine or {}).get("is_trial_number"):
             console.print(
                 "[yellow]Trial account.[/yellow] Trial numbers usually accept calls only from "
                 "verified handsets — verify the phone you will demo from, in the console, before "
                 "relying on it."
             )
-        if mine.get("awaiting_registration"):
+        if (mine or {}).get("awaiting_registration"):
             console.print("[yellow]awaiting_registration is true[/yellow] — the number may not route yet.")
 
         # ── the application ─────────────────────────────────────────────────
@@ -150,6 +159,12 @@ def main(
             console.print(f"[green]attached[/green] {want} -> application {app['app_id']}")
 
     console.print()
+    if mine is None:
+        console.print(
+            "[red]Not routable yet.[/red] The application is registered and CIVOS answers, but the "
+            "operator does not hold the number, so no call can reach it."
+        )
+        raise typer.Exit(1)
     console.print(
         "Vobiz will now deliver calls to the answer URL. That is not proof CIVOS answers them — "
         "dial the number and watch the service logs for that."

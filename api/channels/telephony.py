@@ -419,22 +419,32 @@ async def telephony_status():
     cfg = voice_config()
     creds = bool(vobiz.auth_id() and vobiz.auth_token())
     base = bool(vobiz.public_base())
+    # Credentials are not a dial tone. The operator is asked whether it actually
+    # holds this number, because a trial account with a shared number looks
+    # identical from in here and would have the site printing a line that rings
+    # out.
+    owned = await vobiz.owns_number(cfg["number"]) if creds else False
+    ready = creds and base and owned
     return {
         "voice": {
             "provider": cfg.get("provider"),
-            "number": cfg.get("number") if creds and base else None,
-            "display": cfg.get("display") if creds and base else None,
+            "number": cfg.get("number") if ready else None,
+            "display": cfg.get("display") if ready else None,
             "credentials_configured": creds,
             "public_base_configured": base,
+            "number_on_account": owned,
             "answer_url": vobiz.callback_url(ANSWER_PATH) if base else None,
-            "ready": creds and base,
+            "ready": ready,
             # Being reachable is not the same as being credentialed. The number
             # also has to be attached to an application pointing at answer_url,
             # which happens in the operator console or via scripts/vobiz_setup.py,
             # and this service cannot observe that from the inside.
             "note": (
-                "Credentials and answer URL configured. Confirm the number is attached to an "
-                "application pointing at answer_url — run scripts/vobiz_setup.py --check."
+                "Credentials, answer URL and number all present. Confirm the number is attached "
+                "to an application pointing at answer_url — run scripts/vobiz_setup.py --check."
+                if ready
+                else f"{cfg['number']} is not held by this operator account, so it is not "
+                "advertised. Credentials and answer URL are configured; the line is the gap."
                 if creds and base
                 else "Set VOBIZ_AUTH_ID, VOBIZ_AUTH_TOKEN and CIVOS_PUBLIC_BASE_URL. Until then "
                 "the voice endpoints refuse with 503 rather than accepting unsigned callbacks."
