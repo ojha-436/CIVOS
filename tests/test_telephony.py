@@ -117,14 +117,14 @@ def test_empty_sms_is_rejected(client):
     assert r.status_code == 422
 
 
-def test_status_does_not_advertise_sms_without_an_operator():
-    """Vobiz carries voice and WhatsApp; it has no SMS send API.
+def test_status_names_no_operator_and_points_at_what_works():
+    """The channel must not read as available when nothing delivers to it.
 
-    The old version of this test pinned `carrier_account: false`, which was true
-    when there was no operator and would have stayed false after one arrived. A
-    status field that can only report one answer is decoration — the replacement
-    asserts the shape that has to keep telling the truth.
+    Earlier versions of this test pinned a single boolean that could only ever
+    report one answer. What has to stay true is the shape: no provider claimed,
+    and a reader told which channels actually carry a report today.
     """
     j = TestClient(main.app).get("/channel/status").json()
-    assert j["sms"]["provider"] is None
-    assert "no SMS send API" in j["sms"]["note"]
+    assert j["provider"] is None
+    assert "No telephony operator is attached" in j["note"]
+    assert "telegram" in j["working_today"]

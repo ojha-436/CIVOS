@@ -2049,38 +2049,3 @@ body:has(.lp) {
   text-decoration-thickness: 2px;
 }
 
-/* The number, once it answers. Big and tappable, because the whole point of
-   this channel is a person holding a phone. */
-.lp-phone-live {
-  margin-top: 22px;
-  padding: 18px 20px;
-  border: 1px solid var(--rule-strong);
-  border-left: 3px solid var(--q-act);
-  border-radius: 10px;
-}
-
-.lp-phone-flag.live {
-  color: var(--q-act);
-  border-color: var(--q-act);
-}
-
-.lp-phone-number {
-  display: inline-block;
-  margin: 4px 0 10px;
-  font-size: 2rem;
-  line-height: 1.1;
-  color: var(--paper);
-  text-decoration: none;
-  letter-spacing: 0.01em;
-}
-
-.lp-phone-number:hover {
-  color: var(--gold);
-}
-
-.lp-phone-live p {
-  margin: 0;
-  font-size: 12.5px;
-  line-height: 1.65;
-  color: var(--paper-3);
-}

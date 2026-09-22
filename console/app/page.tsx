@@ -31,23 +31,6 @@ const WAVE = [5, 9, 14, 8, 16, 11, 6, 13, 17, 10, 7, 12, 15, 8, 5, 10, 6, 9, 4, 
 
 export default function Landing() {
   const [stuck, setStuck] = useState(false);
-  /* The dialable number is read from the service rather than written into the
-     page. A number printed in markup keeps being printed after the operator is
-     detached, and a citizen who dials a dead number does not dial again — the
-     one failure this channel cannot afford. `ready` is true only when the
-     credentials and the answer URL are both configured. */
-  const [voice, setVoice] = useState<{
-    ready: boolean;
-    number: string | null;
-    display: string | null;
-  } | null>(null);
-
-  useEffect(() => {
-    fetch('/api/channel/status')
-      .then((r) => (r.ok ? r.json() : null))
-      .then((j) => j && setVoice(j.voice))
-      .catch(() => setVoice(null));
-  }, []);
   const [instance, setInstance] = useState<0 | 1>(0);
 
   /* -- nav materialises once the hero starts leaving ---------------------- */
@@ -105,7 +88,7 @@ export default function Landing() {
           <div className="lp-nav-links">
             <a href="#blind-spot">The blind spot</a>
             <a href="#how">How it works</a>
-            <a href="#feature-phone">Feature phone</a>
+            <a href="#loop">The loop back</a>
             <a href="#dossier">The output</a>
             <a href="#money">The money</a>
             <a href="#provenance">Provenance</a>
@@ -575,95 +558,52 @@ export default function Landing() {
         </section>
 
         {/* ==============================================================
-            05 — Feature phone + the loop back
+            05 — The loop back
             ============================================================== */}
-        <section className="lp-sec" id="feature-phone">
+        <section className="lp-sec" id="loop">
           <div className="lp-wrap">
             <div className="lp-sec-head" data-reveal>
               <span className="lp-sec-idx">05</span>
-              <h2 className="lp-sec-title">A missed call is a complete report.</h2>
+              <h2 className="lp-sec-title">Somebody told you. Now you tell them.</h2>
               <span className="rule" />
             </div>
 
             <div className="lp-split">
               <div data-reveal>
                 <p className="lp-lede">
-                  Every channel above still needs a smartphone and a data connection. The
-                  citizen this system exists to hear — no literacy, no app, no data — could
-                  not use any of them. That is not a missing feature so much as a
-                  contradiction: a product whose whole argument is that digital intake
-                  over-samples the connected cannot itself be reachable only by the
-                  connected.
+                  A citizen who reports and hears nothing does not report again. That is not a
+                  courtesy problem, it is a measurement problem: every one of those silences
+                  becomes a gap the participation correction has to reconstruct from census
+                  covariates instead of being told directly.
                 </p>
                 <p className="lp-lede">
-                  So: <strong>dial and hang up.</strong> CIVOS calls back, records what you
-                  say in your own language, and runs it through the same single extraction
-                  call as every other channel. The citizen is never charged and never has to
-                  stay on the line. <strong>SMS works too</strong>, in either direction.
+                  So every report comes back with a <strong>six-character code</strong>. Enter it
+                  at <Link href="/track" className="lp-inline-link">/track</Link> and you are told
+                  what happened — funded under a named scheme, scheduled for a field check, or an
+                  outreach visit booked because your area showed a severe gap and almost nobody
+                  had spoken.
                 </p>
                 <p className="lp-lede">
-                  <strong>Then the loop closes.</strong> You get a six-character code. Text it
-                  back to the same number and you are told what happened — funded, being
-                  field-checked, or an outreach visit scheduled. No app, no account, no
-                  internet.
+                  The status is <strong>computed from the live funding cycle</strong>, never
+                  copied into a row somebody has to remember to update. If the answer changes, it
+                  is because the decision changed.
                 </p>
-                {voice?.ready && voice.number ? (
-                  <div className="lp-phone-live">
-                    <span className="lp-phone-flag live">Live now</span>
-                    <a className="lp-phone-number display" href={`tel:${voice.number}`}>
-                      {voice.display ?? voice.number}
-                    </a>
-                    <p>
-                      Dial it and speak. Any language, any handset, no app and no
-                      account. Carried by Vobiz on an Indian number, answered by CIVOS.
-                    </p>
-                  </div>
-                ) : (
-                  <div className="lp-phone-status">
-                    <span className="lp-phone-flag">Number not answering yet</span>
-                    <p>
-                      <strong>The line is provisioned but not yet attached, and this page
-                      will not print a number that would ring out.</strong>{' '}
-                      It appears here automatically the moment{' '}
-                      <code className="mono">/channel/status</code> reports the operator
-                      credentials and the answer URL are both live.
-                    </p>
-                    <p>
-                      Everything on this side of the number already runs in production:
-                      signed callbacks, the Voice XML the operator executes, the
-                      extraction behind it, the tracking code and the status loop.
-                    </p>
-                  </div>
-                )}
 
-                <div className="lp-howto">
-                  <h3>What a citizen will do</h3>
-                  <ol>
-                    <li>
-                      <b>Call{voice?.display ? ` ${voice.display}` : ' the constituency number'}</b>{' '}
-                      and say what is wrong after the beep. Any language. No app, no data,
-                      no account. Say your district name so the report can be placed.
-                    </li>
-                    <li>
-                      <b>CIVOS understands it</b> — the recording goes through the same
-                      Gemini call every other channel uses, so the language you spoke is the
-                      language it reads.
-                    </li>
-                    <li>
-                      <b>You get a six-character code</b> by SMS — say{' '}
-                      <code className="mono">4XGF59 · Shrawasti · water sanitation</code> — so
-                      you know it landed and where it landed.
-                    </li>
-                    <li>
-                      <b>Text the code back any time</b> and you are told what happened:
-                      funded, being field-checked, or an outreach visit scheduled.
-                    </li>
-                  </ol>
-                  <p className="lp-howto-now">
-                    <b>Usable right now, without waiting for a number:</b> the{' '}
-                    <a href="#telegram">Telegram bot</a> takes voice, text and photographs
-                    from any citizen with no CIVOS account, and{' '}
-                    <Link href="/track" className="lp-inline-link">/track</Link> looks up a code in the browser.
+                <div className="lp-phone-status">
+                  <span className="lp-phone-flag">Not on this build</span>
+                  <p>
+                    <strong>There is no number to dial, and this page will not print one.</strong>{' '}
+                    A voice channel was built against a real operator and then removed rather than
+                    shipped as a line that answers nothing. In this country an inbound number needs
+                    a KYC-verified account and a purchased DID; trial accounts are refused inbound
+                    routing by policy, which no amount of code changes.
+                  </p>
+                  <p>
+                    What survives is the provider-agnostic half — the webhook contract, the field
+                    mapping the common gateways use, the extraction behind it, and this loop. A
+                    gateway posting to <code className="mono">/channel/sms</code> works without
+                    code changes. The line is a deployment decision with a named monthly cost, and
+                    it belongs to whoever runs the pilot.
                   </p>
                 </div>
               </div>
@@ -672,13 +612,13 @@ export default function Landing() {
                 <div className="lp-matrix-frame">
                   <div className="lp-matrix">
                     <div className="lp-cell">
-                      <span className="cell-k">The token encodes the need</span>
+                      <span className="cell-k">The code encodes the need</span>
                       <span className="cell-n">Not the person</span>
                       <p style={{ fontSize: 11.5, color: 'var(--paper-3)', lineHeight: 1.6 }}>
-                        The obvious way to build this is a table mapping code to caller. This
-                        is not that. The code is a reversible encoding of which
-                        district-sector the report belongs to and which language to answer
-                        in — so there is no record of who reported what, and none to leak.
+                        The obvious way to build this is a table mapping code to reporter. This is
+                        not that. The code is a reversible encoding of which district-sector the
+                        report belongs to and which language to answer in — so there is no record
+                        of who reported what, and none to leak.
                       </p>
                     </div>
                     <div className="lp-cell">
@@ -694,12 +634,10 @@ export default function Landing() {
                   </div>
                 </div>
                 <p style={{ fontSize: 11.5, color: 'var(--paper-3)', lineHeight: 1.6, marginTop: 14 }}>
-                  Status is computed from the live funding cycle, never copied into a row
-                  somebody has to remember to update. Check one at{' '}
-                  <Link href="/track" className="mono lp-inline-link">
-                    /track
-                  </Link>
-                  .
+                  Reporting today needs no account and no form: the{' '}
+                  <a href="#telegram" className="lp-inline-link">Telegram bot</a> takes a voice
+                  note, a photograph or two lines of text in any language, and the image channel
+                  needs no language at all.
                 </p>
               </div>
             </div>

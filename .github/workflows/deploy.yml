@@ -277,16 +277,6 @@ jobs:
       #   CIVOS_SUBMITTER_SALT — unset means a random per-process salt, so
       #     distinct-submitter counting still works within an instance and nothing
       #     durable is written that could be reversed later.
-      #   VOBIZ_AUTH_ID / VOBIZ_AUTH_TOKEN — the operator account. The token is
-      #     also the key Vobiz signs its callbacks with, so there is no separate
-      #     webhook secret to invent. Unset means /channel/voice/* returns 503 and
-      #     the landing page prints no number rather than one that rings out.
-      #   CIVOS_PUBLIC_BASE_URL — the origin Vobiz was configured to call, e.g.
-      #     https://civos-api-....run.app. Vobiz signs the URL, not the body, so
-      #     this must match exactly what is registered on the application. It is
-      #     configuration rather than something inferred from the request, because
-      #     Cloud Run terminates TLS and would hand us http:// and a container
-      #     hostname.
       #   CIVOS_TOKEN_SECRET — unset falls back to a fixed development value.
       #     Tracking tokens are not capabilities: they reveal the public status of
       #     a public need, and the check character guards against a typo rather
@@ -300,7 +290,7 @@ jobs:
             --region ${{ env.REGION }} \
             --project ${{ env.PROJECT_ID }} \
             --allow-unauthenticated \
-            --set-env-vars CIVOS_PROJECT=${{ env.PROJECT_ID }},CIVOS_BQ_LOCATION=${{ env.REGION }},CIVOS_BQ_DATASET=civos,CIVOS_BQ_CONNECTION=civos_vertex,CIVOS_GEMINI_MODEL=gemini-2.5-flash,TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }},TELEGRAM_WEBHOOK_SECRET=${{ secrets.TELEGRAM_WEBHOOK_SECRET }},CIVOS_TELEPHONY_SECRET=${{ secrets.CIVOS_TELEPHONY_SECRET }},CIVOS_SUBMITTER_SALT=${{ secrets.CIVOS_SUBMITTER_SALT }},CIVOS_TOKEN_SECRET=${{ secrets.CIVOS_TOKEN_SECRET }},VOBIZ_AUTH_ID=${{ secrets.VOBIZ_AUTH_ID }},VOBIZ_AUTH_TOKEN=${{ secrets.VOBIZ_AUTH_TOKEN }},CIVOS_PUBLIC_BASE_URL=${{ secrets.CIVOS_PUBLIC_BASE_URL }} \
+            --set-env-vars CIVOS_PROJECT=${{ env.PROJECT_ID }},CIVOS_BQ_LOCATION=${{ env.REGION }},CIVOS_BQ_DATASET=civos,CIVOS_BQ_CONNECTION=civos_vertex,CIVOS_GEMINI_MODEL=gemini-2.5-flash,TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }},TELEGRAM_WEBHOOK_SECRET=${{ secrets.TELEGRAM_WEBHOOK_SECRET }},CIVOS_TELEPHONY_SECRET=${{ secrets.CIVOS_TELEPHONY_SECRET }},CIVOS_SUBMITTER_SALT=${{ secrets.CIVOS_SUBMITTER_SALT }},CIVOS_TOKEN_SECRET=${{ secrets.CIVOS_TOKEN_SECRET }} \
             --memory 1Gi \
             --timeout 120 \
             --min-instances 0 \

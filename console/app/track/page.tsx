@@ -65,8 +65,8 @@ export default function TrackPage() {
       <main className="track">
         <h1 className="display">What happened to your report</h1>
         <p className="track-lede">
-          Enter the six-character code you were sent. You can also text it back to the same
-          number you reported from — no internet needed.
+          Enter the six-character code you were given when you reported. You can also send it
+          back to the CIVOS bot on Telegram.
         </p>
 
         <form className="track-form" onSubmit={lookup}>
