@@ -577,11 +577,17 @@ export default function Landing() {
                   covariates instead of being told directly.
                 </p>
                 <p className="lp-lede">
-                  So every report comes back with a <strong>six-character code</strong>. Enter it
-                  at <Link href="/track" className="lp-inline-link">/track</Link> and you are told
-                  what happened — funded under a named scheme, scheduled for a field check, or an
+                  So every report comes back with a <strong>six-character code</strong>. Send that
+                  code back to the <a href="#telegram" className="lp-inline-link">same bot</a> you
+                  reported to — or enter it at{' '}
+                  <Link href="/track" className="lp-inline-link">/track</Link> — and you are told
+                  what happened: funded under a named scheme, scheduled for a field check, or an
                   outreach visit booked because your area showed a severe gap and almost nobody
                   had spoken.
+                </p>
+                <p className="lp-lede">
+                  One conversation, both directions. Asking somebody to remember a second place to
+                  check is asking them not to.
                 </p>
                 <p className="lp-lede">
                   The status is <strong>computed from the live funding cycle</strong>, never

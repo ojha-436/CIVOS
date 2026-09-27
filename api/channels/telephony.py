@@ -45,7 +45,6 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 
 from api import tracking
 from api.extraction import extract
-from api.fixture import load_scores, resolve_unit_by_name
 from api.guards import rate_limit, safe_detail
 
 log = logging.getLogger("civos.telephony")
@@ -148,30 +147,9 @@ def build_status_reply(status: dict) -> str:
 
 
 def place_report(result, text: str | None) -> tuple[str | None, str | None]:
-    """Work out which need this report belongs to, and mint its token.
-
-    Returns (token, district name), either of which may be None. Placing is
-    best-effort by design on this channel: an SMS carries no coordinates and no
-    picker, so the only signal is whatever place name the citizen mentioned. A
-    report that cannot be placed is still extracted, still acknowledged and still
-    counted — it simply cannot be tracked yet, and the receipt says so rather
-    than issuing a token pointing at a district nobody named.
-    """
-    if not result.sector:
-        return None, None
+    """Place an inbound text report. The logic is shared — see api.tracking.place."""
     haystack = " ".join(filter(None, [result.geo_hint, result.translation, result.raw_text, text]))
-    code = resolve_unit_by_name(haystack)
-    if not code:
-        return None, None
-    data = load_scores()
-    table = tracking.build_need_table(data)
-    try:
-        index = table.index((code, result.sector))
-    except ValueError:
-        return None, None
-    language = (result.language or "en").split("-")[0].lower()
-    district = next((d["name"] for d in data["districts"] if d["code"] == code), None)
-    return tracking.encode(index, language), district
+    return tracking.place(result.sector, hint_text=haystack, language=result.language or "en")
 
 
 def _verify_signature(request: Request, raw: bytes) -> None:

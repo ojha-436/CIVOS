@@ -148,6 +148,44 @@ def need_index_of(needs: list[tuple[str, str]], unit_code: str, sector: str) -> 
     return needs.index((unit_code, sector))
 
 
+def place(
+    sector: str | None,
+    *,
+    unit_code: str | None = None,
+    hint_text: str = "",
+    language: str = "en",
+) -> tuple[str | None, str | None]:
+    """Work out which need a report belongs to, and mint its code.
+
+    Returns `(token, district name)`, either of which may be None. Placing is
+    best-effort by design on a channel with no picker: the only signals are a
+    resolved administrative unit, when the channel could supply one, and whatever
+    place name the citizen happened to mention.
+
+    A report that cannot be placed is still extracted, still acknowledged and
+    still counted — it simply cannot be tracked yet, and the receipt says so.
+    Issuing a code that resolves to nothing would be worse than issuing none: the
+    citizen sends it back, gets an error, and concludes the report was lost.
+
+    Shared by every channel so a code means the same thing wherever it came from.
+    """
+    from api.fixture import load_scores, resolve_unit_by_name
+
+    if not sector:
+        return None, None
+    code = unit_code or resolve_unit_by_name(hint_text)
+    if not code:
+        return None, None
+    data = load_scores()
+    try:
+        index = build_need_table(data).index((code, sector))
+    except ValueError:
+        return None, None
+    lang = (language or "en").split("-")[0].lower()
+    district = next((d["name"] for d in data["districts"] if d["code"] == code), None)
+    return encode(index, lang), district
+
+
 def build_need_table(data: dict) -> list[tuple[str, str]]:
     """Stable ordering of every (unit, sector) the fixture scores.
 

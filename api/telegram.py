@@ -43,6 +43,7 @@ from typing import Any
 import httpx
 from fastapi import APIRouter, Header, Request
 
+from api import tracking
 from api.extraction import extract
 from api.geo import parse_exif_gps, resolve_district
 
@@ -84,12 +85,28 @@ def _secret() -> str:
 # ---------------------------------------------------------------------------
 
 
-def format_result(result: Any, district_name: str | None, geo_confidence: str) -> str:
+def format_result(
+    result: Any,
+    district_name: str | None,
+    geo_confidence: str,
+    token: str | None = None,
+) -> str:
     """Build the citizen-facing confirmation message.
 
     The receipt exists so nobody is left wondering whether their report landed,
     and so the privacy guarantee is stated to the person it protects rather than
     only in a policy document they will never open.
+
+    It now carries a tracking code, which is the half that was missing: an
+    acknowledgement tells somebody they were heard once, and a code lets them
+    come back and ask what came of it. A citizen who reports and never learns the
+    outcome does not report again, and every one of those silences becomes a gap
+    the participation correction has to reconstruct from census covariates
+    instead of being told directly.
+
+    Where the report could not be placed there is no code, and the receipt asks
+    for the district instead — see `tracking.place` for why a code pointing at
+    nothing is worse than none.
     """
     sector_label = (result.sector or "unclassified").replace("_", " ").title()
     severity = result.severity or 0
@@ -119,10 +136,48 @@ def format_result(result: Any, district_name: str | None, geo_confidence: str) -
     loc = district_name or result.geo_hint or "unknown"
     lines.append(f"*Registered in:* {loc} _(geo: {geo_confidence})_")
 
+    if token:
+        lines += [
+            "",
+            f"*Your tracking code:* `{token}`",
+            "_Send this code back to me any time and I will tell you what happened —_",
+            "_funded, being checked, or an outreach visit scheduled._",
+            "_The code identifies the need, not you. Nothing links it back to this chat._",
+        ]
+    else:
+        lines += [
+            "",
+            "_I could not place this on the map yet, so there is no tracking code._",
+            "_Reply with your district name and I can._",
+        ]
+
     lines += [
         "",
         "_Your audio/photo has been analysed and deleted. No image or recording is stored._",
         "_If GPS was present, it was used once to find your district and then discarded._",
+    ]
+    return "\n".join(lines)
+
+
+def format_status(status: dict) -> str:
+    """What a citizen sees when they send their code back."""
+    place = status.get("district") or "your area"
+    state = f", {status['state']}" if status.get("state") else ""
+    sector = (status.get("sector") or "").replace("_", " ")
+    lines = [
+        f"*{status['headline']}*",
+        "",
+        f"*Where:* {place}{state}",
+        f"*What:* {sector}",
+        "",
+        status["detail"],
+    ]
+    if status.get("scheme"):
+        lines += ["", f"*Scheme:* {status['scheme']}"]
+    lines += [
+        "",
+        "_Status is worked out from the current funding cycle, not copied from a record_",
+        "_somebody has to remember to update. If it changes, the decision changed._",
     ]
     return "\n".join(lines)
 
@@ -132,7 +187,9 @@ WELCOME = (
     "Tell me what your area needs — by voice note, photo, or text.\n\n"
     "No form, no department jargon required. Just say what is wrong, "
     "in whatever language you speak.\n\n"
-    "_Nothing identifying about you is stored._"
+    "You will get a short tracking code back. Send the code to me later and "
+    "I will tell you what happened to it.\n\n"
+    "_Nothing identifying about you is stored. The code identifies the need, not you._"
 )
 
 
@@ -196,6 +253,26 @@ async def _handle_message(client: httpx.AsyncClient, msg: dict[str, Any]) -> Non
         await _send(client, chat_id, WELCOME)
         return
 
+    # -- a tracking code sent back -----------------------------------------
+    # Checked before everything else, and strictly: only a message that is
+    # *nothing but* a code counts. A sentence that happens to contain six
+    # consonants is a report, and mistaking one for the other would silently
+    # swallow it. One conversation does both directions, because asking somebody
+    # to remember a second place to check is asking them not to.
+    if text and tracking.looks_like_token(text):
+        # Imported here because api.main mounts this router; at module scope the
+        # import would close the circle.
+        from api.main import resolve_status
+
+        try:
+            await _send(client, chat_id, format_status(resolve_status(text)))
+        except tracking.TokenError as exc:
+            await _send(client, chat_id, str(exc))
+        except Exception:
+            log.exception("status lookup failed")
+            await _send(client, chat_id, "⚠️ Could not look that code up. Please try again.")
+        return
+
     # -- photo (checked before text: a captioned photo carries both) -------
     if msg.get("photo"):
         await _send(client, chat_id, "Analysing your photo…")
@@ -204,17 +281,31 @@ async def _handle_message(client: httpx.AsyncClient, msg: dict[str, Any]) -> Non
             image_bytes = await _download(client, file_id)
 
             district_name: str | None = None
+            unit_code: str | None = None
             geo_confidence = "inferred"
             gps = parse_exif_gps(image_bytes)
             if gps:
                 geo = resolve_district(*gps)
                 if geo:
                     district_name = f"{geo.name}, {geo.state}"
+                    unit_code = geo.admin_unit_code
                     geo_confidence = "high"
 
             caption = msg.get("caption") or None
             result = extract(image_bytes=image_bytes, text=caption)
-            await _send(client, chat_id, format_result(result, district_name, geo_confidence))
+            # EXIF gives a containment-tested unit, which beats guessing at a
+            # place name, so it is passed straight through rather than being
+            # re-derived from whatever the caption happened to say.
+            token, placed = tracking.place(
+                result.sector,
+                unit_code=unit_code,
+                hint_text=" ".join(filter(None, [result.geo_hint, result.translation, caption])),
+                language=result.language or "en",
+            )
+            await _send(
+                client, chat_id,
+                format_result(result, district_name or placed, geo_confidence, token),
+            )
         except Exception:
             log.exception("photo handling failed")
             await _send(client, chat_id, "⚠️ Could not process that photo. Please try again.")
@@ -228,7 +319,12 @@ async def _handle_message(client: httpx.AsyncClient, msg: dict[str, Any]) -> Non
             audio_bytes = await _download(client, voice["file_id"])
             mime = voice.get("mime_type") or "audio/ogg"
             result = extract(audio_bytes=audio_bytes, audio_mime=mime)
-            await _send(client, chat_id, format_result(result, None, "inferred"))
+            token, placed = tracking.place(
+                result.sector,
+                hint_text=" ".join(filter(None, [result.geo_hint, result.translation, result.raw_text])),
+                language=result.language or "en",
+            )
+            await _send(client, chat_id, format_result(result, placed, "inferred", token))
         except Exception:
             log.exception("voice handling failed")
             await _send(client, chat_id, "⚠️ Could not process that voice note. Please try again.")
@@ -239,7 +335,12 @@ async def _handle_message(client: httpx.AsyncClient, msg: dict[str, Any]) -> Non
         await _send(client, chat_id, "Processing…")
         try:
             result = extract(text=text)
-            await _send(client, chat_id, format_result(result, None, "inferred"))
+            token, placed = tracking.place(
+                result.sector,
+                hint_text=" ".join(filter(None, [result.geo_hint, result.translation, text])),
+                language=result.language or "en",
+            )
+            await _send(client, chat_id, format_result(result, placed, "inferred", token))
         except Exception:
             log.exception("text handling failed")
             await _send(client, chat_id, "⚠️ Could not process that. Please try again.")
